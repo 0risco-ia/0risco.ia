@@ -1,10 +1,10 @@
 <!DOCTYPE html>
-<!-- saved from url=(0057)file:///C:/Users/Derjam%20Oliveira/Downloads/admin_8.html -->
-<html lang="pt-BR"><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
-
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>0Risco.IA — Painel Administrativo</title>
-<script src="./Admin_files/xlsx.full.min.js.download"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js"></script>
 <style>
   :root {
     --bg: #0a0c0f;
@@ -769,7 +769,7 @@
 <!-- ═══ LOGIN ═══ -->
 <div id="login-screen">
   <div class="login-box">
-    <img src="file:///C:/Users/Derjam%20Oliveira/Downloads/logo_0risco_ia_realistic_front.png" alt="0Risco.IA" onerror="this.style.display=&#39;none&#39;" style="display: none;">
+    <img src="logo_0risco_ia_realistic_front.png" alt="0Risco.IA" onerror="this.style.display='none'">
     <h2>0Risco.IA</h2>
     <p>Painel Administrativo — Acesso Restrito</p>
 
@@ -796,7 +796,7 @@
 <!-- ═══ SIDEBAR ═══ -->
 <aside id="sidebar">
   <div class="sidebar-logo">
-    <img src="file:///C:/Users/Derjam%20Oliveira/Downloads/logo_0risco_ia_realistic_front.png" alt="0Risco.IA" onerror="this.style.display=&#39;none&#39;" style="display: none;">
+    <img src="logo_0risco_ia_realistic_front.png" alt="0Risco.IA" onerror="this.style.display='none'">
     <div class="sidebar-logo-text">
       <strong>0Risco.IA</strong>
       Painel Admin
@@ -805,57 +805,57 @@
 
   <nav>
     <div class="nav-section">Visão Geral</div>
-    <a class="active" onclick="showPanel(&#39;dashboard&#39;)">
+    <a class="active" onclick="showPanel('dashboard')">
       <span class="nav-icon">📊</span> Dashboard
     </a>
 
     <div class="nav-section">Permissões de Trabalho</div>
-    <a onclick="showPanel(&#39;pts-abertas&#39;)">
+    <a onclick="showPanel('pts-abertas')">
       <span class="nav-icon">🔓</span> PTs Abertas
       <span class="nav-badge" id="badge-abertas">0</span>
     </a>
-    <a onclick="showPanel(&#39;pts-pendentes&#39;)">
+    <a onclick="showPanel('pts-pendentes')">
       <span class="nav-icon">⏳</span> Aguardando Aprovação
       <span class="nav-badge" id="badge-pendentes" style="background:var(--orange)">0</span>
     </a>
-    <a onclick="showPanel(&#39;pts-historico&#39;)">
+    <a onclick="showPanel('pts-historico')">
       <span class="nav-icon">📁</span> Histórico de PTs
     </a>
 
     <div class="nav-section">Trabalhadores</div>
-    <a onclick="showPanel(&#39;trabalhadores&#39;)">
+    <a onclick="showPanel('trabalhadores')">
       <span class="nav-icon">👷</span> Cadastro de Executantes
     </a>
-    <a onclick="showPanel(&#39;documentos&#39;)">
+    <a onclick="showPanel('documentos')">
       <span class="nav-icon">📋</span> Verificação Documental
     </a>
 
-    <div class="nav-section">Riscos &amp; IA</div>
-    <a onclick="showPanel(&#39;analise-pxg&#39;)">
+    <div class="nav-section">Riscos & IA</div>
+    <a onclick="showPanel('analise-pxg')">
       <span class="nav-icon">🤖</span> Análise PxG (IA)
     </a>
-    <a onclick="showPanel(&#39;checklist-cmoc&#39;)">
+    <a onclick="showPanel('checklist-cmoc')">
       <span class="nav-icon">✅</span> Checklist CMOC 16pts
     </a>
 
     <div class="nav-section">Gestão</div>
-    <a onclick="showPanel(&#39;gestao-liberadores&#39;)">
+    <a onclick="showPanel('gestao-liberadores')">
       <span class="nav-icon">📊</span> Acomp. por Liberador
     </a>
 
     <div class="nav-section">Ambiente</div>
-    <a onclick="showPanel(&#39;clima&#39;)">
+    <a onclick="showPanel('clima')">
       <span class="nav-icon">🌤️</span> Condições Climáticas
     </a>
 
     <div class="nav-section">Sistema</div>
-    <a onclick="showPanel(&#39;usuarios&#39;)">
+    <a onclick="showPanel('usuarios')">
       <span class="nav-icon">👤</span> Usuários Admin
     </a>
-    <a onclick="showPanel(&#39;relatorios&#39;)">
+    <a onclick="showPanel('relatorios')">
       <span class="nav-icon">📈</span> Relatórios
     </a>
-    <a onclick="showPanel(&#39;configuracoes&#39;)">
+    <a onclick="showPanel('configuracoes')">
       <span class="nav-icon">⚙️</span> Configurações
     </a>
 
@@ -863,10 +863,10 @@
     <a onclick="irParaCampo()" style="color:#000;background:var(--yellow);border-left:3px solid var(--yellow2);font-weight:700">
       <span class="nav-icon">📱</span> Ir para App de Campo ↗
     </a>
-    <a onclick="window.open(&#39;liberador.html&#39;,&#39;_blank&#39;)" style="color:var(--text2);background:rgba(41,121,255,.08);border-left:3px solid #2979ff">
+    <a onclick="window.open('liberador.html','_blank')" style="color:var(--text2);background:rgba(41,121,255,.08);border-left:3px solid #2979ff">
       <span class="nav-icon">🔑</span> Portal do Liberador ↗
     </a>
-    <a onclick="window.open(&#39;index.html&#39;,&#39;_self&#39;)" style="color:var(--text3)">
+    <a onclick="window.open('index.html','_self')" style="color:var(--text3)">
       <span class="nav-icon">🌐</span> Início
     </a>
   </nav>
@@ -886,7 +886,7 @@
     <h1 id="topbar-title">Dashboard</h1>
     <div style="display:flex;gap:10px;align-items:center">
       <button class="topbar-btn" onclick="refreshData()">🔄 Atualizar</button>
-      <button class="topbar-btn" onclick="showPanel(&#39;relatorios&#39;)">📥 Exportar</button>
+      <button class="topbar-btn" onclick="showPanel('relatorios')">📥 Exportar</button>
       <div class="user-pill">
         <div class="user-avatar" id="topbar-avatar">A</div>
         <span id="topbar-user">admin</span>
@@ -1067,7 +1067,7 @@
     <div class="panel" id="panel-pts-historico">
       <div class="section-header">
         <div class="section-title">Histórico de PTs</div>
-        <button class="btn btn-outline" onclick="exportPTs(&#39;all&#39;)">⬇ Exportar Tudo</button>
+        <button class="btn btn-outline" onclick="exportPTs('all')">⬇ Exportar Tudo</button>
       </div>
 
       <div style="display:flex;gap:10px;margin-bottom:16px">
@@ -1115,7 +1115,7 @@
       <div class="section-header">
         <div class="section-title">Executantes Cadastrados</div>
         <div style="display:flex;gap:10px">
-          <button class="btn btn-outline" onclick="document.getElementById(&#39;import-workers-file&#39;).click()">📂 Importar Excel/CSV</button>
+          <button class="btn btn-outline" onclick="document.getElementById('import-workers-file').click()">📂 Importar Excel/CSV</button>
           <input type="file" id="import-workers-file" accept=".xlsx,.csv" style="display:none" onchange="importWorkers(this)">
           <button class="btn btn-primary" onclick="openModalWorker()">＋ Novo Trabalhador</button>
         </div>
@@ -1164,9 +1164,9 @@
       </div>
 
       <div class="tabs">
-        <button class="tab active" onclick="switchDocTab(&#39;executante&#39;)">Executante</button>
-        <button class="tab" onclick="switchDocTab(&#39;liberador&#39;)">Liberador</button>
-        <button class="tab" onclick="switchDocTab(&#39;vigia&#39;)">Vigia</button>
+        <button class="tab active" onclick="switchDocTab('executante')">Executante</button>
+        <button class="tab" onclick="switchDocTab('liberador')">Liberador</button>
+        <button class="tab" onclick="switchDocTab('vigia')">Vigia</button>
       </div>
 
       <div class="grid2">
@@ -1638,7 +1638,7 @@
       <!-- Status geral -->
       <div class="card" id="clima-status-card" style="text-align:center;padding:28px">
         <div style="font-size:56px" id="clima-icon">⏳</div>
-        <div style="font-size:22px;font-weight:800;margin:8px 0" id="clima-veredicto">Carregando dados…</div>
+        <div style="font-size:22px;font-weight:800;margin:8px 0" id="clima-veredicto" style="color:var(--text2)">Carregando dados…</div>
         <div style="font-size:13px;color:var(--text2)" id="clima-veredicto-sub">Consultando condições meteorológicas</div>
       </div>
 
@@ -1764,12 +1764,12 @@
   <div class="modal">
     <div class="modal-header">
       <div class="modal-title">🔥 Nova Permissão de Trabalho</div>
-      <button class="modal-close" onclick="closeModal(&#39;modal-nova-pt&#39;)">✕</button>
+      <button class="modal-close" onclick="closeModal('modal-nova-pt')">✕</button>
     </div>
     <div class="grid2">
       <div class="form-group">
         <label>N° PT (auto)</label>
-        <input type="text" id="pt-numero" readonly="" placeholder="Gerado automaticamente">
+        <input type="text" id="pt-numero" readonly placeholder="Gerado automaticamente">
       </div>
       <div class="form-group">
         <label>Data / Hora Início</label>
@@ -1816,7 +1816,7 @@
       </div>
     </div>
     <div style="display:flex;gap:10px;justify-content:flex-end;margin-top:8px">
-      <button class="btn btn-outline" onclick="closeModal(&#39;modal-nova-pt&#39;)">Cancelar</button>
+      <button class="btn btn-outline" onclick="closeModal('modal-nova-pt')">Cancelar</button>
       <button class="btn btn-primary" onclick="salvarPT()">🔥 Emitir PT</button>
     </div>
   </div>
@@ -1827,7 +1827,7 @@
   <div class="modal">
     <div class="modal-header">
       <div class="modal-title">👷 Cadastrar Trabalhador</div>
-      <button class="modal-close" onclick="closeModal(&#39;modal-worker&#39;)">✕</button>
+      <button class="modal-close" onclick="closeModal('modal-worker')">✕</button>
     </div>
     <div class="grid2">
       <div class="form-group">
@@ -1881,7 +1881,7 @@
       </select>
     </div>
     <div style="display:flex;gap:10px;justify-content:flex-end;margin-top:8px">
-      <button class="btn btn-outline" onclick="closeModal(&#39;modal-worker&#39;)">Cancelar</button>
+      <button class="btn btn-outline" onclick="closeModal('modal-worker')">Cancelar</button>
       <button class="btn btn-primary" onclick="salvarWorker()">💾 Salvar</button>
     </div>
   </div>
@@ -1892,7 +1892,7 @@
   <div class="modal">
     <div class="modal-header">
       <div class="modal-title">👤 Novo Usuário Administrador</div>
-      <button class="modal-close" onclick="closeModal(&#39;modal-usuario&#39;)">✕</button>
+      <button class="modal-close" onclick="closeModal('modal-usuario')">✕</button>
     </div>
     <div class="form-group">
       <label>Login (usuário)</label>
@@ -1915,7 +1915,7 @@
       <input type="password" id="u-senha" placeholder="Mínimo 6 caracteres">
     </div>
     <div style="display:flex;gap:10px;justify-content:flex-end;margin-top:8px">
-      <button class="btn btn-outline" onclick="closeModal(&#39;modal-usuario&#39;)">Cancelar</button>
+      <button class="btn btn-outline" onclick="closeModal('modal-usuario')">Cancelar</button>
       <button class="btn btn-primary" onclick="salvarUsuario()">💾 Criar Usuário</button>
     </div>
   </div>
@@ -3300,6 +3300,5 @@ function checkResponsive() {
 window.addEventListener('resize', checkResponsive);
 checkResponsive();
 </script>
-
-
-</body></html>
+</body>
+</html>
