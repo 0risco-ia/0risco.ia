@@ -1,0 +1,3305 @@
+<!DOCTYPE html>
+<!-- saved from url=(0057)file:///C:/Users/Derjam%20Oliveira/Downloads/admin_7.html -->
+<html lang="pt-BR"><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>0Risco.IA — Painel Administrativo</title>
+<script src="./0Risco.IA — Painel Administrativo_files/xlsx.full.min.js.download"></script>
+<style>
+  :root {
+    --bg: #0a0c0f;
+    --bg2: #111418;
+    --bg3: #181c22;
+    --card: #1a1f28;
+    --border: #252c38;
+    --border2: #2e3748;
+    --yellow: #f5c518;
+    --yellow2: #ffd60a;
+    --green: #00c853;
+    --green2: #00e676;
+    --red: #ff3d3d;
+    --orange: #ff7a00;
+    --blue: #2979ff;
+    --text: #c8d6e8;
+    --text2: #7a9ab5;
+    --text3: #4a6480;
+    --white: #ffffff;
+    --stripe: rgba(245,197,24,0.06);
+    --sidebar-w: 240px;
+  }
+
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  body {
+    background: var(--bg);
+    color: var(--text);
+    font-family: 'Segoe UI', system-ui, sans-serif;
+    min-height: 100vh;
+    display: flex;
+  }
+
+  /* ─── SIDEBAR ─── */
+  #sidebar {
+    width: var(--sidebar-w);
+    background: var(--bg2);
+    border-right: 1px solid var(--border);
+    display: flex;
+    flex-direction: column;
+    position: fixed;
+    top: 0; left: 0; bottom: 0;
+    z-index: 100;
+    transition: transform .25s;
+  }
+
+  .sidebar-logo {
+    padding: 20px 16px 16px;
+    border-bottom: 1px solid var(--border);
+    display: flex;
+    align-items: center;
+    gap: 10px;
+  }
+
+  .sidebar-logo img {
+    height: 40px;
+    object-fit: contain;
+  }
+
+  .sidebar-logo-text {
+    font-size: 11px;
+    color: var(--text2);
+    line-height: 1.4;
+  }
+
+  .sidebar-logo-text strong {
+    display: block;
+    font-size: 13px;
+    color: var(--yellow);
+    font-weight: 700;
+    letter-spacing: .5px;
+  }
+
+  nav {
+    flex: 1;
+    overflow-y: auto;
+    padding: 12px 0;
+  }
+
+  .nav-section {
+    padding: 8px 16px 4px;
+    font-size: 10px;
+    font-weight: 700;
+    letter-spacing: 1.2px;
+    color: var(--text3);
+    text-transform: uppercase;
+  }
+
+  nav a {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding: 9px 16px;
+    color: var(--text2);
+    text-decoration: none;
+    font-size: 13px;
+    cursor: pointer;
+    border-left: 3px solid transparent;
+    transition: all .15s;
+  }
+
+  nav a:hover { background: var(--bg3); color: var(--text); }
+  nav a.active {
+    background: rgba(245,197,24,.08);
+    color: var(--yellow);
+    border-left-color: var(--yellow);
+    font-weight: 600;
+  }
+
+  nav a .nav-icon { font-size: 16px; width: 20px; text-align: center; }
+  nav a .nav-badge {
+    margin-left: auto;
+    background: var(--red);
+    color: #fff;
+    font-size: 10px;
+    font-weight: 700;
+    padding: 1px 6px;
+    border-radius: 10px;
+    min-width: 18px;
+    text-align: center;
+  }
+
+  .sidebar-footer {
+    padding: 12px 16px;
+    border-top: 1px solid var(--border);
+    font-size: 11px;
+    color: var(--text3);
+  }
+
+  .sidebar-footer span { display: block; }
+  .sidebar-footer strong { color: var(--text2); }
+
+  /* ─── MAIN ─── */
+  #main {
+    margin-left: var(--sidebar-w);
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    min-height: 100vh;
+  }
+
+  /* ─── TOPBAR ─── */
+  #topbar {
+    height: 56px;
+    background: var(--bg2);
+    border-bottom: 1px solid var(--border);
+    display: flex;
+    align-items: center;
+    padding: 0 24px;
+    gap: 16px;
+    position: sticky;
+    top: 0;
+    z-index: 50;
+  }
+
+  #topbar h1 {
+    font-size: 15px;
+    font-weight: 600;
+    color: var(--white);
+    flex: 1;
+  }
+
+  .topbar-btn {
+    background: none;
+    border: 1px solid var(--border2);
+    color: var(--text2);
+    padding: 6px 14px;
+    border-radius: 6px;
+    font-size: 12px;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    transition: all .15s;
+  }
+
+  .topbar-btn:hover { border-color: var(--yellow); color: var(--yellow); }
+
+  .topbar-btn.danger:hover { border-color: var(--red); color: var(--red); }
+
+  .user-pill {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    background: var(--bg3);
+    border: 1px solid var(--border);
+    border-radius: 20px;
+    padding: 4px 12px 4px 6px;
+    font-size: 12px;
+    color: var(--text2);
+  }
+
+  .user-avatar {
+    width: 26px; height: 26px;
+    border-radius: 50%;
+    background: var(--yellow);
+    color: #000;
+    font-size: 11px;
+    font-weight: 800;
+    display: flex; align-items: center; justify-content: center;
+  }
+
+  /* ─── CONTENT ─── */
+  #content {
+    padding: 24px;
+    flex: 1;
+  }
+
+  /* ─── PANELS ─── */
+  .panel { display: none; }
+  .panel.active { display: block; }
+
+  /* ─── STATS GRID ─── */
+  .stats-grid {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 16px;
+    margin-bottom: 24px;
+  }
+
+  .stat-card {
+    background: var(--card);
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    padding: 18px 20px;
+    position: relative;
+    overflow: hidden;
+  }
+
+  .stat-card::before {
+    content: '';
+    position: absolute;
+    top: 0; left: 0; right: 0;
+    height: 3px;
+    background: var(--accent, var(--yellow));
+  }
+
+  .stat-label {
+    font-size: 11px;
+    color: var(--text3);
+    text-transform: uppercase;
+    letter-spacing: .8px;
+    margin-bottom: 8px;
+  }
+
+  .stat-value {
+    font-size: 28px;
+    font-weight: 700;
+    color: var(--white);
+    line-height: 1;
+  }
+
+  .stat-sub {
+    font-size: 11px;
+    color: var(--text2);
+    margin-top: 6px;
+  }
+
+  .stat-icon {
+    position: absolute;
+    top: 16px; right: 16px;
+    font-size: 24px;
+    opacity: .2;
+  }
+
+  /* ─── SECTION HEADER ─── */
+  .section-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: 16px;
+  }
+
+  .section-title {
+    font-size: 14px;
+    font-weight: 600;
+    color: var(--white);
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+
+  .section-title::before {
+    content: '';
+    display: block;
+    width: 3px; height: 16px;
+    background: var(--yellow);
+    border-radius: 2px;
+  }
+
+  /* ─── TABLE ─── */
+  .table-wrap {
+    background: var(--card);
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    overflow: hidden;
+  }
+
+  table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 13px;
+  }
+
+  thead { background: var(--bg3); }
+
+  th {
+    padding: 11px 14px;
+    text-align: left;
+    font-size: 11px;
+    font-weight: 700;
+    color: var(--text3);
+    text-transform: uppercase;
+    letter-spacing: .7px;
+    border-bottom: 1px solid var(--border);
+  }
+
+  td {
+    padding: 11px 14px;
+    border-bottom: 1px solid var(--border);
+    color: var(--text);
+    vertical-align: middle;
+  }
+
+  tr:last-child td { border-bottom: none; }
+
+  tr:nth-child(even) td { background: var(--stripe); }
+
+  tr:hover td { background: rgba(245,197,24,.04); }
+
+  /* ─── BADGES ─── */
+  .badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 4px;
+    padding: 3px 8px;
+    border-radius: 4px;
+    font-size: 11px;
+    font-weight: 600;
+    letter-spacing: .3px;
+  }
+
+  .badge.green { background: rgba(0,200,83,.15); color: var(--green2); }
+  .badge.red { background: rgba(255,61,61,.15); color: var(--red); }
+  .badge.yellow { background: rgba(245,197,24,.15); color: var(--yellow2); }
+  .badge.orange { background: rgba(255,122,0,.15); color: var(--orange); }
+  .badge.blue { background: rgba(41,121,255,.15); color: #6fa8ff; }
+  .badge.gray { background: rgba(74,100,128,.15); color: var(--text2); }
+
+  /* ─── ACTION BUTTONS ─── */
+  .btn {
+    padding: 7px 14px;
+    border-radius: 6px;
+    font-size: 12px;
+    font-weight: 600;
+    cursor: pointer;
+    border: none;
+    transition: all .15s;
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+  }
+
+  .btn-primary { background: var(--yellow); color: #000; }
+  .btn-primary:hover { background: var(--yellow2); }
+
+  .btn-outline {
+    background: none;
+    border: 1px solid var(--border2);
+    color: var(--text2);
+  }
+  .btn-outline:hover { border-color: var(--yellow); color: var(--yellow); }
+
+  .btn-danger { background: rgba(255,61,61,.15); color: var(--red); border: 1px solid rgba(255,61,61,.3); }
+  .btn-danger:hover { background: rgba(255,61,61,.25); }
+
+  .btn-sm { padding: 4px 10px; font-size: 11px; }
+
+  /* ─── FORM ELEMENTS ─── */
+  .form-group { margin-bottom: 16px; }
+
+  label {
+    display: block;
+    font-size: 12px;
+    font-weight: 600;
+    color: var(--text2);
+    margin-bottom: 6px;
+    text-transform: uppercase;
+    letter-spacing: .5px;
+  }
+
+  input[type=text], input[type=password], input[type=email],
+  input[type=number], select, textarea {
+    width: 100%;
+    background: var(--bg3);
+    border: 1px solid var(--border2);
+    color: var(--text);
+    padding: 9px 12px;
+    border-radius: 6px;
+    font-size: 13px;
+    outline: none;
+    transition: border-color .15s;
+    font-family: inherit;
+  }
+
+  input:focus, select:focus, textarea:focus {
+    border-color: var(--yellow);
+  }
+
+  select option { background: var(--bg3); }
+
+  /* ─── CARD ─── */
+  .card {
+    background: var(--card);
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    padding: 20px;
+    margin-bottom: 20px;
+  }
+
+  .card-title {
+    font-size: 13px;
+    font-weight: 700;
+    color: var(--white);
+    margin-bottom: 16px;
+    padding-bottom: 12px;
+    border-bottom: 1px solid var(--border);
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+
+  /* ─── GRID 2-col ─── */
+  .grid2 { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; }
+  .grid3 { display: grid; grid-template-columns: repeat(3, 1fr); gap: 16px; }
+
+  /* ─── SEARCH ─── */
+  .search-bar {
+    position: relative;
+    margin-bottom: 16px;
+  }
+
+  .search-bar input {
+    padding-left: 36px;
+  }
+
+  .search-bar::before {
+    content: '🔍';
+    position: absolute;
+    left: 10px; top: 50%;
+    transform: translateY(-50%);
+    font-size: 13px;
+    pointer-events: none;
+  }
+
+  /* ─── RISK GAUGE ─── */
+  .risk-bar {
+    height: 8px;
+    border-radius: 4px;
+    background: var(--border);
+    overflow: hidden;
+    margin-top: 4px;
+  }
+
+  .risk-fill {
+    height: 100%;
+    border-radius: 4px;
+    transition: width .4s;
+  }
+
+  /* ─── TIMELINE ─── */
+  .timeline { padding-left: 16px; }
+
+  .timeline-item {
+    position: relative;
+    padding: 0 0 16px 20px;
+    border-left: 2px solid var(--border2);
+  }
+
+  .timeline-item:last-child { border-left-color: transparent; }
+
+  .timeline-dot {
+    position: absolute;
+    left: -6px; top: 2px;
+    width: 10px; height: 10px;
+    border-radius: 50%;
+    background: var(--yellow);
+    border: 2px solid var(--bg);
+  }
+
+  .timeline-dot.red { background: var(--red); }
+  .timeline-dot.green { background: var(--green); }
+
+  .timeline-time { font-size: 10px; color: var(--text3); margin-bottom: 2px; }
+  .timeline-text { font-size: 12px; color: var(--text2); }
+  .timeline-text strong { color: var(--text); }
+
+  /* ─── LOGIN ─── */
+  #login-screen {
+    position: fixed;
+    inset: 0;
+    background: var(--bg);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 999;
+  }
+
+  .login-box {
+    background: var(--card);
+    border: 1px solid var(--border);
+    border-radius: 16px;
+    padding: 40px;
+    width: 380px;
+    text-align: center;
+  }
+
+  .login-box img {
+    height: 60px;
+    margin-bottom: 8px;
+    object-fit: contain;
+  }
+
+  .login-box h2 {
+    font-size: 18px;
+    font-weight: 700;
+    color: var(--white);
+    margin-bottom: 4px;
+  }
+
+  .login-box p {
+    font-size: 12px;
+    color: var(--text3);
+    margin-bottom: 28px;
+  }
+
+  .login-box .form-group { text-align: left; }
+
+  .login-error {
+    font-size: 12px;
+    color: var(--red);
+    background: rgba(255,61,61,.1);
+    border: 1px solid rgba(255,61,61,.3);
+    border-radius: 6px;
+    padding: 8px 12px;
+    margin-bottom: 16px;
+    display: none;
+  }
+
+  /* ─── MODAL ─── */
+  .modal-overlay {
+    position: fixed;
+    inset: 0;
+    background: rgba(0,0,0,.7);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 200;
+    display: none;
+  }
+
+  .modal-overlay.open { display: flex; }
+
+  .modal {
+    background: var(--card);
+    border: 1px solid var(--border2);
+    border-radius: 12px;
+    padding: 28px;
+    width: 520px;
+    max-width: 95vw;
+    max-height: 90vh;
+    overflow-y: auto;
+  }
+
+  .modal-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: 20px;
+  }
+
+  .modal-title {
+    font-size: 15px;
+    font-weight: 700;
+    color: var(--white);
+  }
+
+  .modal-close {
+    background: none;
+    border: none;
+    color: var(--text3);
+    font-size: 20px;
+    cursor: pointer;
+    padding: 2px 6px;
+    border-radius: 4px;
+  }
+
+  .modal-close:hover { background: var(--bg3); color: var(--text); }
+
+  /* ─── TOAST ─── */
+  #toast {
+    position: fixed;
+    bottom: 24px; right: 24px;
+    background: var(--card);
+    border: 1px solid var(--border2);
+    border-radius: 8px;
+    padding: 12px 18px;
+    font-size: 13px;
+    color: var(--text);
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    z-index: 500;
+    transform: translateY(80px);
+    opacity: 0;
+    transition: all .3s;
+    max-width: 320px;
+    box-shadow: 0 4px 24px rgba(0,0,0,.5);
+  }
+
+  #toast.show { transform: translateY(0); opacity: 1; }
+  #toast.success { border-left: 3px solid var(--green); }
+  #toast.error { border-left: 3px solid var(--red); }
+  #toast.warn { border-left: 3px solid var(--yellow); }
+
+  /* ─── PT ─── */
+  .pt-card {
+    background: var(--card);
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    padding: 16px;
+    margin-bottom: 12px;
+    cursor: pointer;
+    transition: all .15s;
+  }
+
+  .pt-card:hover { border-color: var(--border2); background: var(--bg3); }
+
+  .pt-card-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: 8px;
+  }
+
+  .pt-number { font-size: 12px; font-weight: 700; color: var(--yellow); }
+
+  .pt-meta { font-size: 11px; color: var(--text3); margin-top: 4px; }
+
+  .pt-local {
+    font-size: 14px;
+    font-weight: 600;
+    color: var(--white);
+    margin-bottom: 4px;
+  }
+
+  .risk-mini {
+    display: flex;
+    gap: 6px;
+    margin-top: 8px;
+  }
+
+  .risk-mini span {
+    font-size: 11px;
+    padding: 2px 7px;
+    border-radius: 4px;
+    font-weight: 600;
+  }
+
+  /* ─── WORKERS TABLE ACTIONS ─── */
+  .action-group { display: flex; gap: 6px; align-items: center; }
+
+  /* ─── SCROLLBAR ─── */
+  ::-webkit-scrollbar { width: 6px; height: 6px; }
+  ::-webkit-scrollbar-track { background: transparent; }
+  ::-webkit-scrollbar-thumb { background: var(--border2); border-radius: 3px; }
+
+  /* ─── RESPONSIVE ─── */
+  @media (max-width: 900px) {
+    #sidebar { transform: translateX(-100%); }
+    #sidebar.open { transform: translateX(0); }
+    #main { margin-left: 0; }
+    .stats-grid { grid-template-columns: 1fr 1fr; }
+    .grid2 { grid-template-columns: 1fr; }
+    .grid3 { grid-template-columns: 1fr; }
+  }
+
+  /* ─── EMPTY STATE ─── */
+  .empty-state {
+    text-align: center;
+    padding: 48px 24px;
+    color: var(--text3);
+  }
+
+  .empty-state .empty-icon { font-size: 40px; margin-bottom: 12px; }
+  .empty-state p { font-size: 13px; }
+
+  /* ─── DOC VERIFY ROW ─── */
+  .doc-row {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 10px 0;
+    border-bottom: 1px solid var(--border);
+    font-size: 13px;
+  }
+
+  .doc-row:last-child { border-bottom: none; }
+  .doc-row .doc-name { color: var(--text); }
+  .doc-row .doc-status { display: flex; align-items: center; gap: 8px; }
+
+  /* ─── TABS ─── */
+  .tabs {
+    display: flex;
+    gap: 2px;
+    background: var(--bg3);
+    border-radius: 8px;
+    padding: 4px;
+    margin-bottom: 20px;
+    width: fit-content;
+  }
+
+  .tab {
+    padding: 7px 16px;
+    border-radius: 5px;
+    font-size: 12px;
+    font-weight: 600;
+    cursor: pointer;
+    color: var(--text2);
+    border: none;
+    background: none;
+    transition: all .15s;
+  }
+
+  .tab.active { background: var(--card); color: var(--yellow); }
+
+  /* ─── GRAVITY SCALE ─── */
+  .gravity-row {
+    display: flex;
+    gap: 4px;
+  }
+
+  .g-pill {
+    flex: 1;
+    text-align: center;
+    padding: 4px 2px;
+    border-radius: 4px;
+    font-size: 10px;
+    font-weight: 700;
+    border: 1px solid transparent;
+  }
+
+  .g1 { background: rgba(0,200,83,.12); color: #00e676; border-color: rgba(0,200,83,.25); }
+  .g2 { background: rgba(255,214,10,.12); color: #ffd60a; border-color: rgba(255,214,10,.25); }
+  .g3 { background: rgba(255,122,0,.12); color: #ff7a00; border-color: rgba(255,122,0,.25); }
+  .g4 { background: rgba(255,61,61,.12); color: #ff3d3d; border-color: rgba(255,61,61,.25); }
+  .g5 { background: rgba(200,30,30,.2); color: #ff8080; border-color: rgba(200,30,30,.4); }
+</style>
+</head>
+<body>
+
+<!-- ═══ LOGIN ═══ -->
+<div id="login-screen">
+  <div class="login-box">
+    <img src="file:///C:/Users/Derjam%20Oliveira/Downloads/logo_0risco_ia_realistic_front.png" alt="0Risco.IA" onerror="this.style.display=&#39;none&#39;" style="display: none;">
+    <h2>0Risco.IA</h2>
+    <p>Painel Administrativo — Acesso Restrito</p>
+
+    <div class="login-error" id="login-error">Usuário ou senha incorretos.</div>
+
+    <div class="form-group">
+      <label>Usuário</label>
+      <input type="text" id="login-user" placeholder="admin" autocomplete="username">
+    </div>
+    <div class="form-group">
+      <label>Senha</label>
+      <input type="password" id="login-pass" placeholder="••••••••" autocomplete="current-password">
+    </div>
+    <button class="btn btn-primary" style="width:100%;justify-content:center;margin-top:4px" onclick="doLogin()">
+      🔐 Entrar
+    </button>
+
+    <p style="margin-top:20px;font-size:11px;color:var(--text3)">
+      0Risco.IA v2.0 · NR-34 / NR-35 Compliant
+    </p>
+  </div>
+</div>
+
+<!-- ═══ SIDEBAR ═══ -->
+<aside id="sidebar">
+  <div class="sidebar-logo">
+    <img src="file:///C:/Users/Derjam%20Oliveira/Downloads/logo_0risco_ia_realistic_front.png" alt="0Risco.IA" onerror="this.style.display=&#39;none&#39;" style="display: none;">
+    <div class="sidebar-logo-text">
+      <strong>0Risco.IA</strong>
+      Painel Admin
+    </div>
+  </div>
+
+  <nav>
+    <div class="nav-section">Visão Geral</div>
+    <a class="active" onclick="showPanel(&#39;dashboard&#39;)">
+      <span class="nav-icon">📊</span> Dashboard
+    </a>
+
+    <div class="nav-section">Permissões de Trabalho</div>
+    <a onclick="showPanel(&#39;pts-abertas&#39;)">
+      <span class="nav-icon">🔓</span> PTs Abertas
+      <span class="nav-badge" id="badge-abertas">0</span>
+    </a>
+    <a onclick="showPanel(&#39;pts-pendentes&#39;)">
+      <span class="nav-icon">⏳</span> Aguardando Aprovação
+      <span class="nav-badge" id="badge-pendentes" style="background:var(--orange)">0</span>
+    </a>
+    <a onclick="showPanel(&#39;pts-historico&#39;)">
+      <span class="nav-icon">📁</span> Histórico de PTs
+    </a>
+
+    <div class="nav-section">Trabalhadores</div>
+    <a onclick="showPanel(&#39;trabalhadores&#39;)">
+      <span class="nav-icon">👷</span> Cadastro de Executantes
+    </a>
+    <a onclick="showPanel(&#39;documentos&#39;)">
+      <span class="nav-icon">📋</span> Verificação Documental
+    </a>
+
+    <div class="nav-section">Riscos &amp; IA</div>
+    <a onclick="showPanel(&#39;analise-pxg&#39;)">
+      <span class="nav-icon">🤖</span> Análise PxG (IA)
+    </a>
+    <a onclick="showPanel(&#39;checklist-cmoc&#39;)">
+      <span class="nav-icon">✅</span> Checklist CMOC 16pts
+    </a>
+
+    <div class="nav-section">Gestão</div>
+    <a onclick="showPanel(&#39;gestao-liberadores&#39;)">
+      <span class="nav-icon">📊</span> Acomp. por Liberador
+    </a>
+
+    <div class="nav-section">Ambiente</div>
+    <a onclick="showPanel(&#39;clima&#39;)">
+      <span class="nav-icon">🌤️</span> Condições Climáticas
+    </a>
+
+    <div class="nav-section">Sistema</div>
+    <a onclick="showPanel(&#39;usuarios&#39;)">
+      <span class="nav-icon">👤</span> Usuários Admin
+    </a>
+    <a onclick="showPanel(&#39;relatorios&#39;)">
+      <span class="nav-icon">📈</span> Relatórios
+    </a>
+    <a onclick="showPanel(&#39;configuracoes&#39;)">
+      <span class="nav-icon">⚙️</span> Configurações
+    </a>
+
+    <div style="height:12px"></div>
+    <a onclick="irParaCampo()" style="color:#000;background:var(--yellow);border-left:3px solid var(--yellow2);font-weight:700">
+      <span class="nav-icon">📱</span> Ir para App de Campo ↗
+    </a>
+    <a onclick="window.open(&#39;liberador.html&#39;,&#39;_blank&#39;)" style="color:var(--text2);background:rgba(41,121,255,.08);border-left:3px solid #2979ff">
+      <span class="nav-icon">🔑</span> Portal do Liberador ↗
+    </a>
+    <a onclick="window.open(&#39;index.html&#39;,&#39;_self&#39;)" style="color:var(--text3)">
+      <span class="nav-icon">🌐</span> Início
+    </a>
+  </nav>
+
+  <div class="sidebar-footer">
+    <strong id="sidebar-user-name">admin</strong>
+    <span id="sidebar-user-role" style="margin-top:2px">Administrador</span>
+  </div>
+</aside>
+
+<!-- ═══ MAIN ═══ -->
+<div id="main">
+
+  <!-- TOPBAR -->
+  <div id="topbar">
+    <button class="topbar-btn" onclick="toggleSidebar()" style="display:none" id="menu-btn">☰</button>
+    <h1 id="topbar-title">Dashboard</h1>
+    <div style="display:flex;gap:10px;align-items:center">
+      <button class="topbar-btn" onclick="refreshData()">🔄 Atualizar</button>
+      <button class="topbar-btn" onclick="showPanel(&#39;relatorios&#39;)">📥 Exportar</button>
+      <div class="user-pill">
+        <div class="user-avatar" id="topbar-avatar">A</div>
+        <span id="topbar-user">admin</span>
+      </div>
+      <button class="topbar-btn danger" onclick="doLogout()">Sair</button>
+    </div>
+  </div>
+
+  <!-- ══════════════════════════════════════════
+       PANEL: DASHBOARD
+  ══════════════════════════════════════════ -->
+  <div id="content">
+
+    <div class="panel active" id="panel-dashboard">
+      <div class="stats-grid">
+        <div class="stat-card" style="--accent:var(--yellow)">
+          <div class="stat-icon">🔥</div>
+          <div class="stat-label">PTs Abertas Hoje</div>
+          <div class="stat-value" id="stat-abertas">0</div>
+          <div class="stat-sub">Trabalhos a Quente Ativos</div>
+        </div>
+        <div class="stat-card" style="--accent:var(--orange)">
+          <div class="stat-icon">⏳</div>
+          <div class="stat-label">Aguardando Aprovação</div>
+          <div class="stat-value" id="stat-pendentes">0</div>
+          <div class="stat-sub">Necessitam revisão</div>
+        </div>
+        <div class="stat-card" style="--accent:var(--green)">
+          <div class="stat-icon">✅</div>
+          <div class="stat-label">Concluídas no Mês</div>
+          <div class="stat-value" id="stat-concluidas">0</div>
+          <div class="stat-sub">Encerradas com sucesso</div>
+        </div>
+        <div class="stat-card" style="--accent:var(--red)">
+          <div class="stat-icon">⚠️</div>
+          <div class="stat-label">Ocorrências</div>
+          <div class="stat-value" id="stat-ocorrencias">0</div>
+          <div class="stat-sub">Incidentes registrados</div>
+        </div>
+      </div>
+
+      <div class="grid2">
+        <!-- Últimas PTs -->
+        <div class="card">
+          <div class="card-title">🔥 Últimas Permissões de Trabalho</div>
+          <div id="dashboard-pts-list">
+            <div class="empty-state">
+              <div class="empty-icon">📋</div>
+              <p>Nenhuma PT registrada ainda</p>
+            </div>
+          </div>
+        </div>
+
+        <!-- Atividade Recente -->
+        <div class="card">
+          <div class="card-title">📡 Atividade Recente</div>
+          <div class="timeline" id="activity-timeline">
+            <div class="empty-state">
+              <div class="empty-icon">📡</div>
+              <p>Sem atividade registrada</p>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Distribuição de Risco -->
+      <div class="card">
+        <div class="card-title">📊 Distribuição de Risco PxG</div>
+        <div class="grid3" style="margin-top:4px">
+          <div style="text-align:center">
+            <div style="font-size:11px;color:var(--text3);margin-bottom:8px">GRAVIDADE MÉDIA</div>
+            <div style="font-size:32px;font-weight:800;color:var(--yellow)" id="risk-gravity-avg">—</div>
+            <div class="gravity-row" style="margin-top:10px">
+              <div class="g-pill g1">G1</div>
+              <div class="g-pill g2">G2</div>
+              <div class="g-pill g3">G3</div>
+              <div class="g-pill g4">G4</div>
+              <div class="g-pill g5">G5</div>
+            </div>
+          </div>
+          <div>
+            <div style="font-size:11px;color:var(--text3);margin-bottom:12px">DISTRIBUIÇÃO POR RISCO</div>
+            <div id="risk-dist-bars">
+              <div class="risk-bar-item" style="margin-bottom:10px">
+                <div style="display:flex;justify-content:space-between;font-size:12px;margin-bottom:4px">
+                  <span style="color:var(--green2)">BAIXO</span><span class="count-low" style="color:var(--text2)">0</span>
+                </div>
+                <div class="risk-bar"><div class="risk-fill" id="bar-low" style="width:0%;background:var(--green)"></div></div>
+              </div>
+              <div class="risk-bar-item" style="margin-bottom:10px">
+                <div style="display:flex;justify-content:space-between;font-size:12px;margin-bottom:4px">
+                  <span style="color:var(--yellow2)">MÉDIO</span><span class="count-med" style="color:var(--text2)">0</span>
+                </div>
+                <div class="risk-bar"><div class="risk-fill" id="bar-med" style="width:0%;background:var(--yellow)"></div></div>
+              </div>
+              <div class="risk-bar-item">
+                <div style="display:flex;justify-content:space-between;font-size:12px;margin-bottom:4px">
+                  <span style="color:var(--red)">ALTO/CRÍTICO</span><span class="count-high" style="color:var(--text2)">0</span>
+                </div>
+                <div class="risk-bar"><div class="risk-fill" id="bar-high" style="width:0%;background:var(--red)"></div></div>
+              </div>
+            </div>
+          </div>
+          <div>
+            <div style="font-size:11px;color:var(--text3);margin-bottom:12px">TRABALHADORES ATIVOS</div>
+            <div style="font-size:36px;font-weight:800;color:var(--blue)" id="stat-workers-active">0</div>
+            <div style="font-size:11px;color:var(--text2);margin-top:4px">Com documentação válida</div>
+            <div style="margin-top:16px;font-size:11px;color:var(--text3)">DOCS VENCIDOS</div>
+            <div style="font-size:22px;font-weight:700;color:var(--orange);margin-top:2px" id="stat-docs-vencidos">0</div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ══════════════════════════════════════════
+         PANEL: PTs ABERTAS
+    ══════════════════════════════════════════ -->
+    <div class="panel" id="panel-pts-abertas">
+      <div class="section-header">
+        <div class="section-title">Permissões Abertas</div>
+        <div style="display:flex;gap:10px">
+          <button class="btn btn-outline" onclick="exportPTs()">⬇ Exportar Excel</button>
+          <button class="btn btn-primary" onclick="openModalNovaPT()">＋ Nova PT</button>
+        </div>
+      </div>
+
+      <div class="search-bar">
+        <input type="text" id="search-pts" placeholder="Pesquisar por local, executante, número…" oninput="renderPTs()">
+      </div>
+
+      <div class="table-wrap">
+        <table>
+          <thead>
+            <tr>
+              <th>N° PT</th>
+              <th>Local / Serviço</th>
+              <th>Executante</th>
+              <th>Liberador</th>
+              <th>Início</th>
+              <th>Validade</th>
+              <th>Risco PxG</th>
+              <th>Status</th>
+              <th>Ações</th>
+            </tr>
+          </thead>
+          <tbody id="pts-abertas-tbody">
+            <tr>
+              <td colspan="9">
+                <div class="empty-state">
+                  <div class="empty-icon">🔥</div>
+                  <p>Nenhuma PT aberta no momento</p>
+                </div>
+              </td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+    <!-- ══════════════════════════════════════════
+         PANEL: PTs PENDENTES
+    ══════════════════════════════════════════ -->
+    <div class="panel" id="panel-pts-pendentes">
+      <div class="section-header">
+        <div class="section-title">Aguardando Aprovação</div>
+      </div>
+      <div id="pts-pendentes-list">
+        <div class="empty-state" style="margin-top:40px">
+          <div class="empty-icon">⏳</div>
+          <p>Nenhuma PT aguardando aprovação</p>
+        </div>
+      </div>
+    </div>
+
+    <!-- ══════════════════════════════════════════
+         PANEL: HISTÓRICO
+    ══════════════════════════════════════════ -->
+    <div class="panel" id="panel-pts-historico">
+      <div class="section-header">
+        <div class="section-title">Histórico de PTs</div>
+        <button class="btn btn-outline" onclick="exportPTs(&#39;all&#39;)">⬇ Exportar Tudo</button>
+      </div>
+
+      <div style="display:flex;gap:10px;margin-bottom:16px">
+        <select id="hist-filter-status" onchange="renderHistorico()" style="max-width:160px">
+          <option value="">Todos Status</option>
+          <option value="concluida">Concluídas</option>
+          <option value="cancelada">Canceladas</option>
+          <option value="vencida">Vencidas</option>
+        </select>
+        <input type="date" id="hist-filter-inicio" onchange="renderHistorico()">
+        <input type="date" id="hist-filter-fim" onchange="renderHistorico()">
+      </div>
+
+      <div class="table-wrap">
+        <table>
+          <thead>
+            <tr>
+              <th>N° PT</th>
+              <th>Local</th>
+              <th>Executante</th>
+              <th>Data</th>
+              <th>Risco</th>
+              <th>Status Final</th>
+              <th>Ações</th>
+            </tr>
+          </thead>
+          <tbody id="historico-tbody">
+            <tr>
+              <td colspan="7">
+                <div class="empty-state">
+                  <div class="empty-icon">📁</div>
+                  <p>Histórico vazio</p>
+                </div>
+              </td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+    <!-- ══════════════════════════════════════════
+         PANEL: TRABALHADORES
+    ══════════════════════════════════════════ -->
+    <div class="panel" id="panel-trabalhadores">
+      <div class="section-header">
+        <div class="section-title">Executantes Cadastrados</div>
+        <div style="display:flex;gap:10px">
+          <button class="btn btn-outline" onclick="document.getElementById(&#39;import-workers-file&#39;).click()">📂 Importar Excel/CSV</button>
+          <input type="file" id="import-workers-file" accept=".xlsx,.csv" style="display:none" onchange="importWorkers(this)">
+          <button class="btn btn-primary" onclick="openModalWorker()">＋ Novo Trabalhador</button>
+        </div>
+      </div>
+
+      <div class="search-bar">
+        <input type="text" id="search-workers" placeholder="Pesquisar por nome, matrícula, função…" oninput="renderWorkers()">
+      </div>
+
+      <div class="table-wrap">
+        <table>
+          <thead>
+            <tr>
+              <th>Matrícula</th>
+              <th>Nome</th>
+              <th>Função</th>
+              <th>Empresa</th>
+              <th>NR-34</th>
+              <th>NR-35</th>
+              <th>ASO</th>
+              <th>TAQ</th>
+              <th>Status</th>
+              <th>Ações</th>
+            </tr>
+          </thead>
+          <tbody id="workers-tbody">
+            <tr>
+              <td colspan="10">
+                <div class="empty-state">
+                  <div class="empty-icon">👷</div>
+                  <p>Nenhum trabalhador cadastrado</p>
+                </div>
+              </td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+    <!-- ══════════════════════════════════════════
+         PANEL: DOCUMENTOS
+    ══════════════════════════════════════════ -->
+    <div class="panel" id="panel-documentos">
+      <div class="section-header">
+        <div class="section-title">Verificação Documental</div>
+      </div>
+
+      <div class="tabs">
+        <button class="tab active" onclick="switchDocTab(&#39;executante&#39;)">Executante</button>
+        <button class="tab" onclick="switchDocTab(&#39;liberador&#39;)">Liberador</button>
+        <button class="tab" onclick="switchDocTab(&#39;vigia&#39;)">Vigia</button>
+      </div>
+
+      <div class="grid2">
+        <div class="card">
+          <div class="card-title">📋 Documentos Obrigatórios — Executante</div>
+          <div id="doc-checklist-executante">
+            <div class="doc-row">
+              <span class="doc-name">Treinamento de Integração</span>
+              <div class="doc-status"><span class="badge gray">N/V</span></div>
+            </div>
+            <div class="doc-row">
+              <span class="doc-name">ASO — Atestado de Saúde Ocupacional</span>
+              <div class="doc-status"><span class="badge gray">N/V</span></div>
+            </div>
+            <div class="doc-row">
+              <span class="doc-name">NR-34 — Trabalho em Espaço Confinado</span>
+              <div class="doc-status"><span class="badge gray">N/V</span></div>
+            </div>
+            <div class="doc-row">
+              <span class="doc-name">NR-35 — Trabalho em Altura</span>
+              <div class="doc-status"><span class="badge gray">N/V</span></div>
+            </div>
+            <div class="doc-row">
+              <span class="doc-name">TAQ — Teste de Aptidão em Quente</span>
+              <div class="doc-status"><span class="badge gray">N/V</span></div>
+            </div>
+            <div class="doc-row">
+              <span class="doc-name">Qualificação para Oxicorte</span>
+              <div class="doc-status"><span class="badge gray">N/V</span></div>
+            </div>
+          </div>
+        </div>
+
+        <div class="card">
+          <div class="card-title">🔍 Selecionar Trabalhador para Verificar</div>
+          <div class="form-group">
+            <label>Matrícula ou Nome</label>
+            <input type="text" id="doc-search-worker" placeholder="Digite para buscar…" oninput="filterDocWorker()">
+          </div>
+          <div id="doc-worker-results" style="margin-top:8px"></div>
+          <div id="doc-worker-selected" style="display:none">
+            <div style="padding:12px;background:var(--bg3);border-radius:8px;border:1px solid var(--border)">
+              <div style="font-size:12px;color:var(--text3)">TRABALHADOR SELECIONADO</div>
+              <div style="font-size:15px;font-weight:700;color:var(--white);margin-top:4px" id="dws-name">—</div>
+              <div style="font-size:11px;color:var(--text2)" id="dws-role">—</div>
+            </div>
+            <button class="btn btn-primary" style="width:100%;justify-content:center;margin-top:12px" onclick="runDocVerification()">
+              ✅ Verificar Documentação
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ══════════════════════════════════════════
+         PANEL: ANÁLISE PxG
+    ══════════════════════════════════════════ -->
+    <div class="panel" id="panel-analise-pxg">
+      <div class="section-header">
+        <div class="section-title">Análise de Risco PxG — IA</div>
+      </div>
+
+      <div class="grid2">
+        <div class="card">
+          <div class="card-title">🤖 Parâmetros da Análise</div>
+          <div class="form-group">
+            <label>Tipo de Serviço</label>
+            <select id="pxg-tipo">
+              <option>Oxicorte</option>
+              <option>Solda Elétrica</option>
+              <option>Esmerilhamento</option>
+              <option>Maçarico</option>
+              <option>Outro (descrever)</option>
+            </select>
+          </div>
+          <div class="form-group">
+            <label>Local de Trabalho</label>
+            <input type="text" id="pxg-local" placeholder="Ex: Casco Navio, Porão, Cais…">
+          </div>
+          <div class="form-group">
+            <label>Espaço Confinado?</label>
+            <select id="pxg-confinado">
+              <option value="nao">Não</option>
+              <option value="sim">Sim — NR-33 aplicável</option>
+            </select>
+          </div>
+          <div class="form-group">
+            <label>Trabalho em Altura?</label>
+            <select id="pxg-altura">
+              <option value="nao">Não</option>
+              <option value="sim">Sim — acima de 2m (NR-35)</option>
+            </select>
+          </div>
+          <div class="form-group">
+            <label>Presença de Inflamáveis/Gases?</label>
+            <select id="pxg-inflamavel">
+              <option value="nao">Não</option>
+              <option value="sim">Sim</option>
+              <option value="desconhecido">Não verificado</option>
+            </select>
+          </div>
+          <div class="form-group">
+            <label>Contexto Adicional</label>
+            <textarea id="pxg-contexto" rows="3" placeholder="Descreva condições especiais, número de trabalhadores, equipamentos…"></textarea>
+          </div>
+          <button class="btn btn-primary" style="width:100%;justify-content:center" onclick="runPxGAnalysis()">
+            🤖 Analisar com IA
+          </button>
+        </div>
+
+        <div class="card">
+          <div class="card-title">📊 Resultado PxG</div>
+          <div id="pxg-result-placeholder" style="text-align:center;padding:40px 20px;color:var(--text3)">
+            <div style="font-size:40px;margin-bottom:12px">🤖</div>
+            <p>Preencha os parâmetros e clique em "Analisar" para obter a análise de risco PxG pela IA</p>
+          </div>
+          <div id="pxg-result" style="display:none">
+            <div style="text-align:center;margin-bottom:20px">
+              <div style="font-size:12px;color:var(--text3);margin-bottom:6px">ÍNDICE DE RISCO PxG</div>
+              <div style="font-size:48px;font-weight:900" id="pxg-score">—</div>
+              <div style="font-size:14px;font-weight:700;margin-top:4px" id="pxg-class">—</div>
+            </div>
+            <div style="margin-bottom:16px">
+              <div style="font-size:11px;color:var(--text3);margin-bottom:8px;text-transform:uppercase;letter-spacing:.7px">Escala de Gravidade</div>
+              <div class="gravity-row">
+                <div class="g-pill g1" id="gpill-1">G1</div>
+                <div class="g-pill g2" id="gpill-2">G2</div>
+                <div class="g-pill g3" id="gpill-3">G3</div>
+                <div class="g-pill g4" id="gpill-4">G4</div>
+                <div class="g-pill g5" id="gpill-5">G5</div>
+              </div>
+            </div>
+            <div style="font-size:13px;line-height:1.7;color:var(--text2)" id="pxg-narrative"></div>
+            <div style="margin-top:16px">
+              <div style="font-size:11px;color:var(--text3);text-transform:uppercase;letter-spacing:.7px;margin-bottom:8px">EPIs Obrigatórios</div>
+              <div id="pxg-epis" style="display:flex;flex-wrap:wrap;gap:6px"></div>
+            </div>
+            <div style="margin-top:16px">
+              <div style="font-size:11px;color:var(--text3);text-transform:uppercase;letter-spacing:.7px;margin-bottom:8px">Controles Obrigatórios</div>
+              <div id="pxg-controls" style="font-size:12px;color:var(--text2);line-height:1.8"></div>
+            </div>
+          </div>
+          <div id="pxg-loading" style="display:none;text-align:center;padding:40px">
+            <div style="font-size:32px;margin-bottom:8px;animation:spin 1s linear infinite">⚙️</div>
+            <div style="font-size:13px;color:var(--text2)">IA analisando riscos…</div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ══════════════════════════════════════════
+         PANEL: CHECKLIST CMOC
+    ══════════════════════════════════════════ -->
+    <div class="panel" id="panel-checklist-cmoc">
+      <div class="section-header">
+        <div class="section-title">Checklist CMOC — 16 Pontos (Oxicorte)</div>
+        <button class="btn btn-outline" onclick="resetChecklist()">🔄 Reiniciar</button>
+      </div>
+
+      <div class="grid2">
+        <div class="card">
+          <div class="card-title">⚙️ Inspeção de Equipamento</div>
+          <div id="cmoc-list"></div>
+        </div>
+        <div class="card">
+          <div class="card-title">📋 Resumo da Inspeção</div>
+          <div id="cmoc-summary">
+            <div style="text-align:center;color:var(--text3);padding:24px">
+              Responda os itens ao lado para ver o resultado
+            </div>
+          </div>
+          <button class="btn btn-primary" style="width:100%;justify-content:center;margin-top:16px" onclick="finalizarChecklist()">
+            ✅ Finalizar Inspeção
+          </button>
+        </div>
+      </div>
+    </div>
+
+    <!-- ══════════════════════════════════════════
+         PANEL: USUÁRIOS
+    ══════════════════════════════════════════ -->
+    <div class="panel" id="panel-usuarios">
+      <div class="section-header">
+        <div class="section-title">Usuários Administrativos</div>
+        <button class="btn btn-primary" onclick="openModalUsuario()">＋ Novo Usuário</button>
+      </div>
+      <div class="table-wrap">
+        <table>
+          <thead>
+            <tr>
+              <th>Usuário</th>
+              <th>Nome</th>
+              <th>Perfil</th>
+              <th>Último Acesso</th>
+              <th>Status</th>
+              <th>Ações</th>
+            </tr>
+          </thead>
+          <tbody id="users-tbody"></tbody>
+        </table>
+      </div>
+    </div>
+
+    <!-- ══════════════════════════════════════════
+         PANEL: RELATÓRIOS
+    ══════════════════════════════════════════ -->
+    <div class="panel" id="panel-relatorios">
+      <div class="section-header">
+        <div class="section-title">Relatórios e Exportações</div>
+      </div>
+      <div class="grid3">
+        <div class="card" style="text-align:center;cursor:pointer" onclick="exportPTs()">
+          <div style="font-size:32px;margin-bottom:8px">📊</div>
+          <div style="font-weight:700;color:var(--white);margin-bottom:4px">PTs — Excel</div>
+          <div style="font-size:12px;color:var(--text3)">Todas as permissões de trabalho</div>
+          <button class="btn btn-outline" style="margin-top:12px;width:100%;justify-content:center">⬇ Exportar</button>
+        </div>
+        <div class="card" style="text-align:center;cursor:pointer" onclick="exportWorkers()">
+          <div style="font-size:32px;margin-bottom:8px">👷</div>
+          <div style="font-weight:700;color:var(--white);margin-bottom:4px">Trabalhadores — Excel</div>
+          <div style="font-size:12px;color:var(--text3)">Cadastro e situação documental</div>
+          <button class="btn btn-outline" style="margin-top:12px;width:100%;justify-content:center">⬇ Exportar</button>
+        </div>
+        <div class="card" style="text-align:center;cursor:pointer" onclick="exportDocs()">
+          <div style="font-size:32px;margin-bottom:8px">📋</div>
+          <div style="font-weight:700;color:var(--white);margin-bottom:4px">Documentos Vencidos</div>
+          <div style="font-size:12px;color:var(--text3)">ASO, NR-34, NR-35, TAQ</div>
+          <button class="btn btn-outline btn-danger" style="margin-top:12px;width:100%;justify-content:center">⬇ Exportar</button>
+        </div>
+      </div>
+
+      <div class="card" style="margin-top:4px">
+        <div class="card-title">📅 Exportar por Período</div>
+        <div style="display:flex;gap:12px;align-items:flex-end;flex-wrap:wrap">
+          <div class="form-group" style="margin:0;flex:1;min-width:140px">
+            <label>Data Início</label>
+            <input type="date" id="rel-inicio">
+          </div>
+          <div class="form-group" style="margin:0;flex:1;min-width:140px">
+            <label>Data Fim</label>
+            <input type="date" id="rel-fim">
+          </div>
+          <div class="form-group" style="margin:0;flex:1;min-width:140px">
+            <label>Tipo de Dado</label>
+            <select id="rel-tipo">
+              <option value="pts">Permissões de Trabalho</option>
+              <option value="workers">Trabalhadores</option>
+              <option value="todos">Tudo</option>
+            </select>
+          </div>
+          <button class="btn btn-primary" onclick="exportPeriodo()">⬇ Exportar Excel</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- ══════════════════════════════════════════
+         PANEL: CONFIGURAÇÕES
+    ══════════════════════════════════════════ -->
+    <div class="panel" id="panel-configuracoes">
+      <div class="section-header">
+        <div class="section-title">Configurações do Sistema</div>
+      </div>
+      <div class="grid2">
+        <div class="card">
+          <div class="card-title">🏢 Dados da Empresa</div>
+          <div class="form-group">
+            <label>Nome da Empresa/Terminal</label>
+            <input type="text" id="cfg-empresa" placeholder="Ex: Terminal AGEO Novo Remanso">
+          </div>
+          <div class="form-group">
+            <label>CNPJ</label>
+            <input type="text" id="cfg-cnpj" placeholder="00.000.000/0000-00">
+          </div>
+          <div class="form-group">
+            <label>Responsável Técnico</label>
+            <input type="text" id="cfg-responsavel" placeholder="Nome do Engenheiro/Técnico">
+          </div>
+          <div class="form-group">
+            <label>CREA / CRQ</label>
+            <input type="text" id="cfg-crea" placeholder="CREA-AM 000000">
+          </div>
+          <button class="btn btn-primary" onclick="saveConfig()">💾 Salvar</button>
+        </div>
+        <div class="card">
+          <div class="card-title">⏰ Validade de Documentos (dias)</div>
+          <div class="form-group">
+            <label>ASO</label>
+            <input type="number" id="cfg-val-aso" value="365">
+          </div>
+          <div class="form-group">
+            <label>NR-34 (Treinamento)</label>
+            <input type="number" id="cfg-val-nr34" value="365">
+          </div>
+          <div class="form-group">
+            <label>NR-35 (Treinamento)</label>
+            <input type="number" id="cfg-val-nr35" value="365">
+          </div>
+          <div class="form-group">
+            <label>TAQ</label>
+            <input type="number" id="cfg-val-taq" value="180">
+          </div>
+          <div class="form-group">
+            <label>Aviso de Vencimento (dias de antecedência)</label>
+            <input type="number" id="cfg-aviso" value="30">
+          </div>
+          <button class="btn btn-primary" onclick="saveConfig()">💾 Salvar</button>
+        </div>
+      </div>
+
+      <div class="card">
+        <div class="card-title">🔑 Alterar Senha</div>
+        <div style="display:flex;gap:12px;flex-wrap:wrap">
+          <div class="form-group" style="flex:1;margin:0">
+            <label>Senha Atual</label>
+            <input type="password" id="cfg-senha-atual">
+          </div>
+          <div class="form-group" style="flex:1;margin:0">
+            <label>Nova Senha</label>
+            <input type="password" id="cfg-senha-nova">
+          </div>
+          <div class="form-group" style="flex:1;margin:0">
+            <label>Confirmar Nova Senha</label>
+            <input type="password" id="cfg-senha-conf">
+          </div>
+          <div style="display:flex;align-items:flex-end">
+            <button class="btn btn-primary" onclick="changePassword()">🔐 Alterar</button>
+          </div>
+        </div>
+      </div>
+
+      <div class="card">
+        <div class="card-title" style="color:var(--red)">⚠️ Zona de Perigo</div>
+        <div style="display:flex;gap:12px;flex-wrap:wrap">
+          <button class="btn btn-danger" onclick="clearAllData()">🗑 Limpar Todos os Dados</button>
+          <button class="btn btn-outline" onclick="exportBackup()">💾 Exportar Backup Completo</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- ══════════════════════════════════════════
+         PANEL: GESTÃO POR LIBERADOR
+    ══════════════════════════════════════════ -->
+    <div class="panel" id="panel-gestao-liberadores">
+      <div class="section-header">
+        <div class="section-title">📊 Acompanhamento de PTs por Liberador</div>
+        <button class="btn btn-outline" onclick="exportGestaoLiberadores()">⬇ Exportar Excel</button>
+      </div>
+
+      <!-- Filtros -->
+      <div class="card" style="padding:16px;margin-bottom:20px">
+        <div style="display:flex;gap:12px;flex-wrap:wrap;align-items:flex-end">
+          <div style="flex:1;min-width:140px">
+            <label style="display:block;font-size:11px;font-weight:700;color:var(--text3);text-transform:uppercase;letter-spacing:.5px;margin-bottom:6px">Data Início</label>
+            <input type="date" id="gl-di" onchange="renderGestaoLiberadores()">
+          </div>
+          <div style="flex:1;min-width:140px">
+            <label style="display:block;font-size:11px;font-weight:700;color:var(--text3);text-transform:uppercase;letter-spacing:.5px;margin-bottom:6px">Data Fim</label>
+            <input type="date" id="gl-df" onchange="renderGestaoLiberadores()">
+          </div>
+          <div style="flex:1;min-width:140px">
+            <label style="display:block;font-size:11px;font-weight:700;color:var(--text3);text-transform:uppercase;letter-spacing:.5px;margin-bottom:6px">Tipo de Trabalho</label>
+            <select id="gl-tipo" onchange="renderGestaoLiberadores()">
+              <option value="">Todos</option>
+              <option>Oxicorte</option>
+              <option>Solda Elétrica</option>
+              <option>Esmerilhamento</option>
+              <option>Maçarico</option>
+              <option>Outro</option>
+            </select>
+          </div>
+          <div style="flex:1;min-width:140px">
+            <label style="display:block;font-size:11px;font-weight:700;color:var(--text3);text-transform:uppercase;letter-spacing:.5px;margin-bottom:6px">Status</label>
+            <select id="gl-status" onchange="renderGestaoLiberadores()">
+              <option value="">Todos</option>
+              <option value="aberta">Abertas</option>
+              <option value="concluida">Concluídas</option>
+              <option value="cancelada">Canceladas</option>
+              <option value="pendente">Pendentes</option>
+            </select>
+          </div>
+          <div style="flex:1;min-width:140px">
+            <label style="display:block;font-size:11px;font-weight:700;color:var(--text3);text-transform:uppercase;letter-spacing:.5px;margin-bottom:6px">Liberador</label>
+            <select id="gl-liberador" onchange="renderGestaoLiberadores()">
+              <option value="">Todos</option>
+            </select>
+          </div>
+          <button class="btn btn-outline" onclick="limparFiltrosGL()">✕ Limpar</button>
+        </div>
+      </div>
+
+      <!-- Cards resumo -->
+      <div class="stats-grid" style="margin-bottom:20px" id="gl-stats-grid">
+        <div class="stat-card" style="--accent:var(--yellow)">
+          <div class="stat-icon">📋</div>
+          <div class="stat-label">Total de PTs</div>
+          <div class="stat-value" id="gl-total">0</div>
+          <div class="stat-sub">No período filtrado</div>
+        </div>
+        <div class="stat-card" style="--accent:var(--green)">
+          <div class="stat-icon">✅</div>
+          <div class="stat-label">Aprovadas</div>
+          <div class="stat-value" id="gl-aprovadas">0</div>
+          <div class="stat-sub" id="gl-aprovadas-pct">0%</div>
+        </div>
+        <div class="stat-card" style="--accent:var(--red)">
+          <div class="stat-icon">✕</div>
+          <div class="stat-label">Recusadas/Canceladas</div>
+          <div class="stat-value" id="gl-recusadas">0</div>
+          <div class="stat-sub" id="gl-recusadas-pct">0%</div>
+        </div>
+        <div class="stat-card" style="--accent:var(--blue)">
+          <div class="stat-icon">🔓</div>
+          <div class="stat-label">Em Aberto</div>
+          <div class="stat-value" id="gl-abertas">0</div>
+          <div class="stat-sub">Ativas no momento</div>
+        </div>
+      </div>
+
+      <div class="grid2" style="margin-bottom:20px">
+        <!-- Por liberador -->
+        <div class="card">
+          <div class="card-title">👤 Desempenho por Liberador</div>
+          <div id="gl-por-liberador">
+            <div class="empty-state"><div class="empty-icon">👤</div><p>Sem dados no período</p></div>
+          </div>
+        </div>
+
+        <!-- Por tipo de trabalho -->
+        <div class="card">
+          <div class="card-title">🔥 Distribuição por Tipo de Trabalho</div>
+          <div id="gl-por-tipo">
+            <div class="empty-state"><div class="empty-icon">🔥</div><p>Sem dados no período</p></div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Tabela detalhada -->
+      <div class="section-header">
+        <div class="section-title">📋 PTs Detalhadas</div>
+      </div>
+      <div class="table-wrap">
+        <table>
+          <thead>
+            <tr>
+              <th>N° PT</th>
+              <th>Local</th>
+              <th>Tipo</th>
+              <th>Executante</th>
+              <th>Liberador</th>
+              <th>Data</th>
+              <th>Risco PxG</th>
+              <th>Status</th>
+            </tr>
+          </thead>
+          <tbody id="gl-tbody">
+            <tr><td colspan="8"><div class="empty-state"><div class="empty-icon">📋</div><p>Sem PTs no período</p></div></td></tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+
+    <div class="panel" id="panel-clima">
+      <div class="section-header">
+        <div class="section-title">🌤️ Condições Climáticas — Trabalho a Céu Aberto</div>
+        <button class="btn btn-outline" onclick="fetchClima()">🔄 Atualizar</button>
+      </div>
+
+      <!-- Status geral -->
+      <div class="card" id="clima-status-card" style="text-align:center;padding:28px">
+        <div style="font-size:56px" id="clima-icon">⏳</div>
+        <div style="font-size:22px;font-weight:800;margin:8px 0" id="clima-veredicto">Carregando dados…</div>
+        <div style="font-size:13px;color:var(--text2)" id="clima-veredicto-sub">Consultando condições meteorológicas</div>
+      </div>
+
+      <div class="grid3" style="margin-bottom:20px">
+        <div class="stat-card" style="--accent:var(--blue)">
+          <div class="stat-icon">🌡️</div>
+          <div class="stat-label">Temperatura</div>
+          <div class="stat-value" id="clima-temp">—</div>
+          <div class="stat-sub" id="clima-temp-sub">—</div>
+        </div>
+        <div class="stat-card" style="--accent:var(--yellow)">
+          <div class="stat-icon">💨</div>
+          <div class="stat-label">Vento</div>
+          <div class="stat-value" id="clima-vento">—</div>
+          <div class="stat-sub" id="clima-vento-sub">—</div>
+        </div>
+        <div class="stat-card" style="--accent:var(--green)">
+          <div class="stat-icon">💧</div>
+          <div class="stat-label">Umidade</div>
+          <div class="stat-value" id="clima-umidade">—</div>
+          <div class="stat-sub" id="clima-umidade-sub">—</div>
+        </div>
+      </div>
+
+      <div class="grid2">
+        <!-- Checklist de liberação -->
+        <div class="card">
+          <div class="card-title">✅ Critérios para Liberação — Trabalho a Céu Aberto</div>
+          <div id="clima-checklist"></div>
+          <div style="margin-top:16px;padding:12px;border-radius:8px;text-align:center;font-weight:700;font-size:14px" id="clima-resultado-box">
+            Aguardando dados climáticos…
+          </div>
+        </div>
+
+        <!-- Detalhes + NRs -->
+        <div class="card">
+          <div class="card-title">📋 Informações Complementares</div>
+          <div style="margin-bottom:16px">
+            <div style="font-size:11px;color:var(--text3);text-transform:uppercase;letter-spacing:.7px;margin-bottom:8px">Localização</div>
+            <div style="display:flex;gap:8px">
+              <input type="text" id="clima-cidade" placeholder="Cidade (ex: Manaus)" style="flex:1">
+              <button class="btn btn-primary" onclick="fetchClima()">Buscar</button>
+            </div>
+            <div style="font-size:11px;color:var(--text3);margin-top:6px" id="clima-local-atual">📍 Usando localização padrão: Manaus, AM</div>
+          </div>
+
+          <div style="font-size:11px;color:var(--text3);text-transform:uppercase;letter-spacing:.7px;margin-bottom:10px">Normas Aplicáveis</div>
+          <div class="timeline">
+            <div class="timeline-item">
+              <div class="timeline-dot"></div>
+              <div class="timeline-text"><strong>NR-15 Anexo 3</strong> — Exposição ao calor: IBUTG máx. 25°C (leve), 26.7°C (moderado)</div>
+            </div>
+            <div class="timeline-item">
+              <div class="timeline-dot"></div>
+              <div class="timeline-text"><strong>NR-35</strong> — Vento ≥ 42 km/h: suspender trabalho em altura</div>
+            </div>
+            <div class="timeline-item">
+              <div class="timeline-dot"></div>
+              <div class="timeline-text"><strong>NR-10 / ABNT</strong> — Proibido trabalho elétrico com chuva ou raios</div>
+            </div>
+            <div class="timeline-item">
+              <div class="timeline-dot" style="background:var(--yellow)"></div>
+              <div class="timeline-text"><strong>NR-34</strong> — Condições adversas suspendem atividades navais a céu aberto</div>
+            </div>
+          </div>
+
+          <div style="margin-top:16px">
+            <div style="font-size:11px;color:var(--text3);text-transform:uppercase;letter-spacing:.7px;margin-bottom:8px">Registro Manual</div>
+            <div class="form-group" style="margin-bottom:8px">
+              <label>Temperatura observada (°C)</label>
+              <input type="number" id="clima-manual-temp" placeholder="Ex: 34">
+            </div>
+            <div class="form-group" style="margin-bottom:8px">
+              <label>Vento observado (km/h)</label>
+              <input type="number" id="clima-manual-vento" placeholder="Ex: 15">
+            </div>
+            <div class="form-group" style="margin-bottom:8px">
+              <label>Condição do Tempo</label>
+              <select id="clima-manual-cond">
+                <option value="limpo">☀️ Céu Limpo</option>
+                <option value="nublado">⛅ Parcialmente Nublado</option>
+                <option value="chuva_fraca">🌦️ Chuva Fraca</option>
+                <option value="chuva_forte">🌧️ Chuva Forte</option>
+                <option value="trovoada">⛈️ Trovoada / Raios</option>
+              </select>
+            </div>
+            <button class="btn btn-primary" style="width:100%;justify-content:center" onclick="avaliarClimaManual()">
+              ⚡ Avaliar Condições
+            </button>
+          </div>
+        </div>
+      </div>
+
+      <!-- Histórico de avaliações -->
+      <div class="card">
+        <div class="card-title">📅 Histórico de Avaliações Climáticas</div>
+        <div class="table-wrap" style="margin-top:0;border:none">
+          <table>
+            <thead>
+              <tr>
+                <th>Data/Hora</th>
+                <th>Local</th>
+                <th>Temp.</th>
+                <th>Vento</th>
+                <th>Condição</th>
+                <th>Veredicto</th>
+                <th>Responsável</th>
+              </tr>
+            </thead>
+            <tbody id="clima-historico-tbody">
+              <tr><td colspan="7"><div class="empty-state"><div class="empty-icon">🌤️</div><p>Sem avaliações registradas</p></div></td></tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+
+  </div><!-- /content -->
+</div><!-- /main -->
+
+<!-- ═══ MODAL: NOVA PT ═══ -->
+<div class="modal-overlay" id="modal-nova-pt">
+  <div class="modal">
+    <div class="modal-header">
+      <div class="modal-title">🔥 Nova Permissão de Trabalho</div>
+      <button class="modal-close" onclick="closeModal(&#39;modal-nova-pt&#39;)">✕</button>
+    </div>
+    <div class="grid2">
+      <div class="form-group">
+        <label>N° PT (auto)</label>
+        <input type="text" id="pt-numero" readonly="" placeholder="Gerado automaticamente">
+      </div>
+      <div class="form-group">
+        <label>Data / Hora Início</label>
+        <input type="datetime-local" id="pt-inicio">
+      </div>
+    </div>
+    <div class="form-group">
+      <label>Local do Serviço</label>
+      <input type="text" id="pt-local" placeholder="Ex: Casco BB, Proa, Porão N°2…">
+    </div>
+    <div class="form-group">
+      <label>Descrição do Serviço</label>
+      <textarea id="pt-servico" rows="2" placeholder="Descreva o trabalho a ser executado…"></textarea>
+    </div>
+    <div class="grid2">
+      <div class="form-group">
+        <label>Executante (Matrícula ou Nome)</label>
+        <input type="text" id="pt-executante" placeholder="Buscar trabalhador…" list="workers-datalist">
+        <datalist id="workers-datalist"></datalist>
+      </div>
+      <div class="form-group">
+        <label>Liberador</label>
+        <input type="text" id="pt-liberador" placeholder="Nome do Liberador">
+      </div>
+    </div>
+    <div class="form-group">
+      <label>Vigia</label>
+      <input type="text" id="pt-vigia" placeholder="Nome do Vigia (se aplicável)">
+    </div>
+    <div class="grid2">
+      <div class="form-group">
+        <label>Tipo de Trabalho a Quente</label>
+        <select id="pt-tipo">
+          <option>Oxicorte</option>
+          <option>Solda Elétrica</option>
+          <option>Esmerilhamento</option>
+          <option>Maçarico</option>
+          <option>Outro</option>
+        </select>
+      </div>
+      <div class="form-group">
+        <label>Validade (horas)</label>
+        <input type="number" id="pt-validade" value="8" min="1" max="24">
+      </div>
+    </div>
+    <div style="display:flex;gap:10px;justify-content:flex-end;margin-top:8px">
+      <button class="btn btn-outline" onclick="closeModal(&#39;modal-nova-pt&#39;)">Cancelar</button>
+      <button class="btn btn-primary" onclick="salvarPT()">🔥 Emitir PT</button>
+    </div>
+  </div>
+</div>
+
+<!-- ═══ MODAL: TRABALHADOR ═══ -->
+<div class="modal-overlay" id="modal-worker">
+  <div class="modal">
+    <div class="modal-header">
+      <div class="modal-title">👷 Cadastrar Trabalhador</div>
+      <button class="modal-close" onclick="closeModal(&#39;modal-worker&#39;)">✕</button>
+    </div>
+    <div class="grid2">
+      <div class="form-group">
+        <label>Matrícula</label>
+        <input type="text" id="w-matricula" placeholder="MAT-0001">
+      </div>
+      <div class="form-group">
+        <label>CPF</label>
+        <input type="text" id="w-cpf" placeholder="000.000.000-00">
+      </div>
+    </div>
+    <div class="form-group">
+      <label>Nome Completo</label>
+      <input type="text" id="w-nome" placeholder="Nome do trabalhador">
+    </div>
+    <div class="grid2">
+      <div class="form-group">
+        <label>Função</label>
+        <input type="text" id="w-funcao" placeholder="Ex: Soldador, Oxicortista…">
+      </div>
+      <div class="form-group">
+        <label>Empresa</label>
+        <input type="text" id="w-empresa" placeholder="Empresa contratada">
+      </div>
+    </div>
+    <div style="font-size:12px;font-weight:700;color:var(--text3);text-transform:uppercase;letter-spacing:.6px;margin-bottom:12px">Validade dos Documentos</div>
+    <div class="grid2">
+      <div class="form-group">
+        <label>ASO — Validade</label>
+        <input type="date" id="w-aso">
+      </div>
+      <div class="form-group">
+        <label>NR-34 — Validade</label>
+        <input type="date" id="w-nr34">
+      </div>
+      <div class="form-group">
+        <label>NR-35 — Validade</label>
+        <input type="date" id="w-nr35">
+      </div>
+      <div class="form-group">
+        <label>TAQ — Validade</label>
+        <input type="date" id="w-taq">
+      </div>
+    </div>
+    <div class="form-group">
+      <label>Treinamento de Integração?</label>
+      <select id="w-integracao">
+        <option value="sim">Sim — Concluído</option>
+        <option value="nao">Não</option>
+        <option value="pendente">Pendente</option>
+      </select>
+    </div>
+    <div style="display:flex;gap:10px;justify-content:flex-end;margin-top:8px">
+      <button class="btn btn-outline" onclick="closeModal(&#39;modal-worker&#39;)">Cancelar</button>
+      <button class="btn btn-primary" onclick="salvarWorker()">💾 Salvar</button>
+    </div>
+  </div>
+</div>
+
+<!-- ═══ MODAL: USUÁRIO ═══ -->
+<div class="modal-overlay" id="modal-usuario">
+  <div class="modal">
+    <div class="modal-header">
+      <div class="modal-title">👤 Novo Usuário Administrador</div>
+      <button class="modal-close" onclick="closeModal(&#39;modal-usuario&#39;)">✕</button>
+    </div>
+    <div class="form-group">
+      <label>Login (usuário)</label>
+      <input type="text" id="u-login" placeholder="login.usuario">
+    </div>
+    <div class="form-group">
+      <label>Nome Completo</label>
+      <input type="text" id="u-nome" placeholder="Nome do usuário">
+    </div>
+    <div class="form-group">
+      <label>Perfil de Acesso</label>
+      <select id="u-perfil">
+        <option value="admin">Administrador (acesso total)</option>
+        <option value="liberador">Liberador (aprovar PTs)</option>
+        <option value="visor">Visualizador (somente leitura)</option>
+      </select>
+    </div>
+    <div class="form-group">
+      <label>Senha Inicial</label>
+      <input type="password" id="u-senha" placeholder="Mínimo 6 caracteres">
+    </div>
+    <div style="display:flex;gap:10px;justify-content:flex-end;margin-top:8px">
+      <button class="btn btn-outline" onclick="closeModal(&#39;modal-usuario&#39;)">Cancelar</button>
+      <button class="btn btn-primary" onclick="salvarUsuario()">💾 Criar Usuário</button>
+    </div>
+  </div>
+</div>
+
+<!-- ═══ TOAST ═══ -->
+<div id="toast">
+  <span id="toast-icon">✅</span>
+  <span id="toast-msg">Operação realizada</span>
+</div>
+
+<style>
+@keyframes spin { to { transform: rotate(360deg); } }
+</style>
+
+<script>
+// ═══════════════════════════════════════════════════
+//  STATE
+// ═══════════════════════════════════════════════════
+const KEY = {
+  pts: '0r_admin_pts',
+  workers: '0r_admin_workers',
+  users: '0r_admin_users',
+  config: '0r_admin_config',
+  logs: '0r_admin_logs',
+  session: '0r_admin_session'
+};
+
+// Built-in users
+const BUILTIN_USERS = [
+  { login: 'admin',  senha: 'orisco2025', nome: 'Administrador',      perfil: 'admin'   },
+  { login: 'derjam', senha: 'pxg@2025',   nome: 'Derjam Rocha',       perfil: 'admin'   }
+];
+
+const CMOC_ITEMS = [
+  'Cilindros de O₂ e combustível com tampas rosqueadas e válvulas protegidas',
+  'Reguladores de pressão calibrados e sem vazamentos',
+  'Mangueiras sem cortes, dobras ou ressecamentos (vermelho=combustível, verde=O₂)',
+  'Maçarico com bico apropriado ao serviço, limpo e sem entupimentos',
+  'Retroflama (Flashback Arrestors) instalada em O₂ e combustível',
+  'Válvulas de corte automático (VMAs) em bom estado',
+  'Fixação e identificação dos cilindros (verticais, presos, na sombra)',
+  'Extintor de CO₂ (mín. 6kg) posicionado a ≤5m do ponto de trabalho',
+  'Detector de gases calibrado — leitura < 10% LIE no ambiente',
+  'Ventilação forçada ativa (≥6 trocas de ar/h em espaço confinado)',
+  'EPIs completos: touca, luva vaqueta, avental raspa, perneira, óculos e máscara',
+  'Sinalização e isolamento da área (raio mínimo 5m)',
+  'Permissão de Trabalho a Quente assinada por Liberador autorizado',
+  'ASO, NR-34 e TAQ válidos para todos os executantes verificados',
+  'Comunicação estabelecida Executante ↔ Vigia ↔ Liberador',
+  'Plano de emergência e rota de fuga definidos e comunicados'
+];
+
+let currentUser = null;
+let cmocAnswers = {};
+
+function load(key) {
+  try { return JSON.parse(localStorage.getItem(key)) || null; } catch { return null; }
+}
+
+function save(key, data) {
+  localStorage.setItem(key, JSON.stringify(data));
+}
+
+function getList(key) { return load(key) || []; }
+
+// ═══════════════════════════════════════════════════
+//  AUTH
+// ═══════════════════════════════════════════════════
+function doLogin() {
+  const user = document.getElementById('login-user').value.trim();
+  const pass = document.getElementById('login-pass').value;
+
+  const users = [...BUILTIN_USERS, ...getList(KEY.users)];
+  const found = users.find(u => u.login === user && u.senha === pass);
+
+  if (found) {
+    currentUser = found;
+    save(KEY.session, { login: found.login, nome: found.nome, perfil: found.perfil, ts: Date.now() });
+    document.getElementById('login-screen').style.display = 'none';
+    initAdmin(found);
+  } else {
+    document.getElementById('login-error').style.display = 'block';
+    document.getElementById('login-pass').value = '';
+  }
+}
+
+function doLogout() {
+  localStorage.removeItem(KEY.session);
+  location.reload();
+}
+
+function initAdmin(user) {
+  document.getElementById('topbar-user').textContent = user.nome || user.login;
+  document.getElementById('topbar-avatar').textContent = (user.nome || user.login)[0].toUpperCase();
+  document.getElementById('sidebar-user-name').textContent = user.nome || user.login;
+  document.getElementById('sidebar-user-role').textContent = { admin:'Administrador', liberador:'Liberador', visor:'Visualizador' }[user.perfil] || user.perfil;
+  addLog(`Login: ${user.nome || user.login}`);
+  refreshData();
+  initCMOC();
+  renderUsers();
+  renderWorkers();
+  loadConfig();
+}
+
+// Auto-login from session
+window.addEventListener('DOMContentLoaded', () => {
+  const ses = load(KEY.session);
+  if (ses && (Date.now() - ses.ts) < 8 * 3600000) {
+    const users = [...BUILTIN_USERS, ...getList(KEY.users)];
+    const found = users.find(u => u.login === ses.login);
+    if (found) {
+      currentUser = found;
+      document.getElementById('login-screen').style.display = 'none';
+      initAdmin(found);
+      return;
+    }
+  }
+  document.getElementById('login-user').focus();
+  document.getElementById('login-pass').addEventListener('keydown', e => { if (e.key === 'Enter') doLogin(); });
+  document.getElementById('login-user').addEventListener('keydown', e => { if (e.key === 'Enter') document.getElementById('login-pass').focus(); });
+});
+
+// ═══════════════════════════════════════════════════
+//  NAVIGATION
+// ═══════════════════════════════════════════════════
+const PANEL_TITLES = {
+  dashboard: 'Dashboard',
+  'pts-abertas': 'Permissões Abertas',
+  'pts-pendentes': 'Aguardando Aprovação',
+  'pts-historico': 'Histórico de PTs',
+  trabalhadores: 'Executantes Cadastrados',
+  documentos: 'Verificação Documental',
+  'analise-pxg': 'Análise de Risco PxG',
+  'checklist-cmoc': 'Checklist CMOC 16pts',
+  'gestao-liberadores': 'Acompanhamento por Liberador',
+  clima: 'Condições Climáticas',
+  usuarios: 'Usuários Admin',
+  relatorios: 'Relatórios',
+  configuracoes: 'Configurações',
+};
+
+function showPanel(id) {
+  document.querySelectorAll('.panel').forEach(p => p.classList.remove('active'));
+  document.querySelectorAll('nav a').forEach(a => a.classList.remove('active'));
+  document.getElementById('panel-' + id)?.classList.add('active');
+  document.getElementById('topbar-title').textContent = PANEL_TITLES[id] || id;
+
+  // Activate nav link
+  document.querySelectorAll('nav a').forEach(a => {
+    if (a.getAttribute('onclick')?.includes(`'${id}'`)) a.classList.add('active');
+  });
+
+  if (id === 'pts-abertas') renderPTs();
+  if (id === 'pts-pendentes') renderPendentes();
+  if (id === 'pts-historico') renderHistorico();
+  if (id === 'trabalhadores') renderWorkers();
+  if (id === 'gestao-liberadores') renderGestaoLiberadores();
+  if (id === 'clima') { fetchClima(); renderClimaHistorico(); }
+}
+
+function toggleSidebar() {
+  document.getElementById('sidebar').classList.toggle('open');
+}
+
+// ═══════════════════════════════════════════════════
+//  DATA REFRESH
+// ═══════════════════════════════════════════════════
+function refreshData() {
+  const pts = getList(KEY.pts);
+  const workers = getList(KEY.workers);
+  const today = new Date().toDateString();
+
+  const abertas = pts.filter(p => p.status === 'aberta');
+  const pendentes = pts.filter(p => p.status === 'pendente');
+  const concluidas = pts.filter(p => p.status === 'concluida');
+  const ocorrencias = pts.filter(p => p.ocorrencia);
+
+  // Stats
+  document.getElementById('stat-abertas').textContent = abertas.length;
+  document.getElementById('stat-pendentes').textContent = pendentes.length;
+  document.getElementById('stat-concluidas').textContent = concluidas.length;
+  document.getElementById('stat-ocorrencias').textContent = ocorrencias.length;
+  document.getElementById('badge-abertas').textContent = abertas.length;
+  document.getElementById('badge-pendentes').textContent = pendentes.length;
+
+  // Workers stats
+  const now = new Date();
+  const activeWorkers = workers.filter(w => {
+    const docs = [w.aso, w.nr34, w.nr35, w.taq];
+    return docs.every(d => !d || new Date(d) > now);
+  });
+  const docsVencidos = workers.filter(w => {
+    const docs = [w.aso, w.nr34, w.nr35, w.taq];
+    return docs.some(d => d && new Date(d) <= now);
+  });
+
+  document.getElementById('stat-workers-active').textContent = activeWorkers.length;
+  document.getElementById('stat-docs-vencidos').textContent = docsVencidos.length;
+
+  // Risk distribution
+  const low = pts.filter(p => (p.risco || 0) <= 4).length;
+  const med = pts.filter(p => (p.risco || 0) > 4 && (p.risco || 0) <= 12).length;
+  const high = pts.filter(p => (p.risco || 0) > 12).length;
+  const total = pts.length || 1;
+
+  document.querySelector('.count-low').textContent = low;
+  document.querySelector('.count-med').textContent = med;
+  document.querySelector('.count-high').textContent = high;
+  document.getElementById('bar-low').style.width = (low / total * 100) + '%';
+  document.getElementById('bar-med').style.width = (med / total * 100) + '%';
+  document.getElementById('bar-high').style.width = (high / total * 100) + '%';
+
+  const avgRisco = pts.length ? (pts.reduce((a,p) => a + (p.risco || 0), 0) / pts.length).toFixed(1) : '—';
+  document.getElementById('risk-gravity-avg').textContent = avgRisco;
+
+  renderDashboardPTs(abertas.slice(0, 5));
+  renderTimeline();
+}
+
+function renderDashboardPTs(list) {
+  const el = document.getElementById('dashboard-pts-list');
+  if (!list.length) {
+    el.innerHTML = '<div class="empty-state"><div class="empty-icon">📋</div><p>Nenhuma PT aberta</p></div>';
+    return;
+  }
+  el.innerHTML = list.map(pt => `
+    <div class="pt-card" onclick="showPanel('pts-abertas')">
+      <div class="pt-card-header">
+        <span class="pt-number">${pt.numero}</span>
+        ${statusBadge(pt.status)}
+      </div>
+      <div class="pt-local">${pt.local || '—'}</div>
+      <div class="pt-meta">${pt.tipo || ''} · ${pt.executante || ''}</div>
+      <div class="risk-mini">
+        <span style="background:${riskColor(pt.risco)};color:#000">PxG ${pt.risco || '?'}</span>
+        <span style="background:var(--border);color:var(--text2)">${formatDate(pt.inicio)}</span>
+      </div>
+    </div>
+  `).join('');
+}
+
+function renderTimeline() {
+  const logs = getList(KEY.logs).slice(0, 8);
+  const el = document.getElementById('activity-timeline');
+  if (!logs.length) {
+    el.innerHTML = '<div class="empty-state"><div class="empty-icon">📡</div><p>Sem atividade</p></div>';
+    return;
+  }
+  el.innerHTML = logs.reverse().map(l => `
+    <div class="timeline-item">
+      <div class="timeline-dot ${l.type || ''}"></div>
+      <div class="timeline-time">${formatDateTime(l.ts)}</div>
+      <div class="timeline-text">${l.msg}</div>
+    </div>
+  `).join('');
+}
+
+// ═══════════════════════════════════════════════════
+//  PTs
+// ═══════════════════════════════════════════════════
+function openModalNovaPT() {
+  const num = generatePTNumber();
+  document.getElementById('pt-numero').value = num;
+  document.getElementById('pt-inicio').value = new Date().toISOString().slice(0,16);
+  updateWorkerDatalist();
+  document.getElementById('modal-nova-pt').classList.add('open');
+}
+
+function generatePTNumber() {
+  const pts = getList(KEY.pts);
+  const seq = (pts.length + 1).toString().padStart(4, '0');
+  const d = new Date();
+  return `PT-${d.getFullYear()}${(d.getMonth()+1).toString().padStart(2,'0')}${d.getDate().toString().padStart(2,'0')}-${seq}`;
+}
+
+function updateWorkerDatalist() {
+  const workers = getList(KEY.workers);
+  document.getElementById('workers-datalist').innerHTML =
+    workers.map(w => `<option value="${w.nome} (${w.matricula})">`).join('');
+}
+
+function salvarPT() {
+  const local = document.getElementById('pt-local').value.trim();
+  const executante = document.getElementById('pt-executante').value.trim();
+  if (!local || !executante) { toast('Preencha Local e Executante', 'error'); return; }
+
+  const pt = {
+    id: Date.now(),
+    numero: document.getElementById('pt-numero').value,
+    local,
+    servico: document.getElementById('pt-servico').value,
+    executante,
+    liberador: document.getElementById('pt-liberador').value,
+    vigia: document.getElementById('pt-vigia').value,
+    tipo: document.getElementById('pt-tipo').value,
+    inicio: document.getElementById('pt-inicio').value,
+    validade: document.getElementById('pt-validade').value,
+    status: 'aberta',
+    risco: null,
+    criador: currentUser?.login,
+    ts: Date.now()
+  };
+
+  const pts = getList(KEY.pts);
+  pts.push(pt);
+  save(KEY.pts, pts);
+  addLog(`PT emitida: ${pt.numero} — ${pt.local}`, 'green');
+  closeModal('modal-nova-pt');
+  toast(`PT ${pt.numero} emitida com sucesso!`, 'success');
+  refreshData();
+}
+
+function renderPTs() {
+  const q = document.getElementById('search-pts')?.value.toLowerCase() || '';
+  const pts = getList(KEY.pts).filter(p => p.status === 'aberta' && (
+    !q || p.numero?.toLowerCase().includes(q) || p.local?.toLowerCase().includes(q) || p.executante?.toLowerCase().includes(q)
+  ));
+
+  const tbody = document.getElementById('pts-abertas-tbody');
+  if (!pts.length) {
+    tbody.innerHTML = `<tr><td colspan="9"><div class="empty-state"><div class="empty-icon">🔥</div><p>Nenhuma PT aberta</p></div></td></tr>`;
+    return;
+  }
+
+  tbody.innerHTML = pts.map(pt => `
+    <tr>
+      <td><strong style="color:var(--yellow)">${pt.numero}</strong></td>
+      <td>${pt.local}</td>
+      <td>${pt.executante || '—'}</td>
+      <td>${pt.liberador || '—'}</td>
+      <td>${formatDateTime(pt.inicio)}</td>
+      <td>${calcValidade(pt)}</td>
+      <td>${pt.risco ? `<span style="background:${riskColor(pt.risco)};color:#000;padding:2px 8px;border-radius:4px;font-size:11px;font-weight:700">PxG ${pt.risco}</span>` : '<span class="badge gray">N/A</span>'}</td>
+      <td>${statusBadge(pt.status)}</td>
+      <td>
+        <div class="action-group">
+          <button class="btn btn-outline btn-sm" onclick="encerrarPT(${pt.id})">✅ Encerrar</button>
+          <button class="btn btn-danger btn-sm" onclick="cancelarPT(${pt.id})">✕</button>
+        </div>
+      </td>
+    </tr>
+  `).join('');
+}
+
+function renderPendentes() {
+  const pts = getList(KEY.pts).filter(p => p.status === 'pendente');
+  const el = document.getElementById('pts-pendentes-list');
+  if (!pts.length) {
+    el.innerHTML = '<div class="empty-state" style="margin-top:40px"><div class="empty-icon">⏳</div><p>Nenhuma PT aguardando aprovação</p></div>';
+    return;
+  }
+  el.innerHTML = pts.map(pt => `
+    <div class="pt-card">
+      <div class="pt-card-header">
+        <span class="pt-number">${pt.numero}</span>
+        ${statusBadge(pt.status)}
+      </div>
+      <div class="pt-local">${pt.local}</div>
+      <div class="pt-meta">${pt.tipo} · ${pt.executante} · ${formatDateTime(pt.inicio)}</div>
+      <div style="display:flex;gap:8px;margin-top:10px">
+        <button class="btn btn-primary btn-sm" onclick="aprovarPT(${pt.id})">✅ Aprovar</button>
+        <button class="btn btn-danger btn-sm" onclick="cancelarPT(${pt.id})">✕ Recusar</button>
+      </div>
+    </div>
+  `).join('');
+}
+
+function renderHistorico() {
+  const sf = document.getElementById('hist-filter-status')?.value;
+  const di = document.getElementById('hist-filter-inicio')?.value;
+  const df = document.getElementById('hist-filter-fim')?.value;
+  const pts = getList(KEY.pts).filter(p => {
+    if (['aberta','pendente'].includes(p.status)) return false;
+    if (sf && p.status !== sf) return false;
+    if (di && p.ts < new Date(di).getTime()) return false;
+    if (df && p.ts > new Date(df).getTime() + 86399999) return false;
+    return true;
+  });
+
+  const tbody = document.getElementById('historico-tbody');
+  if (!pts.length) {
+    tbody.innerHTML = `<tr><td colspan="7"><div class="empty-state"><div class="empty-icon">📁</div><p>Sem registros</p></div></td></tr>`;
+    return;
+  }
+  tbody.innerHTML = pts.map(pt => `
+    <tr>
+      <td><strong style="color:var(--yellow)">${pt.numero}</strong></td>
+      <td>${pt.local}</td>
+      <td>${pt.executante || '—'}</td>
+      <td>${formatDate(pt.inicio)}</td>
+      <td>${pt.risco ? `<span style="background:${riskColor(pt.risco)};color:#000;padding:2px 8px;border-radius:4px;font-size:11px;font-weight:700">PxG ${pt.risco}</span>` : '—'}</td>
+      <td>${statusBadge(pt.status)}</td>
+      <td><button class="btn btn-outline btn-sm">🗒 Ver</button></td>
+    </tr>
+  `).join('');
+}
+
+function encerrarPT(id) {
+  const pts = getList(KEY.pts);
+  const pt = pts.find(p => p.id === id);
+  if (pt) { pt.status = 'concluida'; pt.encerradoEm = Date.now(); save(KEY.pts, pts); }
+  addLog(`PT encerrada: ${pt?.numero}`, 'green');
+  toast('PT encerrada com sucesso', 'success');
+  refreshData(); renderPTs();
+}
+
+function cancelarPT(id) {
+  if (!confirm('Cancelar esta PT?')) return;
+  const pts = getList(KEY.pts);
+  const pt = pts.find(p => p.id === id);
+  if (pt) { pt.status = 'cancelada'; save(KEY.pts, pts); }
+  addLog(`PT cancelada: ${pt?.numero}`, 'red');
+  toast('PT cancelada', 'warn');
+  refreshData(); renderPTs(); renderPendentes();
+}
+
+function aprovarPT(id) {
+  const pts = getList(KEY.pts);
+  const pt = pts.find(p => p.id === id);
+  if (pt) { pt.status = 'aberta'; save(KEY.pts, pts); }
+  addLog(`PT aprovada: ${pt?.numero}`, 'green');
+  toast('PT aprovada', 'success');
+  refreshData(); renderPendentes();
+}
+
+// ═══════════════════════════════════════════════════
+//  TRABALHADORES
+// ═══════════════════════════════════════════════════
+function openModalWorker() {
+  document.getElementById('modal-worker').classList.add('open');
+}
+
+function salvarWorker() {
+  const nome = document.getElementById('w-nome').value.trim();
+  if (!nome) { toast('Nome obrigatório', 'error'); return; }
+
+  const w = {
+    id: Date.now(),
+    matricula: document.getElementById('w-matricula').value.trim() || `MAT-${Date.now().toString().slice(-4)}`,
+    cpf: document.getElementById('w-cpf').value.trim(),
+    nome,
+    funcao: document.getElementById('w-funcao').value.trim(),
+    empresa: document.getElementById('w-empresa').value.trim(),
+    aso: document.getElementById('w-aso').value,
+    nr34: document.getElementById('w-nr34').value,
+    nr35: document.getElementById('w-nr35').value,
+    taq: document.getElementById('w-taq').value,
+    integracao: document.getElementById('w-integracao').value,
+    ts: Date.now()
+  };
+
+  const workers = getList(KEY.workers);
+  workers.push(w);
+  save(KEY.workers, workers);
+  addLog(`Trabalhador cadastrado: ${w.nome}`);
+  closeModal('modal-worker');
+  toast(`${w.nome} cadastrado`, 'success');
+  renderWorkers();
+  refreshData();
+}
+
+function renderWorkers() {
+  const q = document.getElementById('search-workers')?.value.toLowerCase() || '';
+  const workers = getList(KEY.workers).filter(w =>
+    !q || w.nome?.toLowerCase().includes(q) || w.matricula?.toLowerCase().includes(q) || w.funcao?.toLowerCase().includes(q)
+  );
+
+  const tbody = document.getElementById('workers-tbody');
+  if (!workers.length) {
+    tbody.innerHTML = `<tr><td colspan="10"><div class="empty-state"><div class="empty-icon">👷</div><p>Nenhum trabalhador cadastrado</p></div></td></tr>`;
+    return;
+  }
+
+  tbody.innerHTML = workers.map(w => `
+    <tr>
+      <td><code style="color:var(--yellow);font-size:11px">${w.matricula}</code></td>
+      <td><strong>${w.nome}</strong></td>
+      <td>${w.funcao || '—'}</td>
+      <td>${w.empresa || '—'}</td>
+      <td>${docBadge(w.nr34)}</td>
+      <td>${docBadge(w.nr35)}</td>
+      <td>${docBadge(w.aso)}</td>
+      <td>${docBadge(w.taq)}</td>
+      <td>${workerStatus(w)}</td>
+      <td>
+        <div class="action-group">
+          <button class="btn btn-outline btn-sm" onclick="editWorker(${w.id})">✏</button>
+          <button class="btn btn-danger btn-sm" onclick="deleteWorker(${w.id})">🗑</button>
+        </div>
+      </td>
+    </tr>
+  `).join('');
+}
+
+function deleteWorker(id) {
+  if (!confirm('Remover trabalhador?')) return;
+  const workers = getList(KEY.workers).filter(w => w.id !== id);
+  save(KEY.workers, workers);
+  renderWorkers(); refreshData();
+  toast('Trabalhador removido', 'warn');
+}
+
+function importWorkers(input) {
+  const file = input.files[0];
+  if (!file) return;
+  const reader = new FileReader();
+  reader.onload = e => {
+    try {
+      const wb = XLSX.read(e.target.result, { type: 'array' });
+      const ws = wb.Sheets[wb.SheetNames[0]];
+      const rows = XLSX.utils.sheet_to_json(ws, { defval: '' });
+      const workers = getList(KEY.workers);
+      let added = 0;
+      rows.forEach(r => {
+        if (!r.nome && !r.Nome) return;
+        workers.push({
+          id: Date.now() + Math.random(),
+          matricula: r.matricula || r.Matrícula || `IMP-${Date.now().toString().slice(-4)}`,
+          nome: r.nome || r.Nome,
+          funcao: r.funcao || r.Função || '',
+          empresa: r.empresa || r.Empresa || '',
+          aso: r.aso || r.ASO || '',
+          nr34: r.nr34 || r.NR34 || '',
+          nr35: r.nr35 || r.NR35 || '',
+          taq: r.taq || r.TAQ || '',
+          integracao: 'pendente',
+          ts: Date.now()
+        });
+        added++;
+      });
+      save(KEY.workers, workers);
+      renderWorkers(); refreshData();
+      toast(`${added} trabalhador(es) importado(s)`, 'success');
+    } catch(err) {
+      toast('Erro ao ler arquivo', 'error');
+    }
+  };
+  reader.readAsArrayBuffer(file);
+  input.value = '';
+}
+
+// ═══════════════════════════════════════════════════
+//  DOCUMENTOS
+// ═══════════════════════════════════════════════════
+let selectedDocWorker = null;
+
+function switchDocTab(role) {
+  document.querySelectorAll('.tabs .tab').forEach(t => t.classList.remove('active'));
+  event.target.classList.add('active');
+}
+
+function filterDocWorker() {
+  const q = document.getElementById('doc-search-worker').value.toLowerCase();
+  const workers = getList(KEY.workers).filter(w =>
+    w.nome?.toLowerCase().includes(q) || w.matricula?.toLowerCase().includes(q)
+  );
+  const el = document.getElementById('doc-worker-results');
+  if (!q || !workers.length) { el.innerHTML = ''; return; }
+  el.innerHTML = workers.slice(0,5).map(w => `
+    <div onclick="selectDocWorker(${w.id})" style="padding:8px 12px;background:var(--bg3);border:1px solid var(--border);border-radius:6px;cursor:pointer;margin-bottom:6px;font-size:13px">
+      <strong>${w.nome}</strong> <span style="color:var(--text3)">${w.matricula}</span>
+    </div>
+  `).join('');
+}
+
+function selectDocWorker(id) {
+  const w = getList(KEY.workers).find(w => w.id === id);
+  if (!w) return;
+  selectedDocWorker = w;
+  document.getElementById('dws-name').textContent = w.nome;
+  document.getElementById('dws-role').textContent = `${w.funcao || ''} · ${w.empresa || ''}`;
+  document.getElementById('doc-worker-selected').style.display = 'block';
+  document.getElementById('doc-worker-results').innerHTML = '';
+  document.getElementById('doc-search-worker').value = w.nome;
+}
+
+function runDocVerification() {
+  if (!selectedDocWorker) return;
+  const w = selectedDocWorker;
+  const now = new Date();
+  const docs = [
+    { name: 'Treinamento de Integração', val: w.integracao === 'sim' ? '9999-12-31' : null },
+    { name: 'ASO — Atestado de Saúde Ocupacional', val: w.aso },
+    { name: 'NR-34 — Espaço Confinado', val: w.nr34 },
+    { name: 'NR-35 — Trabalho em Altura', val: w.nr35 },
+    { name: 'TAQ — Teste de Aptidão em Quente', val: w.taq },
+    { name: 'Qualificação para Oxicorte', val: w.taq }, // reuse TAQ
+  ];
+  const el = document.getElementById('doc-checklist-executante');
+  el.innerHTML = docs.map(d => {
+    const valid = d.val && new Date(d.val) > now;
+    const badge = valid ? '<span class="badge green">✓ VÁLIDO</span>' : '<span class="badge red">✕ INVÁLIDO/AUSENTE</span>';
+    const expiry = d.val && d.val !== '9999-12-31' ? `<span style="font-size:10px;color:var(--text3);margin-left:4px">Vence: ${d.val}</span>` : '';
+    return `<div class="doc-row"><span class="doc-name">${d.name}</span><div class="doc-status">${badge}${expiry}</div></div>`;
+  }).join('');
+}
+
+// ═══════════════════════════════════════════════════
+//  ANÁLISE PxG — IA
+// ═══════════════════════════════════════════════════
+async function runPxGAnalysis() {
+  const tipo = document.getElementById('pxg-tipo').value;
+  const local = document.getElementById('pxg-local').value;
+  const confinado = document.getElementById('pxg-confinado').value;
+  const altura = document.getElementById('pxg-altura').value;
+  const inflamavel = document.getElementById('pxg-inflamavel').value;
+  const contexto = document.getElementById('pxg-contexto').value;
+
+  document.getElementById('pxg-result-placeholder').style.display = 'none';
+  document.getElementById('pxg-result').style.display = 'none';
+  document.getElementById('pxg-loading').style.display = 'block';
+
+  const prompt = `Você é um especialista em Segurança do Trabalho Naval (NR-34, NR-35, NR-33, NR-20, NR-1) com expertise em análise de risco PxG (Probabilidade x Gravidade).
+
+ANÁLISE SOLICITADA:
+- Tipo de Trabalho a Quente: ${tipo}
+- Local: ${local || 'não especificado'}
+- Espaço Confinado: ${confinado}
+- Trabalho em Altura: ${altura}
+- Presença de Inflamáveis/Gases: ${inflamavel}
+- Contexto adicional: ${contexto || 'nenhum'}
+
+Retorne APENAS um JSON válido com esta estrutura exata:
+{
+  "pxg_score": <número de 1 a 25>,
+  "probabilidade": <1-5>,
+  "gravidade": <1-5, escala G1-G5>,
+  "classificacao": "<BAIXO|MÉDIO|ALTO|CRÍTICO>",
+  "cor": "<green|yellow|orange|red>",
+  "narrativa": "<2-3 frases explicando o risco>",
+  "epis": ["<EPI 1>","<EPI 2>","<EPI 3>"],
+  "controles": ["<controle 1>","<controle 2>","<controle 3>","<controle 4>"]
+}`;
+
+  try {
+    const response = await fetch('https://api.anthropic.com/v1/messages', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({
+        model: 'claude-sonnet-4-6',
+        max_tokens: 1000,
+        messages: [{ role: 'user', content: prompt }]
+      })
+    });
+
+    const data = await response.json();
+    const text = data.content?.map(c => c.text || '').join('') || '';
+    const clean = text.replace(/```json|```/g, '').trim();
+    const result = JSON.parse(clean);
+    showPxGResult(result);
+  } catch (err) {
+    // Fallback: generate locally based on params
+    const localFallback = generateLocalPxG(tipo, confinado, altura, inflamavel);
+    showPxGResult(localFallback);
+  }
+}
+
+function generateLocalPxG(tipo, confinado, altura, inflamavel) {
+  let p = 2, g = 2;
+  if (confinado === 'sim') { p++; g++; }
+  if (altura === 'sim') { p++; g++; }
+  if (inflamavel === 'sim') { p += 2; g += 2; }
+  if (tipo === 'Oxicorte') { g++; }
+  p = Math.min(5, p); g = Math.min(5, g);
+  const score = p * g;
+  const classificacao = score <= 4 ? 'BAIXO' : score <= 12 ? 'MÉDIO' : score <= 16 ? 'ALTO' : 'CRÍTICO';
+  const cor = score <= 4 ? 'green' : score <= 12 ? 'yellow' : score <= 16 ? 'orange' : 'red';
+  return {
+    pxg_score: score, probabilidade: p, gravidade: g, classificacao, cor,
+    narrativa: `Análise local: P=${p} x G=${g} = PxG ${score} (${classificacao}). ${confinado === 'sim' ? 'Espaço confinado aumenta significativamente o risco. ' : ''}${inflamavel === 'sim' ? 'Presença de inflamáveis requer atenção máxima.' : ''}`,
+    epis: ['Máscara de Solda/Oxicorte', 'Luva de Vaqueta', 'Avental de Raspa', 'Perneira de Raspa', 'Óculos de Proteção'],
+    controles: ['Verificar detector de gases antes de iniciar', 'Isolar área no raio mínimo de 5m', 'Posicionar extintor CO₂ a menos de 5m', 'Vigia presente durante todo o serviço']
+  };
+}
+
+function showPxGResult(result) {
+  document.getElementById('pxg-loading').style.display = 'none';
+  document.getElementById('pxg-result').style.display = 'block';
+
+  const colorMap = { green: 'var(--green2)', yellow: 'var(--yellow2)', orange: 'var(--orange)', red: 'var(--red)' };
+  const color = colorMap[result.cor] || 'var(--yellow)';
+
+  document.getElementById('pxg-score').textContent = result.pxg_score;
+  document.getElementById('pxg-score').style.color = color;
+  document.getElementById('pxg-class').textContent = result.classificacao;
+  document.getElementById('pxg-class').style.color = color;
+  document.getElementById('pxg-narrative').textContent = result.narrativa;
+
+  // Highlight gravity
+  for (let i = 1; i <= 5; i++) {
+    const pill = document.getElementById(`gpill-${i}`);
+    pill.style.opacity = i <= result.gravidade ? '1' : '0.3';
+    if (i === result.gravidade) pill.style.transform = 'scale(1.1)';
+    else pill.style.transform = '';
+  }
+
+  document.getElementById('pxg-epis').innerHTML = result.epis.map(e =>
+    `<span class="badge blue">${e}</span>`
+  ).join('');
+
+  document.getElementById('pxg-controls').innerHTML = result.controles.map(c =>
+    `<div style="margin-bottom:4px">▸ ${c}</div>`
+  ).join('');
+}
+
+// ═══════════════════════════════════════════════════
+//  CHECKLIST CMOC
+// ═══════════════════════════════════════════════════
+function initCMOC() {
+  cmocAnswers = {};
+  const el = document.getElementById('cmoc-list');
+  el.innerHTML = CMOC_ITEMS.map((item, i) => `
+    <div style="padding:10px 0;border-bottom:1px solid var(--border)">
+      <div style="font-size:12px;color:var(--text2);margin-bottom:8px">
+        <span style="color:var(--yellow);font-weight:700;margin-right:6px">${String(i+1).padStart(2,'0')}</span>${item}
+      </div>
+      <div style="display:flex;gap:8px">
+        <button class="btn btn-sm" style="background:rgba(0,200,83,.15);color:var(--green2);border:1px solid rgba(0,200,83,.3)" onclick="cmocAnswer(${i},'ok',this)">✓ OK</button>
+        <button class="btn btn-sm" style="background:rgba(255,61,61,.1);color:var(--red);border:1px solid rgba(255,61,61,.3)" onclick="cmocAnswer(${i},'nok',this)">✕ N/C</button>
+        <button class="btn btn-sm" style="background:rgba(255,122,0,.1);color:var(--orange);border:1px solid rgba(255,122,0,.3)" onclick="cmocAnswer(${i},'na',this)">N/A</button>
+      </div>
+    </div>
+  `).join('');
+}
+
+function cmocAnswer(idx, val, btn) {
+  cmocAnswers[idx] = val;
+  const parent = btn.parentElement;
+  parent.querySelectorAll('.btn').forEach(b => b.style.fontWeight = '400');
+  btn.style.fontWeight = '800';
+  updateCMOCSummary();
+}
+
+function updateCMOCSummary() {
+  const ok = Object.values(cmocAnswers).filter(v => v === 'ok').length;
+  const nok = Object.values(cmocAnswers).filter(v => v === 'nok').length;
+  const na = Object.values(cmocAnswers).filter(v => v === 'na').length;
+  const total = CMOC_ITEMS.length;
+  const answered = ok + nok + na;
+  const pct = Math.round((ok + na) / total * 100);
+
+  document.getElementById('cmoc-summary').innerHTML = `
+    <div style="text-align:center;margin-bottom:16px">
+      <div style="font-size:36px;font-weight:900;color:${nok > 0 ? 'var(--red)' : 'var(--green2)'}">${pct}%</div>
+      <div style="font-size:12px;color:var(--text3)">Conformidade</div>
+    </div>
+    <div style="display:flex;gap:12px;justify-content:center;margin-bottom:16px">
+      <div style="text-align:center"><div style="font-size:20px;font-weight:700;color:var(--green2)">${ok}</div><div style="font-size:11px;color:var(--text3)">OK</div></div>
+      <div style="text-align:center"><div style="font-size:20px;font-weight:700;color:var(--red)">${nok}</div><div style="font-size:11px;color:var(--text3)">N/C</div></div>
+      <div style="text-align:center"><div style="font-size:20px;font-weight:700;color:var(--text2)">${na}</div><div style="font-size:11px;color:var(--text3)">N/A</div></div>
+      <div style="text-align:center"><div style="font-size:20px;font-weight:700;color:var(--text)">${total - answered}</div><div style="font-size:11px;color:var(--text3)">Pendente</div></div>
+    </div>
+    ${nok > 0 ? `<div style="background:rgba(255,61,61,.1);border:1px solid rgba(255,61,61,.3);border-radius:6px;padding:10px;font-size:12px;color:var(--red)">⚠️ ${nok} item(s) não conformes. <strong>NÃO iniciar o serviço</strong> até regularização.</div>` : ''}
+  `;
+}
+
+function resetChecklist() {
+  initCMOC();
+  document.getElementById('cmoc-summary').innerHTML = '<div style="text-align:center;color:var(--text3);padding:24px">Responda os itens ao lado para ver o resultado</div>';
+}
+
+function finalizarChecklist() {
+  const ok = Object.values(cmocAnswers).filter(v => v === 'ok').length;
+  const nok = Object.values(cmocAnswers).filter(v => v === 'nok').length;
+  if (nok > 0) {
+    toast(`${nok} item(s) não conforme(s) — não é possível liberar`, 'error');
+    return;
+  }
+  addLog(`Checklist CMOC finalizado — ${ok} itens OK`);
+  toast('Checklist CMOC aprovado! PT pode ser emitida.', 'success');
+}
+
+// ═══════════════════════════════════════════════════
+//  USUÁRIOS
+// ═══════════════════════════════════════════════════
+function openModalUsuario() {
+  document.getElementById('modal-usuario').classList.add('open');
+}
+
+function salvarUsuario() {
+  const login = document.getElementById('u-login').value.trim();
+  const nome = document.getElementById('u-nome').value.trim();
+  const senha = document.getElementById('u-senha').value;
+  const perfil = document.getElementById('u-perfil').value;
+  if (!login || !senha) { toast('Login e senha obrigatórios', 'error'); return; }
+  if (senha.length < 6) { toast('Senha deve ter mínimo 6 caracteres', 'error'); return; }
+
+  const users = getList(KEY.users);
+  if (users.find(u => u.login === login) || BUILTIN_USERS.find(u => u.login === login)) {
+    toast('Login já existe', 'error'); return;
+  }
+  users.push({ login, nome, senha, perfil, ts: Date.now() });
+  save(KEY.users, users);
+  closeModal('modal-usuario');
+  toast(`Usuário ${login} criado`, 'success');
+  renderUsers();
+}
+
+function renderUsers() {
+  const all = [...BUILTIN_USERS.map(u => ({...u, builtin: true})), ...getList(KEY.users)];
+  const perfilLabel = { admin:'Administrador', liberador:'Liberador', visor:'Visualizador' };
+  document.getElementById('users-tbody').innerHTML = all.map(u => `
+    <tr>
+      <td><code style="color:var(--yellow)">${u.login}</code></td>
+      <td>${u.nome || '—'}</td>
+      <td><span class="badge ${u.perfil === 'admin' ? 'orange' : u.perfil === 'liberador' ? 'blue' : 'gray'}">${perfilLabel[u.perfil] || u.perfil}</span></td>
+      <td style="color:var(--text3)">—</td>
+      <td><span class="badge green">Ativo</span></td>
+      <td>${u.builtin ? '<span style="font-size:11px;color:var(--text3)">Sistema</span>' : `<button class="btn btn-danger btn-sm" onclick="deleteUser('${u.login}')">🗑</button>`}</td>
+    </tr>
+  `).join('');
+}
+
+function deleteUser(login) {
+  if (!confirm(`Remover usuário ${login}?`)) return;
+  const users = getList(KEY.users).filter(u => u.login !== login);
+  save(KEY.users, users);
+  renderUsers();
+  toast('Usuário removido', 'warn');
+}
+
+// ═══════════════════════════════════════════════════
+//  CONFIGURAÇÕES
+// ═══════════════════════════════════════════════════
+function loadConfig() {
+  const cfg = load(KEY.config) || {};
+  document.getElementById('cfg-empresa').value = cfg.empresa || '';
+  document.getElementById('cfg-cnpj').value = cfg.cnpj || '';
+  document.getElementById('cfg-responsavel').value = cfg.responsavel || '';
+  document.getElementById('cfg-crea').value = cfg.crea || '';
+  document.getElementById('cfg-val-aso').value = cfg.val_aso || 365;
+  document.getElementById('cfg-val-nr34').value = cfg.val_nr34 || 365;
+  document.getElementById('cfg-val-nr35').value = cfg.val_nr35 || 365;
+  document.getElementById('cfg-val-taq').value = cfg.val_taq || 180;
+  document.getElementById('cfg-aviso').value = cfg.aviso || 30;
+}
+
+function saveConfig() {
+  const cfg = {
+    empresa: document.getElementById('cfg-empresa').value,
+    cnpj: document.getElementById('cfg-cnpj').value,
+    responsavel: document.getElementById('cfg-responsavel').value,
+    crea: document.getElementById('cfg-crea').value,
+    val_aso: document.getElementById('cfg-val-aso').value,
+    val_nr34: document.getElementById('cfg-val-nr34').value,
+    val_nr35: document.getElementById('cfg-val-nr35').value,
+    val_taq: document.getElementById('cfg-val-taq').value,
+    aviso: document.getElementById('cfg-aviso').value,
+  };
+  save(KEY.config, cfg);
+  toast('Configurações salvas', 'success');
+}
+
+function changePassword() {
+  const atual = document.getElementById('cfg-senha-atual').value;
+  const nova = document.getElementById('cfg-senha-nova').value;
+  const conf = document.getElementById('cfg-senha-conf').value;
+  if (!currentUser) return;
+  if (atual !== currentUser.senha) { toast('Senha atual incorreta', 'error'); return; }
+  if (nova !== conf) { toast('As senhas não coincidem', 'error'); return; }
+  if (nova.length < 6) { toast('Senha deve ter mínimo 6 caracteres', 'error'); return; }
+  if (currentUser.builtin || BUILTIN_USERS.find(u => u.login === currentUser.login)) {
+    toast('Usuários internos não podem ter senha alterada por aqui', 'warn'); return;
+  }
+  const users = getList(KEY.users);
+  const u = users.find(u => u.login === currentUser.login);
+  if (u) { u.senha = nova; save(KEY.users, users); }
+  currentUser.senha = nova;
+  document.getElementById('cfg-senha-atual').value = '';
+  document.getElementById('cfg-senha-nova').value = '';
+  document.getElementById('cfg-senha-conf').value = '';
+  toast('Senha alterada com sucesso', 'success');
+}
+
+function clearAllData() {
+  if (!confirm('⚠️ ATENÇÃO: Isso apagará TODOS os dados (PTs, trabalhadores, etc). Confirma?')) return;
+  if (!confirm('Tem CERTEZA ABSOLUTA? Esta ação não pode ser desfeita.')) return;
+  Object.values(KEY).forEach(k => localStorage.removeItem(k));
+  toast('Dados limpos', 'warn');
+  setTimeout(() => location.reload(), 1500);
+}
+
+function exportBackup() {
+  const backup = {};
+  Object.entries(KEY).forEach(([k, v]) => { backup[k] = load(v); });
+  const blob = new Blob([JSON.stringify(backup, null, 2)], { type: 'application/json' });
+  const a = document.createElement('a');
+  a.href = URL.createObjectURL(blob);
+  a.download = `0risco-backup-${new Date().toISOString().slice(0,10)}.json`;
+  a.click();
+}
+
+// ═══════════════════════════════════════════════════
+//  EXPORTAÇÕES
+// ═══════════════════════════════════════════════════
+function exportPTs(scope) {
+  const pts = scope === 'all' ? getList(KEY.pts) : getList(KEY.pts).filter(p => p.status === 'aberta');
+  if (!pts.length) { toast('Sem dados para exportar', 'warn'); return; }
+  const ws = XLSX.utils.json_to_sheet(pts.map(p => ({
+    'N° PT': p.numero, 'Local': p.local, 'Serviço': p.servico,
+    'Executante': p.executante, 'Liberador': p.liberador, 'Vigia': p.vigia,
+    'Tipo': p.tipo, 'Início': p.inicio, 'Status': p.status,
+    'Risco PxG': p.risco || ''
+  })));
+  const wb = XLSX.utils.book_new();
+  XLSX.utils.book_append_sheet(wb, ws, 'PTs');
+  XLSX.writeFile(wb, `0risco-pts-${new Date().toISOString().slice(0,10)}.xlsx`);
+  toast('Exportado com sucesso', 'success');
+}
+
+function exportWorkers() {
+  const workers = getList(KEY.workers);
+  if (!workers.length) { toast('Sem trabalhadores para exportar', 'warn'); return; }
+  const ws = XLSX.utils.json_to_sheet(workers.map(w => ({
+    'Matrícula': w.matricula, 'Nome': w.nome, 'Função': w.funcao, 'Empresa': w.empresa,
+    'ASO': w.aso, 'NR-34': w.nr34, 'NR-35': w.nr35, 'TAQ': w.taq, 'Integração': w.integracao
+  })));
+  const wb = XLSX.utils.book_new();
+  XLSX.utils.book_append_sheet(wb, ws, 'Trabalhadores');
+  XLSX.writeFile(wb, `0risco-trabalhadores-${new Date().toISOString().slice(0,10)}.xlsx`);
+  toast('Exportado com sucesso', 'success');
+}
+
+function exportDocs() {
+  const now = new Date();
+  const workers = getList(KEY.workers).filter(w => {
+    const docs = [w.aso, w.nr34, w.nr35, w.taq];
+    return docs.some(d => d && new Date(d) <= now);
+  });
+  if (!workers.length) { toast('Nenhum documento vencido', 'success'); return; }
+  const rows = [];
+  workers.forEach(w => {
+    const addRow = (doc, val) => { if (val && new Date(val) <= now) rows.push({ Nome: w.nome, Matrícula: w.matricula, Documento: doc, Validade: val, Status: 'VENCIDO' }); };
+    addRow('ASO', w.aso); addRow('NR-34', w.nr34); addRow('NR-35', w.nr35); addRow('TAQ', w.taq);
+  });
+  const ws = XLSX.utils.json_to_sheet(rows);
+  const wb = XLSX.utils.book_new();
+  XLSX.utils.book_append_sheet(wb, ws, 'Docs Vencidos');
+  XLSX.writeFile(wb, `0risco-docs-vencidos-${new Date().toISOString().slice(0,10)}.xlsx`);
+  toast('Exportado com sucesso', 'success');
+}
+
+function exportPeriodo() {
+  const tipo = document.getElementById('rel-tipo').value;
+  if (tipo === 'pts' || tipo === 'todos') exportPTs('all');
+  if (tipo === 'workers' || tipo === 'todos') exportWorkers();
+}
+
+// ═══════════════════════════════════════════════════
+//  HELPERS
+// ═══════════════════════════════════════════════════
+function addLog(msg, type) {
+  const logs = getList(KEY.logs);
+  logs.push({ msg, type: type || '', ts: Date.now() });
+  if (logs.length > 100) logs.splice(0, logs.length - 100);
+  save(KEY.logs, logs);
+}
+
+function formatDate(d) {
+  if (!d) return '—';
+  try { return new Date(d).toLocaleDateString('pt-BR'); } catch { return d; }
+}
+
+function formatDateTime(d) {
+  if (!d) return '—';
+  try { return new Date(d).toLocaleString('pt-BR', { dateStyle:'short', timeStyle:'short' }); } catch { return d; }
+}
+
+function calcValidade(pt) {
+  if (!pt.inicio || !pt.validade) return '—';
+  const end = new Date(pt.inicio);
+  end.setHours(end.getHours() + parseInt(pt.validade));
+  const diff = end - new Date();
+  if (diff < 0) return '<span style="color:var(--red);font-size:11px">⚠️ Vencida</span>';
+  const h = Math.floor(diff / 3600000);
+  const m = Math.floor((diff % 3600000) / 60000);
+  return `<span style="font-size:11px;color:var(--green2)">⏱ ${h}h${m}m</span>`;
+}
+
+function statusBadge(s) {
+  const map = {
+    aberta: ['green','🔓 ABERTA'],
+    pendente: ['yellow','⏳ PENDENTE'],
+    concluida: ['blue','✅ CONCLUÍDA'],
+    cancelada: ['gray','✕ CANCELADA'],
+    vencida: ['red','⚠️ VENCIDA'],
+  };
+  const [cls, label] = map[s] || ['gray', s];
+  return `<span class="badge ${cls}">${label}</span>`;
+}
+
+function docBadge(val) {
+  if (!val) return '<span class="badge gray" style="font-size:10px">—</span>';
+  const ok = new Date(val) > new Date();
+  return ok ? `<span class="badge green" style="font-size:10px">✓</span>` : `<span class="badge red" style="font-size:10px">✕</span>`;
+}
+
+function workerStatus(w) {
+  const now = new Date();
+  const docs = [w.aso, w.nr34, w.nr35, w.taq].filter(Boolean);
+  if (!docs.length) return '<span class="badge gray">Incompleto</span>';
+  const vencidos = docs.filter(d => new Date(d) <= now).length;
+  if (vencidos > 0) return `<span class="badge red">⚠️ ${vencidos} vencido(s)</span>`;
+  if (w.integracao !== 'sim') return '<span class="badge yellow">Integração pend.</span>';
+  return '<span class="badge green">✓ Regular</span>';
+}
+
+function riskColor(score) {
+  if (!score) return 'var(--text3)';
+  if (score <= 4) return '#00c853';
+  if (score <= 12) return '#ffd60a';
+  if (score <= 16) return '#ff7a00';
+  return '#ff3d3d';
+}
+
+// ═══════════════════════════════════════════════════
+//  TOAST
+// ═══════════════════════════════════════════════════
+let toastTimer;
+function toast(msg, type = 'success') {
+  const el = document.getElementById('toast');
+  const icons = { success: '✅', error: '❌', warn: '⚠️' };
+  document.getElementById('toast-msg').textContent = msg;
+  document.getElementById('toast-icon').textContent = icons[type] || '✅';
+  el.className = `show ${type}`;
+  clearTimeout(toastTimer);
+  toastTimer = setTimeout(() => el.classList.remove('show'), 3500);
+}
+
+// ═══════════════════════════════════════════════════
+//  MODALS
+// ═══════════════════════════════════════════════════
+function closeModal(id) {
+  document.getElementById(id).classList.remove('open');
+}
+
+document.querySelectorAll('.modal-overlay').forEach(o => {
+  o.addEventListener('click', e => { if (e.target === o) o.classList.remove('open'); });
+});
+
+// ═══════════════════════════════════════════════════
+//  IR PARA CAMPO (sem senha)
+// ═══════════════════════════════════════════════════
+function irParaCampo() {
+  // Marca token de bypass para o app de campo não pedir senha
+  localStorage.setItem('0r_campo_bypass', JSON.stringify({ ts: Date.now(), user: currentUser?.nome || 'admin' }));
+  window.open('0risco-mobile.html', '_blank');
+}
+
+// ═══════════════════════════════════════════════════
+//  GESTÃO POR LIBERADOR
+// ═══════════════════════════════════════════════════
+function renderGestaoLiberadores() {
+  const pts = getList(KEY.pts);
+  const di = document.getElementById('gl-di')?.value;
+  const df = document.getElementById('gl-df')?.value;
+  const tipo = document.getElementById('gl-tipo')?.value;
+  const status = document.getElementById('gl-status')?.value;
+  const liberador = document.getElementById('gl-liberador')?.value;
+
+  // Popular select de liberadores
+  const liberadores = [...new Set(pts.map(p => p.liberador).filter(Boolean))];
+  const selLib = document.getElementById('gl-liberador');
+  const curVal = selLib.value;
+  selLib.innerHTML = '<option value="">Todos</option>' + liberadores.map(l => `<option ${l===curVal?'selected':''}>${l}</option>`).join('');
+
+  let filtered = pts.filter(p => {
+    if (di && new Date(p.inicio) < new Date(di)) return false;
+    if (df && new Date(p.inicio) > new Date(df + 'T23:59:59')) return false;
+    if (tipo && p.tipo !== tipo) return false;
+    if (status && p.status !== status) return false;
+    if (liberador && p.liberador !== liberador) return false;
+    return true;
+  });
+
+  const total = filtered.length;
+  const aprovadas = filtered.filter(p => p.status === 'concluida' || p.status === 'aberta').length;
+  const recusadas = filtered.filter(p => p.status === 'cancelada').length;
+  const abertas = filtered.filter(p => p.status === 'aberta').length;
+
+  document.getElementById('gl-total').textContent = total;
+  document.getElementById('gl-aprovadas').textContent = aprovadas;
+  document.getElementById('gl-aprovadas-pct').textContent = total ? Math.round(aprovadas/total*100)+'% do total' : '0%';
+  document.getElementById('gl-recusadas').textContent = recusadas;
+  document.getElementById('gl-recusadas-pct').textContent = total ? Math.round(recusadas/total*100)+'% do total' : '0%';
+  document.getElementById('gl-abertas').textContent = abertas;
+
+  // Por liberador
+  const byLib = {};
+  filtered.forEach(p => {
+    const lib = p.liberador || 'Não informado';
+    if (!byLib[lib]) byLib[lib] = { total:0, aprovadas:0, recusadas:0, abertas:0 };
+    byLib[lib].total++;
+    if (p.status === 'concluida') byLib[lib].aprovadas++;
+    else if (p.status === 'cancelada') byLib[lib].recusadas++;
+    else if (p.status === 'aberta') byLib[lib].abertas++;
+  });
+
+  const elLib = document.getElementById('gl-por-liberador');
+  if (!Object.keys(byLib).length) {
+    elLib.innerHTML = '<div class="empty-state"><div class="empty-icon">👤</div><p>Sem dados</p></div>';
+  } else {
+    elLib.innerHTML = Object.entries(byLib).sort((a,b) => b[1].total - a[1].total).map(([lib, d]) => `
+      <div style="padding:12px 0;border-bottom:1px solid var(--border)">
+        <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:6px">
+          <strong style="font-size:13px">${lib}</strong>
+          <span style="font-size:12px;color:var(--text3)">${d.total} PT${d.total>1?'s':''}</span>
+        </div>
+        <div style="display:flex;gap:8px;flex-wrap:wrap">
+          <span class="badge green">✅ ${d.aprovadas} válidas</span>
+          <span class="badge yellow">🔓 ${d.abertas} abertas</span>
+          <span class="badge red">✕ ${d.recusadas} recusadas</span>
+        </div>
+        <div class="risk-bar" style="margin-top:8px">
+          <div class="risk-fill" style="width:${d.total?Math.round((d.aprovadas+d.abertas)/d.total*100):0}%;background:var(--green)"></div>
+        </div>
+      </div>
+    `).join('');
+  }
+
+  // Por tipo
+  const byTipo = {};
+  filtered.forEach(p => {
+    const t = p.tipo || 'Não informado';
+    byTipo[t] = (byTipo[t] || 0) + 1;
+  });
+
+  const tipoColors = { 'Oxicorte':'var(--orange)', 'Solda Elétrica':'var(--blue)', 'Esmerilhamento':'var(--yellow)', 'Maçarico':'var(--red)', 'Outro':'var(--text2)' };
+
+  const elTipo = document.getElementById('gl-por-tipo');
+  if (!Object.keys(byTipo).length) {
+    elTipo.innerHTML = '<div class="empty-state"><div class="empty-icon">🔥</div><p>Sem dados</p></div>';
+  } else {
+    const max = Math.max(...Object.values(byTipo));
+    elTipo.innerHTML = Object.entries(byTipo).sort((a,b) => b[1]-a[1]).map(([t, n]) => `
+      <div style="margin-bottom:12px">
+        <div style="display:flex;justify-content:space-between;font-size:12px;margin-bottom:4px">
+          <span style="color:var(--text)">${t}</span>
+          <span style="color:var(--text2)">${n} PT${n>1?'s':''} (${total?Math.round(n/total*100):0}%)</span>
+        </div>
+        <div class="risk-bar">
+          <div class="risk-fill" style="width:${Math.round(n/max*100)}%;background:${tipoColors[t]||'var(--text2)'}"></div>
+        </div>
+      </div>
+    `).join('');
+  }
+
+  // Tabela detalhada
+  const tbody = document.getElementById('gl-tbody');
+  if (!filtered.length) {
+    tbody.innerHTML = `<tr><td colspan="8"><div class="empty-state"><div class="empty-icon">📋</div><p>Sem PTs no período</p></div></td></tr>`;
+    return;
+  }
+  tbody.innerHTML = filtered.sort((a,b) => b.ts - a.ts).map(pt => `
+    <tr>
+      <td><strong style="color:var(--yellow)">${pt.numero}</strong></td>
+      <td>${pt.local || '—'}</td>
+      <td>${pt.tipo || '—'}</td>
+      <td>${pt.executante || '—'}</td>
+      <td>${pt.liberador || '—'}</td>
+      <td>${formatDate(pt.inicio)}</td>
+      <td>${pt.risco ? `<span style="background:${riskColor(pt.risco)};color:#000;padding:2px 8px;border-radius:4px;font-size:11px;font-weight:700">PxG ${pt.risco}</span>` : '<span class="badge gray">N/A</span>'}</td>
+      <td>${statusBadge(pt.status)}</td>
+    </tr>
+  `).join('');
+}
+
+function limparFiltrosGL() {
+  document.getElementById('gl-di').value = '';
+  document.getElementById('gl-df').value = '';
+  document.getElementById('gl-tipo').value = '';
+  document.getElementById('gl-status').value = '';
+  document.getElementById('gl-liberador').value = '';
+  renderGestaoLiberadores();
+}
+
+function exportGestaoLiberadores() {
+  const pts = getList(KEY.pts);
+  if (!pts.length) { toast('Sem dados para exportar', 'warn'); return; }
+  const ws = XLSX.utils.json_to_sheet(pts.map(p => ({
+    'N° PT': p.numero, 'Local': p.local, 'Tipo': p.tipo,
+    'Executante': p.executante, 'Liberador': p.liberador,
+    'Data': formatDate(p.inicio), 'Risco PxG': p.risco || '',
+    'Status': p.status
+  })));
+  const wb = XLSX.utils.book_new();
+  XLSX.utils.book_append_sheet(wb, ws, 'Gestão Liberadores');
+  XLSX.writeFile(wb, `0risco-gestao-${new Date().toISOString().slice(0,10)}.xlsx`);
+  toast('Exportado!', 'success');
+}
+
+
+const CLIMA_KEY = '0r_clima_hist';
+
+const CRITERIOS = [
+  { id: 'chuva',     label: 'Sem chuva ou precipitação',           nr: 'NR-10 / NR-34',  check: (d) => !['chuva_forte','chuva_fraca','trovoada'].includes(d.cond) },
+  { id: 'raio',      label: 'Sem trovoada ou raios',                nr: 'NR-10',           check: (d) => d.cond !== 'trovoada' },
+  { id: 'vento35',   label: 'Vento < 35 km/h (trabalho em altura)', nr: 'NR-35',           check: (d) => d.vento < 35 },
+  { id: 'vento42',   label: 'Vento < 42 km/h (limite NR-35)',       nr: 'NR-35',           check: (d) => d.vento < 42 },
+  { id: 'temp',      label: 'Temperatura ≤ 38°C (conforto térmico)',nr: 'NR-15 A3',        check: (d) => d.temp <= 38 },
+  { id: 'calor',     label: 'IBUTG dentro do limite (leve/mod.)',   nr: 'NR-15 A3',        check: (d) => d.temp <= 30 },
+];
+
+let climaAtual = null;
+
+async function fetchClima() {
+  const cidade = document.getElementById('clima-cidade')?.value.trim() || 'Manaus';
+  document.getElementById('clima-icon').textContent = '⏳';
+  document.getElementById('clima-veredicto').textContent = 'Consultando…';
+  document.getElementById('clima-veredicto-sub').textContent = '';
+
+  try {
+    // Open-Meteo API — gratuita, sem key
+    // Primeiro geocode via nominatim
+    const geoRes = await fetch(`https://nominatim.openstreetmap.org/search?q=${encodeURIComponent(cidade)}&format=json&limit=1`);
+    const geoData = await geoRes.json();
+    if (!geoData.length) throw new Error('Cidade não encontrada');
+
+    const lat = parseFloat(geoData[0].lat);
+    const lon = parseFloat(geoData[0].lon);
+    const displayName = geoData[0].display_name.split(',').slice(0,2).join(',');
+
+    document.getElementById('clima-local-atual').textContent = `📍 ${displayName}`;
+
+    const metRes = await fetch(
+      `https://api.open-meteo.com/v1/forecast?latitude=${lat}&longitude=${lon}&current=temperature_2m,relative_humidity_2m,wind_speed_10m,weather_code&wind_speed_unit=kmh&timezone=auto`
+    );
+    const metData = await metRes.json();
+    const c = metData.current;
+
+    const wcode = c.weather_code;
+    let cond = 'limpo';
+    if (wcode >= 95) cond = 'trovoada';
+    else if (wcode >= 61) cond = 'chuva_forte';
+    else if (wcode >= 51) cond = 'chuva_fraca';
+    else if (wcode >= 1)  cond = 'nublado';
+
+    climaAtual = {
+      temp: c.temperature_2m,
+      vento: c.wind_speed_10m,
+      umidade: c.relative_humidity_2m,
+      cond,
+      local: displayName,
+      ts: Date.now()
+    };
+
+    renderClimaUI(climaAtual);
+
+  } catch(err) {
+    // Fallback: Manaus estimativa
+    climaAtual = { temp: 32, vento: 12, umidade: 78, cond: 'nublado', local: 'Manaus, AM (estimativa)', ts: Date.now() };
+    renderClimaUI(climaAtual);
+    document.getElementById('clima-local-atual').textContent = '📍 Manaus, AM (dados estimados — sem conexão)';
+  }
+}
+
+function renderClimaUI(d) {
+  const condMap = {
+    limpo:       { icon:'☀️',  label:'Céu Limpo' },
+    nublado:     { icon:'⛅',  label:'Parcialmente Nublado' },
+    chuva_fraca: { icon:'🌦️', label:'Chuva Fraca' },
+    chuva_forte: { icon:'🌧️', label:'Chuva Forte' },
+    trovoada:    { icon:'⛈️', label:'Trovoada / Raios' },
+  };
+  const cm = condMap[d.cond] || condMap.limpo;
+
+  document.getElementById('clima-icon').textContent = cm.icon;
+  document.getElementById('clima-temp').textContent = `${d.temp}°C`;
+  document.getElementById('clima-vento').textContent = `${d.vento} km/h`;
+  document.getElementById('clima-umidade').textContent = `${d.umidade}%`;
+
+  // Temp sub
+  const tempSub = d.temp > 38 ? '🔴 Acima do limite NR-15' : d.temp > 32 ? '🟡 Atenção ao calor' : '🟢 Dentro do normal';
+  document.getElementById('clima-temp-sub').textContent = tempSub;
+
+  // Vento sub
+  const ventoSub = d.vento >= 42 ? '🔴 Suspender trabalho em altura' : d.vento >= 35 ? '🟡 Atenção NR-35' : '🟢 Dentro do limite';
+  document.getElementById('clima-vento-sub').textContent = ventoSub;
+
+  // Umidade sub
+  document.getElementById('clima-umidade-sub').textContent = d.umidade > 90 ? '🌧️ Umidade muito alta' : d.umidade > 70 ? '💦 Umidade elevada' : '💧 Normal';
+
+  // Checklist
+  const el = document.getElementById('clima-checklist');
+  let allOk = true;
+  el.innerHTML = CRITERIOS.map(c => {
+    const ok = c.check(d);
+    if (!ok) allOk = false;
+    return `
+      <div class="doc-row">
+        <div>
+          <span class="doc-name">${c.label}</span>
+          <div style="font-size:10px;color:var(--text3);margin-top:2px">${c.nr}</div>
+        </div>
+        <span class="badge ${ok ? 'green' : 'red'}">${ok ? '✓ OK' : '✕ REPROVADO'}</span>
+      </div>`;
+  }).join('');
+
+  // Veredicto geral
+  const temTrovoada = d.cond === 'trovoada';
+  const temChuvaForte = d.cond === 'chuva_forte';
+  const ventoAlto = d.vento >= 42;
+
+  let veredicto, cor, icon, sub;
+  if (temTrovoada) {
+    veredicto = 'SUSPENDER IMEDIATAMENTE'; icon = '⛈️'; cor = 'var(--red)';
+    sub = 'Trovoada detectada — proibido qualquer trabalho externo (NR-10)';
+  } else if (temChuvaForte || ventoAlto) {
+    veredicto = 'NÃO LIBERADO'; icon = '🌧️'; cor = 'var(--red)';
+    sub = 'Condições impedem trabalho a céu aberto com segurança';
+  } else if (!allOk) {
+    veredicto = 'LIBERADO COM RESTRIÇÕES'; icon = '⚠️'; cor = 'var(--orange)';
+    sub = 'Alguns critérios não atingidos — avaliar medidas adicionais';
+  } else {
+    veredicto = 'LIBERADO'; icon = '✅'; cor = 'var(--green2)';
+    sub = 'Condições dentro dos parâmetros de segurança';
+  }
+
+  document.getElementById('clima-icon').textContent = icon;
+  document.getElementById('clima-veredicto').textContent = veredicto;
+  document.getElementById('clima-veredicto').style.color = cor;
+  document.getElementById('clima-veredicto-sub').textContent = sub;
+
+  const resBox = document.getElementById('clima-resultado-box');
+  resBox.textContent = veredicto;
+  resBox.style.background = cor === 'var(--green2)' ? 'rgba(0,200,83,.15)' : cor === 'var(--orange)' ? 'rgba(255,122,0,.15)' : 'rgba(255,61,61,.15)';
+  resBox.style.color = cor;
+  resBox.style.border = `1px solid ${cor}`;
+}
+
+function avaliarClimaManual() {
+  const temp = parseFloat(document.getElementById('clima-manual-temp').value) || 30;
+  const vento = parseFloat(document.getElementById('clima-manual-vento').value) || 10;
+  const cond = document.getElementById('clima-manual-cond').value;
+
+  climaAtual = { temp, vento, umidade: 75, cond, local: 'Registro Manual', ts: Date.now() };
+  renderClimaUI(climaAtual);
+
+  // Salvar no histórico
+  const hist = getList(CLIMA_KEY);
+  hist.unshift({
+    ts: Date.now(),
+    local: 'Registro Manual',
+    temp, vento, cond,
+    veredicto: document.getElementById('clima-veredicto').textContent,
+    responsavel: currentUser?.nome || 'admin'
+  });
+  if (hist.length > 30) hist.pop();
+  save(CLIMA_KEY, hist);
+  renderClimaHistorico();
+  showPanel('clima');
+  toast('Avaliação registrada', 'success');
+}
+
+function renderClimaHistorico() {
+  const hist = getList(CLIMA_KEY);
+  const tbody = document.getElementById('clima-historico-tbody');
+  if (!hist.length) {
+    tbody.innerHTML = `<tr><td colspan="7"><div class="empty-state"><div class="empty-icon">🌤️</div><p>Sem avaliações registradas</p></div></td></tr>`;
+    return;
+  }
+  const condLabel = { limpo:'☀️ Limpo', nublado:'⛅ Nublado', chuva_fraca:'🌦️ Chuva Fraca', chuva_forte:'🌧️ Chuva Forte', trovoada:'⛈️ Trovoada' };
+  tbody.innerHTML = hist.map(h => `
+    <tr>
+      <td>${formatDateTime(h.ts)}</td>
+      <td>${h.local || '—'}</td>
+      <td>${h.temp}°C</td>
+      <td>${h.vento} km/h</td>
+      <td>${condLabel[h.cond] || h.cond}</td>
+      <td><span class="badge ${h.veredicto?.includes('LIBERADO') && !h.veredicto?.includes('RESTRIÇÕES') ? 'green' : h.veredicto?.includes('RESTRIÇÕES') ? 'yellow' : 'red'}">${h.veredicto}</span></td>
+      <td>${h.responsavel || '—'}</td>
+    </tr>
+  `).join('');
+}
+
+// Responsive
+function checkResponsive() {
+  const mobile = window.innerWidth <= 900;
+  document.getElementById('menu-btn').style.display = mobile ? 'flex' : 'none';
+}
+window.addEventListener('resize', checkResponsive);
+checkResponsive();
+</script>
+
+
+</body></html>
