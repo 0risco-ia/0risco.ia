@@ -1,0 +1,1967 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<title>0Risco.IA — App de Campo</title>
+<style>
+  :root {
+    --bg: #0a0f0a;
+    --card: #111811;
+    --border: #1e2e1e;
+    --green: #00e676;
+    --yellow: #ffd60a;
+    --red: #ff2d2d;
+    --orange: #ff7a00;
+    --blue: #00c8ff;
+    --text: #a8c4dc;
+    --text2: #7693ab;
+    --text3: #4c6680;
+    --white: #ffffff;
+    --radius: 12px;
+    --font: 'Segoe UI', system-ui, sans-serif;
+  }
+
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+
+  body {
+    background: var(--bg);
+    color: var(--text);
+    font-family: var(--font);
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+  }
+
+  /* ─── TELAS ─── */
+  .screen { display: none; flex-direction: column; min-height: 100vh; }
+  .screen.active { display: flex; }
+
+  /* ─── HEADER ─── */
+  .header {
+    background: #0d150d;
+    border-bottom: 1px solid var(--border);
+    padding: 12px 16px;
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    position: sticky;
+    top: 0;
+    z-index: 100;
+  }
+  .header-logo {
+    width: 36px;
+    height: 36px;
+    background: var(--yellow);
+    border-radius: 8px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-weight: 900;
+    font-size: 18px;
+    color: #000;
+    flex-shrink: 0;
+  }
+  .header-title { font-size: 16px; font-weight: 700; color: var(--white); flex: 1; }
+  .header-sub { font-size: 11px; color: var(--text3); }
+  .btn-home {
+    background: none;
+    border: 1px solid var(--border);
+    color: var(--text2);
+    padding: 6px 10px;
+    border-radius: 8px;
+    cursor: pointer;
+    font-size: 13px;
+    text-decoration: none;
+    display: flex;
+    align-items: center;
+    gap: 4px;
+  }
+  .btn-home:hover { border-color: var(--green); color: var(--green); }
+
+  /* ─── LOGIN ─── */
+  #screen-login {
+    justify-content: center;
+    align-items: center;
+    padding: 24px 20px;
+    background: radial-gradient(ellipse at 50% 30%, #0d2010 0%, var(--bg) 70%);
+  }
+  .login-box {
+    width: 100%;
+    max-width: 360px;
+    background: var(--card);
+    border: 1px solid var(--border);
+    border-radius: 16px;
+    padding: 32px 24px;
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+  }
+  .login-logo {
+    text-align: center;
+  }
+  .login-logo .logo-0 {
+    font-size: 52px;
+    font-weight: 900;
+    background: linear-gradient(135deg, var(--yellow), #ffa800);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    line-height: 1;
+  }
+  .login-logo .logo-rest {
+    font-size: 22px;
+    font-weight: 700;
+    color: var(--yellow);
+    letter-spacing: 2px;
+  }
+  .login-logo .logo-ia {
+    font-size: 14px;
+    color: var(--text3);
+    margin-top: 2px;
+  }
+  .login-logo .logo-tag {
+    font-size: 11px;
+    color: var(--text3);
+    margin-top: 8px;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+  }
+  .field-label {
+    font-size: 12px;
+    color: var(--text2);
+    margin-bottom: 6px;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+  }
+  .field-input {
+    width: 100%;
+    background: #0d150d;
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    padding: 12px 14px;
+    color: var(--white);
+    font-size: 15px;
+    outline: none;
+    transition: border-color .2s;
+  }
+  .field-input:focus { border-color: var(--green); }
+  .btn-primary {
+    width: 100%;
+    background: var(--green);
+    color: #000;
+    border: none;
+    border-radius: 10px;
+    padding: 14px;
+    font-size: 15px;
+    font-weight: 700;
+    cursor: pointer;
+    transition: opacity .2s;
+  }
+  .btn-primary:hover { opacity: .85; }
+  .btn-primary:disabled { opacity: .4; cursor: not-allowed; }
+  .login-error {
+    background: rgba(255,45,45,.1);
+    border: 1px solid rgba(255,45,45,.3);
+    border-radius: 8px;
+    padding: 10px 14px;
+    color: var(--red);
+    font-size: 13px;
+    display: none;
+  }
+  .login-footer {
+    text-align: center;
+    font-size: 11px;
+    color: var(--text3);
+  }
+
+  /* ─── TERMO ─── */
+  #screen-termo {
+    padding: 0;
+  }
+  .termo-body {
+    flex: 1;
+    padding: 20px 16px;
+    overflow-y: auto;
+  }
+  .termo-title {
+    font-size: 16px;
+    font-weight: 700;
+    color: var(--yellow);
+    margin-bottom: 4px;
+  }
+  .termo-subtitle {
+    font-size: 12px;
+    color: var(--text3);
+    margin-bottom: 16px;
+  }
+  .termo-card {
+    background: var(--card);
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    padding: 16px;
+    font-size: 13px;
+    line-height: 1.7;
+    color: var(--text2);
+    margin-bottom: 16px;
+    max-height: 55vh;
+    overflow-y: auto;
+  }
+  .termo-card h4 {
+    color: var(--white);
+    font-size: 14px;
+    margin: 12px 0 6px;
+  }
+  .termo-card p { margin-bottom: 8px; }
+  .termo-check-row {
+    display: flex;
+    align-items: flex-start;
+    gap: 12px;
+    background: rgba(255,214,10,.05);
+    border: 1px solid rgba(255,214,10,.2);
+    border-radius: 10px;
+    padding: 14px;
+    margin-bottom: 16px;
+    cursor: pointer;
+  }
+  .termo-check-row input[type=checkbox] {
+    width: 20px;
+    height: 20px;
+    flex-shrink: 0;
+    accent-color: var(--green);
+    margin-top: 2px;
+  }
+  .termo-check-label {
+    font-size: 13px;
+    color: var(--text);
+    line-height: 1.5;
+  }
+  .termo-footer {
+    padding: 12px 16px 24px;
+    display: flex;
+    gap: 10px;
+  }
+  .btn-secondary {
+    flex: 1;
+    background: none;
+    border: 1px solid var(--border);
+    color: var(--text2);
+    border-radius: 10px;
+    padding: 13px;
+    font-size: 14px;
+    cursor: pointer;
+  }
+  .btn-secondary:hover { border-color: var(--red); color: var(--red); }
+
+  /* ─── MAIN APP ─── */
+  #screen-app { padding: 0; }
+  .app-body { flex: 1; display: flex; flex-direction: column; overflow: hidden; }
+
+  /* Tabs de modo */
+  .mode-tabs {
+    display: flex;
+    background: #0d150d;
+    border-bottom: 1px solid var(--border);
+    padding: 0 16px;
+    gap: 0;
+  }
+  .mode-tab {
+    flex: 1;
+    padding: 12px 8px;
+    border: none;
+    background: none;
+    color: var(--text3);
+    font-size: 13px;
+    font-weight: 600;
+    cursor: pointer;
+    border-bottom: 2px solid transparent;
+    transition: all .2s;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 6px;
+  }
+  .mode-tab.active {
+    color: var(--green);
+    border-bottom-color: var(--green);
+  }
+
+  /* ─── CHAT MODE ─── */
+  #chat-panel { flex: 1; display: flex; flex-direction: column; overflow: hidden; }
+  .chat-messages {
+    flex: 1;
+    overflow-y: auto;
+    padding: 16px;
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+  }
+  .msg {
+    max-width: 85%;
+    padding: 12px 14px;
+    border-radius: 14px;
+    font-size: 14px;
+    line-height: 1.5;
+  }
+  .msg.ai {
+    background: var(--card);
+    border: 1px solid var(--border);
+    color: var(--text);
+    align-self: flex-start;
+    border-bottom-left-radius: 4px;
+  }
+  .msg.ai .msg-tag {
+    font-size: 10px;
+    color: var(--green);
+    font-weight: 700;
+    margin-bottom: 4px;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+  }
+  .msg.user {
+    background: rgba(0,230,118,.1);
+    border: 1px solid rgba(0,230,118,.2);
+    color: var(--white);
+    align-self: flex-end;
+    border-bottom-right-radius: 4px;
+  }
+  .msg-photo {
+    width: 100%;
+    max-width: 220px;
+    border-radius: 8px;
+    margin-top: 8px;
+    border: 1px solid var(--border);
+  }
+
+  /* Barra de foto + input */
+  .chat-photo-preview {
+    margin: 0 16px 8px;
+    display: none;
+    align-items: center;
+    gap: 10px;
+    background: var(--card);
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    padding: 8px 12px;
+  }
+  .chat-photo-preview.visible { display: flex; }
+  .chat-photo-preview img {
+    width: 48px;
+    height: 48px;
+    object-fit: cover;
+    border-radius: 6px;
+    border: 1px solid var(--border);
+  }
+  .chat-photo-preview-info { flex: 1; font-size: 12px; color: var(--text2); }
+  .btn-remove-photo {
+    background: none;
+    border: none;
+    color: var(--red);
+    cursor: pointer;
+    font-size: 18px;
+    line-height: 1;
+    padding: 4px;
+  }
+
+  .chat-input-bar {
+    padding: 10px 16px 20px;
+    background: #0d150d;
+    border-top: 1px solid var(--border);
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+  }
+  .chat-actions {
+    display: flex;
+    gap: 8px;
+  }
+  .btn-cam {
+    background: rgba(255,214,10,.1);
+    border: 1px solid rgba(255,214,10,.3);
+    color: var(--yellow);
+    border-radius: 10px;
+    padding: 10px 14px;
+    font-size: 20px;
+    cursor: pointer;
+    flex-shrink: 0;
+  }
+  .btn-cam:hover { background: rgba(255,214,10,.2); }
+  .chat-text-row {
+    display: flex;
+    gap: 8px;
+  }
+  .chat-input {
+    flex: 1;
+    background: #0a0f0a;
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    padding: 11px 14px;
+    color: var(--white);
+    font-size: 14px;
+    resize: none;
+    outline: none;
+    height: 44px;
+    font-family: var(--font);
+    transition: border-color .2s;
+  }
+  .chat-input:focus { border-color: var(--green); }
+  .btn-send {
+    background: var(--green);
+    border: none;
+    color: #000;
+    border-radius: 10px;
+    padding: 10px 16px;
+    font-size: 18px;
+    cursor: pointer;
+    flex-shrink: 0;
+    font-weight: 700;
+  }
+  .btn-send:disabled { opacity: .3; cursor: not-allowed; }
+
+  /* ─── MANUAL MODE ─── */
+  #manual-panel {
+    flex: 1;
+    overflow-y: auto;
+    padding: 16px;
+    display: flex;
+    flex-direction: column;
+    gap: 14px;
+  }
+  .manual-section {
+    background: var(--card);
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    overflow: hidden;
+  }
+  .manual-section-header {
+    padding: 14px 16px;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    cursor: pointer;
+    border-bottom: 1px solid var(--border);
+  }
+  .manual-section-icon {
+    width: 32px;
+    height: 32px;
+    border-radius: 8px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 16px;
+    flex-shrink: 0;
+  }
+  .manual-section-title { font-size: 14px; font-weight: 600; color: var(--white); flex: 1; }
+  .manual-section-badge {
+    font-size: 11px;
+    padding: 3px 8px;
+    border-radius: 20px;
+    font-weight: 600;
+  }
+  .badge-ok { background: rgba(0,230,118,.15); color: var(--green); }
+  .badge-pending { background: rgba(255,214,10,.1); color: var(--yellow); }
+  .badge-fail { background: rgba(255,45,45,.1); color: var(--red); }
+  .manual-section-body {
+    padding: 16px;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+  }
+  .form-row { display: flex; flex-direction: column; gap: 4px; }
+  .form-row label { font-size: 12px; color: var(--text2); }
+  .form-row input,
+  .form-row select,
+  .form-row textarea {
+    background: #0a0f0a;
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    padding: 10px 12px;
+    color: var(--white);
+    font-size: 14px;
+    outline: none;
+    width: 100%;
+    font-family: var(--font);
+    transition: border-color .2s;
+  }
+  .form-row input:focus,
+  .form-row select:focus,
+  .form-row textarea:focus { border-color: var(--green); }
+  .form-row textarea { resize: vertical; min-height: 72px; }
+  .form-row select option { background: #111; }
+
+  .checklist-item {
+    display: flex;
+    align-items: flex-start;
+    gap: 12px;
+    padding: 10px 0;
+    border-bottom: 1px solid var(--border);
+  }
+  .checklist-item:last-child { border-bottom: none; padding-bottom: 0; }
+  .checklist-item input[type=checkbox] {
+    width: 20px;
+    height: 20px;
+    flex-shrink: 0;
+    accent-color: var(--green);
+    margin-top: 2px;
+  }
+  .checklist-item label {
+    font-size: 13px;
+    color: var(--text);
+    line-height: 1.5;
+    cursor: pointer;
+  }
+  .risk-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 8px;
+  }
+  .risk-btn {
+    background: #0a0f0a;
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    padding: 10px;
+    color: var(--text2);
+    font-size: 13px;
+    cursor: pointer;
+    text-align: center;
+    transition: all .2s;
+  }
+  .risk-btn.sel-alto { background: rgba(255,45,45,.1); border-color: var(--red); color: var(--red); }
+  .risk-btn.sel-medio { background: rgba(255,122,0,.1); border-color: var(--orange); color: var(--orange); }
+  .risk-btn.sel-baixo { background: rgba(0,230,118,.1); border-color: var(--green); color: var(--green); }
+  .risk-btn.sel-aceitavel { background: rgba(0,200,255,.1); border-color: var(--blue); color: var(--blue); }
+
+  .btn-gerar-pt {
+    width: 100%;
+    background: var(--green);
+    color: #000;
+    border: none;
+    border-radius: 10px;
+    padding: 14px;
+    font-size: 15px;
+    font-weight: 700;
+    cursor: pointer;
+    margin-top: 4px;
+  }
+  .btn-gerar-pt:hover { opacity: .85; }
+
+  /* ─── PT RESULTADO ─── */
+  .pt-result {
+    background: rgba(0,230,118,.05);
+    border: 1px solid rgba(0,230,118,.2);
+    border-radius: var(--radius);
+    padding: 16px;
+    margin-top: 4px;
+  }
+  .pt-result-title {
+    font-size: 14px;
+    font-weight: 700;
+    color: var(--green);
+    margin-bottom: 8px;
+  }
+  .pt-result-row {
+    display: flex;
+    justify-content: space-between;
+    font-size: 13px;
+    padding: 4px 0;
+    border-bottom: 1px solid var(--border);
+    color: var(--text2);
+  }
+  .pt-result-row:last-child { border-bottom: none; }
+  .pt-result-row span:last-child { color: var(--white); font-weight: 600; }
+
+  /* ─── STATUS BADGE ─── */
+  .status-row {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    padding: 10px 16px;
+    background: #0d150d;
+    border-bottom: 1px solid var(--border);
+    font-size: 12px;
+    color: var(--text3);
+  }
+  .status-dot {
+    width: 8px;
+    height: 8px;
+    border-radius: 50%;
+    background: var(--green);
+    animation: pulse 2s infinite;
+  }
+  @keyframes pulse {
+    0%, 100% { opacity: 1; }
+    50% { opacity: .3; }
+  }
+
+  /* ─── CAMERA MODAL ─── */
+  #camera-modal {
+    display: none;
+    position: fixed;
+    inset: 0;
+    background: #000;
+    z-index: 999;
+    flex-direction: column;
+  }
+  #camera-modal.open { display: flex; }
+  #camera-video {
+    width: 100%;
+    flex: 1;
+    object-fit: cover;
+    background: #000;
+  }
+  .camera-bar {
+    background: #000;
+    padding: 20px 24px 32px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+  }
+  .btn-capture {
+    width: 72px;
+    height: 72px;
+    border-radius: 50%;
+    background: var(--white);
+    border: 4px solid rgba(255,255,255,.3);
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 28px;
+  }
+  .btn-cancel-cam {
+    background: none;
+    border: 1px solid rgba(255,255,255,.2);
+    color: var(--white);
+    border-radius: 10px;
+    padding: 10px 18px;
+    cursor: pointer;
+    font-size: 14px;
+  }
+  .btn-switch-cam {
+    background: none;
+    border: none;
+    color: var(--white);
+    font-size: 28px;
+    cursor: pointer;
+    padding: 8px;
+  }
+  #camera-canvas { display: none; }
+
+  /* ─── LOADER ─── */
+  .typing-indicator {
+    display: flex;
+    gap: 4px;
+    align-items: center;
+    padding: 4px 0;
+  }
+  .typing-indicator span {
+    width: 6px;
+    height: 6px;
+    border-radius: 50%;
+    background: var(--green);
+    animation: bounce 1.2s infinite;
+  }
+  .typing-indicator span:nth-child(2) { animation-delay: .2s; }
+  .typing-indicator span:nth-child(3) { animation-delay: .4s; }
+  @keyframes bounce {
+    0%, 80%, 100% { transform: translateY(0); opacity: .4; }
+    40% { transform: translateY(-6px); opacity: 1; }
+  }
+
+  /* ─── SCROLLBAR ─── */
+  ::-webkit-scrollbar { width: 4px; }
+  ::-webkit-scrollbar-track { background: transparent; }
+  ::-webkit-scrollbar-thumb { background: var(--border); border-radius: 4px; }
+
+  /* ─── HIDDEN FILE INPUT ─── */
+  #photo-input { display: none; }
+</style>
+</head>
+<body>
+
+<!-- ═══════════════════════════════════════════
+  TELA 1: LOGIN
+═══════════════════════════════════════════ -->
+<div id="screen-login" class="screen active">
+  <div class="login-box">
+    <div class="login-logo">
+      <img src="data:image/png;base64,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" alt="0Risco.IA" style="width:100%;max-width:260px;display:block;margin:0 auto 12px;object-fit:contain">
+      <div class="logo-tag">App de Campo · NR-34 / NR-35</div>
+    </div>
+
+    <div>
+      <div class="field-label">Usuário</div>
+      <input class="field-input" type="text" id="login-user" placeholder="seu.usuario" autocomplete="username">
+    </div>
+    <div>
+      <div class="field-label">Senha</div>
+      <input class="field-input" type="password" id="login-pass" placeholder="••••••••" autocomplete="current-password">
+    </div>
+
+    <div class="login-error" id="login-error">Usuário ou senha inválidos.</div>
+
+    <button class="btn-primary" id="btn-login" onclick="doLogin()">Entrar</button>
+
+    <div class="login-footer">
+      Sistema 0Risco.IA · Acesso restrito a colaboradores autorizados
+    </div>
+  </div>
+</div>
+
+<!-- ═══════════════════════════════════════════
+  TELA 2: TERMO DE RESPONSABILIDADE
+═══════════════════════════════════════════ -->
+<div id="screen-termo" class="screen">
+  <div class="header">
+    <div class="header-logo">⚖️</div>
+    <div>
+      <div class="header-title">Termo de Responsabilidade</div>
+      <div class="header-sub">Leitura obrigatória antes de emitir PT</div>
+    </div>
+  </div>
+
+  <div class="termo-body">
+    <div class="termo-card">
+      <h4>TERMO DE CIÊNCIA E RESPONSABILIDADE — TRABALHO A QUENTE / ESPAÇO CONFINADO</h4>
+
+      <p>Ao acessar este sistema e emitir uma Permissão de Trabalho (PT), o usuário declara estar ciente das seguintes disposições legais e assume integral responsabilidade civil e penal pelos atos praticados:</p>
+
+      <h4>1. Responsabilidade Penal</h4>
+      <p><strong>Art. 121 do Código Penal Brasileiro</strong> — Homicídio doloso ou culposo: pena de reclusão de 6 a 20 anos ou detenção de 1 a 3 anos, conforme grau de culpa.</p>
+      <p><strong>Art. 129 do Código Penal Brasileiro</strong> — Lesão corporal: pena de detenção de 3 meses a 1 ano, agravada em caso de resultado grave ou morte.</p>
+      <p><strong>Art. 132 do Código Penal Brasileiro</strong> — Perigo para a vida ou saúde de outrem: detenção de 3 meses a 1 ano, se o fato não constitui crime mais grave.</p>
+
+      <h4>2. Responsabilidade Civil</h4>
+      <p><strong>Art. 186 do Código Civil</strong> — Aquele que por ação ou omissão voluntária, negligência ou imprudência violar direito e causar dano a outrem, comete ato ilícito.</p>
+      <p><strong>Art. 927 do Código Civil</strong> — Fica obrigado a reparar o dano aquele que, por ato ilícito, causar dano a outrem.</p>
+
+      <h4>3. Legislação Trabalhista e Normas Regulamentadoras</h4>
+      <p><strong>CLT — Art. 157/158:</strong> Empregadores e empregados têm obrigações mútuas quanto à segurança e medicina do trabalho.</p>
+      <p><strong>NR-34 (Condições e Meio Ambiente de Trabalho na Indústria da Construção e Reparação Naval):</strong> Trabalhos a quente exigem PT, análise de riscos, inspeção prévia e vigilância contínua.</p>
+      <p><strong>NR-35 (Trabalho em Altura):</strong> Todo trabalho a quente em altura acima de 2m exige PT específica, equipamentos adequados e liberação formal.</p>
+
+      <h4>4. Proteção de Dados</h4>
+      <p><strong>LGPD — Lei 13.709/2018:</strong> Os dados coletados neste sistema (fotos, localização, registros de atividade) serão tratados exclusivamente para fins de segurança do trabalho e conformidade legal.</p>
+
+      <h4>5. Declaração do Usuário</h4>
+      <p>Declaro que li e compreendi todas as disposições acima, que estou apto a executar as funções para as quais fui designado, e que assumo responsabilidade pessoal pela veracidade das informações prestadas neste sistema.</p>
+    </div>
+
+    <div class="termo-check-row" onclick="toggleTermoCheck()">
+      <input type="checkbox" id="termo-check" onchange="updateTermoBtn()">
+      <div class="termo-check-label">
+        <strong>Li e aceito integralmente</strong> o termo de ciência e responsabilidade acima, estando ciente das penalidades legais aplicáveis em caso de descumprimento das normas de segurança.
+      </div>
+    </div>
+  </div>
+
+  <div class="termo-footer">
+    <button class="btn-secondary" onclick="doLogout()">← Sair</button>
+    <button class="btn-primary" id="btn-aceitar" onclick="aceitarTermo()" disabled style="flex:2">
+      Aceitar e Continuar →
+    </button>
+  </div>
+</div>
+
+<!-- ═══════════════════════════════════════════
+  TELA 3: APP PRINCIPAL
+═══════════════════════════════════════════ -->
+<div id="screen-app" class="screen">
+  <div class="header">
+    <div class="header-logo" style="background:var(--yellow);font-size:14px;font-weight:900">0R</div>
+    <div style="flex:1">
+      <div class="header-title" id="header-user-name">0Risco.IA</div>
+      <div class="header-sub" id="header-user-role">Campo</div>
+    </div>
+    <a href="index.html" class="btn-home">🏠 Início</a>
+  </div>
+
+  <div class="status-row">
+    <div class="status-dot"></div>
+    <span>IA Conectada · Modo Campo Ativo</span>
+  </div>
+
+  <!-- Tabs de modo -->
+  <div class="mode-tabs">
+    <button class="mode-tab active" id="tab-chat" onclick="switchMode('chat')">
+      🤖 Chat + Foto
+    </button>
+    <button class="mode-tab" id="tab-manual" onclick="switchMode('manual')">
+      📝 Manual
+    </button>
+  </div>
+
+  <div class="app-body">
+    <!-- ─── CHAT PANEL ─── -->
+    <div id="chat-panel">
+      <div class="chat-messages" id="chat-messages"></div>
+
+      <!-- Preview da foto antes de enviar -->
+      <div class="chat-photo-preview" id="photo-preview-bar">
+        <img id="photo-preview-thumb" src="" alt="foto">
+        <div class="chat-photo-preview-info">
+          📸 Foto anexada — descreva o que quer analisar
+        </div>
+        <button class="btn-remove-photo" onclick="removePhoto()">×</button>
+      </div>
+
+      <div class="chat-input-bar">
+        <div class="chat-actions">
+          <button class="btn-cam" onclick="openCamera()" title="Tirar foto da área">📷</button>
+          <div style="flex:1;display:flex;align-items:center;gap:6px">
+            <span style="font-size:11px;color:var(--text3)">ou escolha da galeria:</span>
+            <label for="photo-input" style="cursor:pointer;font-size:11px;color:var(--blue);text-decoration:underline">Galeria</label>
+          </div>
+        </div>
+        <div class="chat-text-row">
+          <textarea class="chat-input" id="chat-input"
+            placeholder="Descreva o trabalho, risco ou tire uma foto da área…"
+            rows="1"
+            onkeydown="chatEnter(event)"
+            oninput="autoResize(this)"></textarea>
+          <button class="btn-send" id="btn-send" onclick="sendChat()">➤</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- ─── MANUAL PANEL ─── -->
+    <div id="manual-panel" style="display:none">
+
+      <!-- SEÇÃO 1: IDENTIFICAÇÃO DA PT -->
+      <div class="manual-section">
+        <div class="manual-section-header">
+          <div class="manual-section-icon" style="background:rgba(0,200,255,.1)">📋</div>
+          <div class="manual-section-title">Identificação da PT</div>
+          <span class="manual-section-badge badge-pending" id="badge-id">Pendente</span>
+        </div>
+        <div class="manual-section-body">
+          <div class="form-row">
+            <label>Tipo de Trabalho</label>
+            <select id="m-tipo" onchange="updateBadge('id','m-tipo')">
+              <option value="">Selecione…</option>
+              <option>Solda Elétrica</option>
+              <option>Solda a Gás (MIG/MAG/TIG)</option>
+              <option>Corte com Esmerilhadeira</option>
+              <option>Corte com Disco de Corte</option>
+              <option>Uso de Maçarico</option>
+              <option>Trabalho em Altura + Fogo</option>
+              <option>Espaço Confinado com Ignição</option>
+            </select>
+          </div>
+          <div class="form-row">
+            <label>Local / Área</label>
+            <input type="text" id="m-local" placeholder="Ex.: Porão 2 — Chapa Lateral Estibordo">
+          </div>
+          <div class="form-row">
+            <label>Data e Hora de Início</label>
+            <input type="datetime-local" id="m-inicio">
+          </div>
+          <div class="form-row">
+            <label>Previsão de Término</label>
+            <input type="datetime-local" id="m-fim">
+          </div>
+          <div class="form-row">
+            <label>Executante Responsável</label>
+            <input type="text" id="m-executante" placeholder="Nome completo">
+          </div>
+        </div>
+      </div>
+
+      <!-- SEÇÃO 2: VERIFICAÇÃO DE DOCUMENTOS -->
+      <div class="manual-section">
+        <div class="manual-section-header">
+          <div class="manual-section-icon" style="background:rgba(255,214,10,.1)">🪪</div>
+          <div class="manual-section-title">Verificação de Documentos</div>
+          <span class="manual-section-badge badge-pending" id="badge-docs">Pendente</span>
+        </div>
+        <div class="manual-section-body">
+          <div class="checklist-item">
+            <input type="checkbox" id="doc1" onchange="calcDocBadge()">
+            <label for="doc1">Executante com ASO válido (dentro da validade)</label>
+          </div>
+          <div class="checklist-item">
+            <input type="checkbox" id="doc2" onchange="calcDocBadge()">
+            <label for="doc2">Liberador com ASO válido</label>
+          </div>
+          <div class="checklist-item">
+            <input type="checkbox" id="doc3" onchange="calcDocBadge()">
+            <label for="doc3">Vigia treinado e designado</label>
+          </div>
+          <div class="checklist-item">
+            <input type="checkbox" id="doc4" onchange="calcDocBadge()">
+            <label for="doc4">NR-35 (Trabalho em Altura) — se aplicável</label>
+          </div>
+          <div class="checklist-item">
+            <input type="checkbox" id="doc5" onchange="calcDocBadge()">
+            <label for="doc5">NR-34 (Naval) — habilitação confirmada</label>
+          </div>
+          <div class="checklist-item">
+            <input type="checkbox" id="doc6" onchange="calcDocBadge()">
+            <label for="doc6">EPIs entregues e inspecionados</label>
+          </div>
+        </div>
+      </div>
+
+      <!-- SEÇÃO 3: CHECKLIST DE SEGURANÇA -->
+      <div class="manual-section">
+        <div class="manual-section-header">
+          <div class="manual-section-icon" style="background:rgba(0,230,118,.1)">✅</div>
+          <div class="manual-section-title">Checklist de Segurança</div>
+          <span class="manual-section-badge badge-pending" id="badge-check">Pendente</span>
+        </div>
+        <div class="manual-section-body">
+          <div class="checklist-item">
+            <input type="checkbox" id="c1" onchange="calcCheckBadge()">
+            <label for="c1">Área isolada com fita/barreira</label>
+          </div>
+          <div class="checklist-item">
+            <input type="checkbox" id="c2" onchange="calcCheckBadge()">
+            <label for="c2">Extintor de incêndio posicionado (≤ 5m)</label>
+          </div>
+          <div class="checklist-item">
+            <input type="checkbox" id="c3" onchange="calcCheckBadge()">
+            <label for="c3">Ausência de material inflamável na área</label>
+          </div>
+          <div class="checklist-item">
+            <input type="checkbox" id="c4" onchange="calcCheckBadge()">
+            <label for="c4">Ventilação adequada confirmada</label>
+          </div>
+          <div class="checklist-item">
+            <input type="checkbox" id="c5" onchange="calcCheckBadge()">
+            <label for="c5">Detector de gás ativado (se EC)</label>
+          </div>
+          <div class="checklist-item">
+            <input type="checkbox" id="c6" onchange="calcCheckBadge()">
+            <label for="c6">Comunicação com a base estabelecida</label>
+          </div>
+          <div class="checklist-item">
+            <input type="checkbox" id="c7" onchange="calcCheckBadge()">
+            <label for="c7">Análise meteorológica verificada</label>
+          </div>
+          <div class="checklist-item">
+            <input type="checkbox" id="c8" onchange="calcCheckBadge()">
+            <label for="c8">Plano de emergência revisado</label>
+          </div>
+        </div>
+      </div>
+
+      <!-- SEÇÃO 4: ANÁLISE PxG -->
+      <div class="manual-section">
+        <div class="manual-section-header">
+          <div class="manual-section-icon" style="background:rgba(255,122,0,.1)">⚠️</div>
+          <div class="manual-section-title">Análise de Risco (PxG)</div>
+          <span class="manual-section-badge badge-pending" id="badge-risk">Pendente</span>
+        </div>
+        <div class="manual-section-body">
+          <div class="form-row">
+            <label>Probabilidade</label>
+            <div class="risk-grid" id="prob-grid">
+              <button class="risk-btn" onclick="selectRisk('prob','Alta',this)">Alta</button>
+              <button class="risk-btn" onclick="selectRisk('prob','Média',this)">Média</button>
+              <button class="risk-btn" onclick="selectRisk('prob','Baixa',this)">Baixa</button>
+              <button class="risk-btn" onclick="selectRisk('prob','Improvável',this)">Improvável</button>
+            </div>
+          </div>
+          <div class="form-row">
+            <label>Gravidade</label>
+            <div class="risk-grid" id="grav-grid">
+              <button class="risk-btn" onclick="selectRisk('grav','Fatal',this)">Fatal</button>
+              <button class="risk-btn" onclick="selectRisk('grav','Grave',this)">Grave</button>
+              <button class="risk-btn" onclick="selectRisk('grav','Moderado',this)">Moderado</button>
+              <button class="risk-btn" onclick="selectRisk('grav','Leve',this)">Leve</button>
+            </div>
+          </div>
+          <div class="form-row">
+            <label>Medidas de Controle</label>
+            <textarea id="m-controle" placeholder="Descreva as medidas de controle adotadas…"></textarea>
+          </div>
+          <div id="pxg-result" style="display:none" class="pt-result">
+            <div class="pt-result-title" id="pxg-nivel">—</div>
+            <div style="font-size:12px;color:var(--text2)" id="pxg-desc">—</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- GERAR PT -->
+      <button class="btn-gerar-pt" onclick="gerarPT()">⚡ Gerar Permissão de Trabalho</button>
+
+      <!-- Resultado PT -->
+      <div id="pt-resultado" style="display:none" class="pt-result">
+        <div class="pt-result-title">✅ PT Gerada com Sucesso</div>
+        <div class="pt-result-row"><span>Nº da PT</span><span id="pt-num">—</span></div>
+        <div class="pt-result-row"><span>Tipo</span><span id="pt-tipo-r">—</span></div>
+        <div class="pt-result-row"><span>Local</span><span id="pt-local-r">—</span></div>
+        <div class="pt-result-row"><span>Risco PxG</span><span id="pt-risco-r">—</span></div>
+        <div class="pt-result-row"><span>Emitida em</span><span id="pt-hora-r">—</span></div>
+        <div class="pt-result-row"><span>Executante</span><span id="pt-exec-r">—</span></div>
+      </div>
+
+      <div style="height:32px"></div>
+    </div>
+  </div>
+</div>
+
+<!-- ═══════════════════════════════════════════
+  MODAL CÂMERA
+═══════════════════════════════════════════ -->
+<div id="camera-modal">
+  <video id="camera-video" autoplay playsinline muted></video>
+  <canvas id="camera-canvas"></canvas>
+  <div class="camera-bar">
+    <button class="btn-cancel-cam" onclick="closeCamera()">Cancelar</button>
+    <button class="btn-capture" onclick="capturePhoto()">📷</button>
+    <button class="btn-switch-cam" onclick="switchCamera()" title="Girar câmera">🔄</button>
+  </div>
+</div>
+
+<!-- Input de arquivo oculto para galeria -->
+<input type="file" id="photo-input" accept="image/*" onchange="handlePhotoFile(event)">
+
+<script>
+// ═══════════════════════════════════════════
+//  USUÁRIOS VÁLIDOS (simulando localStorage do admin)
+// ═══════════════════════════════════════════
+const USERS_DEFAULT = [
+  { user: 'admin',  pass: 'orisco2025', nome: 'Administrador', role: 'Admin' },
+  { user: 'derjam', pass: 'pxg@2025',  nome: 'Derjam Rocha',  role: 'Engenheiro de Segurança' },
+];
+
+function getUsers() {
+  try {
+    const stored = localStorage.getItem('0r_users');
+    if (stored) return JSON.parse(stored);
+  } catch(e) {}
+  return USERS_DEFAULT;
+}
+
+let currentUser = null;
+
+// ═══════════════════════════════════════════
+//  TELAS
+// ═══════════════════════════════════════════
+function showScreen(id) {
+  document.querySelectorAll('.screen').forEach(s => s.classList.remove('active'));
+  document.getElementById('screen-' + id).classList.add('active');
+}
+
+// ═══════════════════════════════════════════
+//  LOGIN
+// ═══════════════════════════════════════════
+document.getElementById('login-pass').addEventListener('keydown', e => {
+  if (e.key === 'Enter') doLogin();
+});
+document.getElementById('login-user').addEventListener('keydown', e => {
+  if (e.key === 'Enter') document.getElementById('login-pass').focus();
+});
+
+function doLogin() {
+  const u = document.getElementById('login-user').value.trim();
+  const p = document.getElementById('login-pass').value;
+  const err = document.getElementById('login-error');
+
+  const users = getUsers();
+  const found = users.find(x => x.user === u && x.pass === p);
+
+  if (found) {
+    currentUser = found;
+    err.style.display = 'none';
+    showScreen('termo');
+  } else {
+    err.style.display = 'block';
+    document.getElementById('login-pass').value = '';
+    document.getElementById('login-pass').focus();
+  }
+}
+
+function doLogout() {
+  currentUser = null;
+  document.getElementById('login-user').value = '';
+  document.getElementById('login-pass').value = '';
+  document.getElementById('termo-check').checked = false;
+  document.getElementById('btn-aceitar').disabled = true;
+  showScreen('login');
+}
+
+// ═══════════════════════════════════════════
+//  TERMO
+// ═══════════════════════════════════════════
+function toggleTermoCheck() {
+  const cb = document.getElementById('termo-check');
+  cb.checked = !cb.checked;
+  updateTermoBtn();
+}
+
+function updateTermoBtn() {
+  const checked = document.getElementById('termo-check').checked;
+  document.getElementById('btn-aceitar').disabled = !checked;
+}
+
+function aceitarTermo() {
+  if (!document.getElementById('termo-check').checked) return;
+
+  // Configura o header do app
+  document.getElementById('header-user-name').textContent = currentUser.nome;
+  document.getElementById('header-user-role').textContent = currentUser.role;
+
+  showScreen('app');
+  initChat();
+}
+
+// ═══════════════════════════════════════════
+//  SWITCH DE MODO
+// ═══════════════════════════════════════════
+function switchMode(mode) {
+  document.getElementById('tab-chat').classList.toggle('active', mode === 'chat');
+  document.getElementById('tab-manual').classList.toggle('active', mode === 'manual');
+  document.getElementById('chat-panel').style.display = mode === 'chat' ? 'flex' : 'none';
+  document.getElementById('manual-panel').style.display = mode === 'manual' ? 'flex' : 'none';
+}
+
+// ═══════════════════════════════════════════
+//  CHAT IA
+// ═══════════════════════════════════════════
+let chatHistory = [];
+let pendingPhoto = null; // { dataUrl, base64, type }
+
+function initChat() {
+  chatHistory = [];
+  const container = document.getElementById('chat-messages');
+  container.innerHTML = '';
+  addMessage('ai',
+    `Olá, <strong>${currentUser.nome}</strong>! 👋\n\nSou o assistente 0Risco.IA.\n\nVocê pode:\n• 📷 Tirar uma foto da área de trabalho para eu analisar os riscos\n• 💬 Descrever o trabalho a quente ou espaço confinado\n• 📝 Usar o modo Manual para preencher a PT passo a passo\n\nComo posso ajudar?`
+  );
+}
+
+function addMessage(role, text, imgUrl) {
+  const container = document.getElementById('chat-messages');
+  const div = document.createElement('div');
+  div.className = 'msg ' + role;
+
+  if (role === 'ai') {
+    div.innerHTML = `<div class="msg-tag">0Risco.IA</div>${text.replace(/\n/g,'<br>')}`;
+  } else {
+    div.innerHTML = text.replace(/\n/g,'<br>');
+    if (imgUrl) {
+      const img = document.createElement('img');
+      img.src = imgUrl;
+      img.className = 'msg-photo';
+      div.appendChild(img);
+    }
+  }
+
+  container.appendChild(div);
+  container.scrollTop = container.scrollHeight;
+}
+
+function addTyping() {
+  const container = document.getElementById('chat-messages');
+  const div = document.createElement('div');
+  div.className = 'msg ai';
+  div.id = 'typing-msg';
+  div.innerHTML = `<div class="msg-tag">0Risco.IA</div><div class="typing-indicator"><span></span><span></span><span></span></div>`;
+  container.appendChild(div);
+  container.scrollTop = container.scrollHeight;
+}
+
+function removeTyping() {
+  const t = document.getElementById('typing-msg');
+  if (t) t.remove();
+}
+
+function autoResize(el) {
+  el.style.height = 'auto';
+  el.style.height = Math.min(el.scrollHeight, 120) + 'px';
+}
+
+function chatEnter(e) {
+  if (e.key === 'Enter' && !e.shiftKey) {
+    e.preventDefault();
+    sendChat();
+  }
+}
+
+async function sendChat() {
+  const input = document.getElementById('chat-input');
+  const text = input.value.trim();
+  const btn = document.getElementById('btn-send');
+
+  if (!text && !pendingPhoto) return;
+
+  // Monta mensagem do usuário
+  const displayText = text || (pendingPhoto ? '(analisando foto da área)' : '');
+  addMessage('user', displayText, pendingPhoto ? pendingPhoto.dataUrl : null);
+
+  // Salva foto para envio
+  const photoToSend = pendingPhoto;
+  pendingPhoto = null;
+  removePhoto();
+
+  input.value = '';
+  input.style.height = '44px';
+  btn.disabled = true;
+
+  // Histórico
+  const userContent = [];
+
+  if (photoToSend) {
+    userContent.push({
+      type: 'image',
+      source: { type: 'base64', media_type: photoToSend.type, data: photoToSend.base64 }
+    });
+  }
+
+  if (text) {
+    userContent.push({ type: 'text', text });
+  } else if (photoToSend) {
+    userContent.push({ type: 'text', text: 'Analise esta imagem da área de trabalho e identifique riscos, condições de segurança e se é seguro emitir uma Permissão de Trabalho a Quente ou Espaço Confinado. Seja objetivo e prático.' });
+  }
+
+  chatHistory.push({ role: 'user', content: userContent });
+
+  addTyping();
+
+  try {
+    const systemPrompt = `Você é o assistente 0Risco.IA, especialista em segurança do trabalho com foco em TRABALHO EM ALTURA (NR-35), trabalhos a quente (NR-34) e espaço confinado (NR-33).
+
+Usuário logado: ${currentUser.nome} (${currentUser.role})
+
+═══════════════════════════════════════
+BASE DE CONHECIMENTO — TRABALHO EM ALTURA
+═══════════════════════════════════════
+
+## 1. NR-35 — DEFINIÇÕES E REQUISITOS
+
+### 1.1 Definição
+Trabalho em altura: toda atividade executada acima de 2,00 m do nível inferior, onde haja risco de queda.
+
+### 1.2 Responsabilidades
+- EMPREGADOR: garantir capacitação, EPI, PT, análise de riscos, sistema de resgate.
+- TRABALHADOR: participar de capacitação, usar EPI corretamente, interromper tarefa se houver risco grave.
+- SUPERVISOR: inspecionar o local, validar PT, acompanhar execução.
+
+### 1.3 Capacitação obrigatória (NR-35 item 35.4)
+- Carga horária mínima: 8 horas teóricas + práticas
+- Conteúdo: riscos de queda, uso de EPI, sistemas de ancoragem, procedimentos de emergência, primeiros socorros
+- Validade: 2 anos (renovação a cada 2 anos ou quando houver mudança de condição ou acidente)
+- Trabalhadores com função de supervisor: capacitação adicional de 8 horas
+
+### 1.4 PT — Permissão de Trabalho (NR-35 item 35.5)
+Obrigatória para trabalhos em altura quando:
+- Altura ≥ 2,00 m com risco de queda
+- Trabalhos não rotineiros em altura
+- Situações com risco de queda de materiais sobre terceiros
+
+A PT deve conter:
+- Data, hora início e previsão de término
+- Local e descrição da atividade
+- Relação de trabalhadores
+- Riscos identificados
+- Medidas de controle
+- EPI/EPC necessários
+- Procedimento de emergência/resgate
+- Assinaturas: executor, supervisor, liberador
+
+### 1.5 EPI obrigatório para trabalho em altura
+
+| EPI | Norma | Observação |
+|-----|-------|------------|
+| Capacete com jugular | CA válido | Classe A ou B conforme risco |
+| Cinto de segurança tipo paraquedista | CA válido | Obrigatório ≥ 2m |
+| Talabartes com absorvedor de energia | CA válido | Duplo recomendado |
+| Mosquetão trava-quedas | CA válido | Abertura mínima 50mm |
+| Luvas | CA válido | Conforme risco específico |
+| Calçado de segurança | CA válido | Com solado antiderrapante |
+| Óculos/protetor facial | CA válido | Conforme risco |
+
+### 1.6 Sistemas de ancoragem (NR-35 + ABNT NBR 16325)
+- Ponto de ancoragem: suportar no mínimo 15 kN (≈ 1.530 kgf)
+- Nunca ancorar em tubulações, calhas, corrimãos sem inspeção de resistência
+- Linha de vida horizontal: deve ser projetada por engenheiro responsável
+- Linha de vida vertical: dispositivo trava-quedas deslizante
+- Distância de queda livre máxima: 0,6 m com talabarte simples
+
+### 1.7 Condições impeditivas para trabalho em altura
+🚨 BLOQUEAR a PT nas seguintes condições:
+- Ventos > 42 km/h (11,7 m/s) — Escala Beaufort nível 6
+- Chuva, raios ou tempestade
+- Neblina com visibilidade reduzida
+- Trabalhador sem capacitação NR-35 válida
+- ASO (Atestado de Saúde Ocupacional) vencido
+- EPI com CA vencido ou danificado
+- Ponto de ancoragem não inspecionado
+- Trabalhador em uso de medicamento que cause sonolência
+- Superfície de trabalho escorregadia sem medida de controle
+- Iluminação insuficiente
+
+---
+
+## 2. CHECKLIST DE INSPEÇÃO PRÉ-TRABALHO EM ALTURA
+
+### BLOCO A — Documentação e Habilitação
+- [ ] PT emitida, assinada e válida para a atividade
+- [ ] Trabalhador com capacitação NR-35 válida (máx. 2 anos)
+- [ ] ASO válido (sem restrição para trabalho em altura)
+- [ ] Supervisor designado e presente
+- [ ] Vigia designado (se aplicável)
+- [ ] Plano de resgate disponível e comunicado à equipe
+
+### BLOCO B — EPI
+- [ ] Cinto paraquedista inspecionado (sem cortes, costuras íntegras, fivelas OK)
+- [ ] Talabarte com absorvedor de energia (sem amassados, rebites OK)
+- [ ] Mosquetões com trava dupla funcionando
+- [ ] Capacete com jugular em boas condições
+- [ ] Calçado antiderrapante
+- [ ] CAs de todos EPIs dentro da validade
+
+### BLOCO C — Estrutura e Ancoragem
+- [ ] Ponto de ancoragem inspecionado e aprovado (≥ 15 kN)
+- [ ] Linha de vida instalada por profissional habilitado (se aplicável)
+- [ ] Andaime/plataforma inspecionado (travas, rodapé, guarda-corpo)
+- [ ] Escada em boas condições (travas, apoios, 1m acima da plataforma)
+- [ ] Superfície de trabalho limpa, seca e antiderrapante
+
+### BLOCO D — Ambiente e Condições
+- [ ] Condições meteorológicas favoráveis (sem chuva, raios, vento forte)
+- [ ] Área inferior isolada (fita, cone, barreira)
+- [ ] Sinalização de alerta posicionada
+- [ ] Comunicação com a base estabelecida (rádio/celular)
+- [ ] Iluminação adequada
+
+### BLOCO E — Emergência
+- [ ] Plano de resgate comunicado a todos
+- [ ] Equipamento de resgate disponível no local
+- [ ] Número de emergência disponível (SAMU 192, Bombeiros 193)
+- [ ] Primeiros socorros básicos conhecidos pela equipe
+
+---
+
+## 3. MATRIZ DE RISCO PxG — TRABALHO EM ALTURA
+
+### Probabilidade (P)
+| Nível | Descrição |
+|-------|-----------|
+| 4 — Alta | Ocorre frequentemente, histórico de acidentes no local |
+| 3 — Média | Pode ocorrer em certas condições |
+| 2 — Baixa | Pouco provável, mas possível |
+| 1 — Improvável | Raramente ocorre, controles eficazes |
+
+### Gravidade (G)
+| Nível | Descrição |
+|-------|-----------|
+| 4 — Fatal | Morte, incapacidade permanente total |
+| 3 — Grave | Incapacidade permanente parcial, fratura grave |
+| 2 — Moderado | Lesão com afastamento, fratura simples |
+| 1 — Leve | Lesão sem afastamento, arranhão, contusão |
+
+### Resultado PxG
+| PxG | Nível | Ação |
+|-----|-------|------|
+| 12–16 | 🚨 CRÍTICO | PT BLOQUEADA. Não iniciar. Intervenção imediata. |
+| 8–9 | 🔴 ALTO | Medidas de controle rigorosas antes de liberar |
+| 4–6 | 🟠 MÉDIO | Controles adicionais e supervisão constante |
+| 2–3 | 🟡 BAIXO | Medidas básicas, monitoramento |
+| 1 | ✅ ACEITÁVEL | Prosseguir com procedimento padrão |
+
+### Riscos típicos em trabalho em altura e PxG padrão
+
+| Risco | P | G | PxG | Nível |
+|-------|---|---|-----|-------|
+| Queda de pessoa (sem EPI) | 4 | 4 | 16 | 🚨 CRÍTICO |
+| Queda de pessoa (com EPI, ancoragem OK) | 1 | 4 | 4 | 🟠 MÉDIO |
+| Queda de material/ferramenta sobre terceiros | 3 | 3 | 9 | 🔴 ALTO |
+| Choque elétrico em proximidade de rede elétrica | 3 | 4 | 12 | 🚨 CRÍTICO |
+| Colapso de estrutura/andaime | 2 | 4 | 8 | 🔴 ALTO |
+| Queda em superfície escorregadia | 3 | 3 | 9 | 🔴 ALTO |
+| Trabalho em altura + trabalho a quente | 3 | 4 | 12 | 🚨 CRÍTICO |
+| Trabalho em telhado frágil (fibrocimento, telha) | 4 | 4 | 16 | 🚨 CRÍTICO |
+| Exposição a ventos fortes | 3 | 3 | 9 | 🔴 ALTO |
+| Fadiga/calor extremo em altura | 2 | 3 | 6 | 🟠 MÉDIO |
+
+---
+
+## 4. PROCEDIMENTOS DE RESGATE E EMERGÊNCIA
+
+### 4.1 Plano de resgate (obrigatório pela NR-35 item 35.6)
+Antes de iniciar qualquer trabalho em altura, deve existir um plano de resgate que contemple:
+- Identificação dos riscos de queda do local
+- Método de resgate (autorresgate, resgate assistido, resgate por equipe especializada)
+- Equipamentos disponíveis para resgate
+- Responsáveis pelo resgate
+- Contatos de emergência
+
+### 4.2 Procedimento em caso de queda com suspensão (vítima presa no cinto)
+⚠️ SÍNDROME DO ARNÊS: trabalhador suspenso no cinto pode sofrer colapso circulatório em 3 a 30 minutos.
+
+Ações imediatas:
+1. 🚨 Acionar emergência imediatamente (SAMU 192 / Bombeiros 193)
+2. NÃO remover o cinto bruscamente
+3. Manter a vítima o mais vertical possível durante o resgate
+4. Se consciente: orientar a fazer movimentos com as pernas para manter circulação
+5. Após o resgate: colocar a vítima em posição semi-sentada (não deitar imediatamente)
+6. Monitorar sinais vitais até chegada do socorro
+7. Mesmo sem sintomas visíveis: encaminhar ao médico
+
+### 4.3 Procedimento em caso de queda com impacto
+1. NÃO mover a vítima (suspeita de lesão na coluna)
+2. Acionar SAMU 192 imediatamente
+3. Manter vítima imobilizada e consciente
+4. Controlar hemorragias externas com pressão
+5. Preservar a cena para investigação do acidente
+6. Acionar o SESMT/responsável de segurança
+7. Registrar o acidente (CAT — Comunicação de Acidente de Trabalho)
+
+### 4.4 Contatos de emergência
+- SAMU: 192
+- Bombeiros: 193
+- Defesa Civil: 199
+- Polícia: 190
+
+### 4.5 Investigação pós-acidente (obrigatória)
+- Preservar local
+- Fotografar evidências
+- Ouvir testemunhas
+- Emitir CAT em até 1 dia útil
+- Relatório de investigação com causa raiz e ações corretivas
+
+---
+
+## 5. INSTRUÇÕES PARA A IA
+
+Ao receber uma descrição ou foto de trabalho em altura:
+
+1. **IDENTIFIQUE** o tipo de trabalho, altura estimada, estrutura, condições do ambiente
+2. **VERIFIQUE** as condições impeditivas listadas acima
+3. **APLIQUE** o checklist de inspeção (blocos A a E)
+4. **CALCULE** o PxG para os principais riscos identificados
+5. **EMITA** parecer: ✅ APTO / ⚠️ CONDICIONADO / 🚨 BLOQUEADO
+6. **LISTE** as medidas de controle necessárias antes da liberação
+7. **INDIQUE** o EPI específico para o tipo de trabalho
+
+Formato de resposta para análise completa:
+\`\`\`
+🏗️ ANÁLISE DE RISCO — TRABALHO EM ALTURA
+Local: [identificado]
+Altura estimada: [X] m
+Tipo: [descrição]
+
+📋 CHECKLIST RÁPIDO:
+✅/⚠️/🚨 [item] — [status]
+
+⚠️ RISCOS IDENTIFICADOS (PxG):
+• [Risco] → P[n] x G[n] = [resultado] — [nível]
+
+🛡️ MEDIDAS DE CONTROLE:
+• [medida 1]
+• [medida 2]
+
+🪖 EPI OBRIGATÓRIO:
+• [lista]
+
+📋 PARECER FINAL: ✅ APTO / ⚠️ CONDICIONADO / 🚨 BLOQUEADO
+[Justificativa]
+\`\`\`
+
+
+
+---
+
+## 6. INSPEÇÃO DE EPI — TRABALHO EM ALTURA
+### Base: Manual Capital Safety/DBI-SALA (Inspetor de Equipamento)
+
+**REGRA GERAL: Retirar de operação IMEDIATAMENTE qualquer EPI submetido a queda ou impacto.**
+
+### CINTURÃO PARAQUEDISTA — 4 componentes:
+**FERRAGENS** (argolas D, fivelas, almofada dorsal):
+🚨 REJEITAR: danos, deformidades, bordas afiadas, rebarbas, rachaduras, corrosão
+
+**TECIDO:**
+🚨 REJEITAR: furos/queimaduras >1,5mm em áreas críticas; cortes >3,17mm; corte qualquer tamanho próximo à argola D dorsal; mais de 1 furo trespassante na mesma fita; trama com tinta
+⚠️ VERIFICAR: puimentos, cortes, fibras rompidas, rasgos, abrasões, bolor, queimaduras, descoloramento, danos por calor (áreas escuras e duras)
+
+**COSTURAS:** 🚨 REJEITAR: >2 costuras rasgadas/cortadas no mesmo padrão (indica impacto)
+
+**ETIQUETAS:** 🚨 REJEITAR: ausentes ou ilegíveis
+
+---
+
+### TALABARTE — Inspeção:
+🚨 RETIRAR E DESTRUIR se submetido a queda.
+
+**Ferragens:** Fechos devem mover-se livremente e travar. Rejeitar: danos, rebarbas, rachaduras, corrosão.
+
+**Tecido/costura:** Rejeitar: puimentos, cortes, fibras rompidas, rasgos, abrasões, bolor, queimaduras, descoloramento, nós, sujeira excessiva, tinta, ferrugem. Danos por calor (manchas escuras/áreas quebradiças) = REJEITAR.
+
+**Corda sintética:** Desgaste concentrado, fibras puídas, fios rompidos, cortes, abrasões, queimaduras. Emendas: mínimo 5 dobras completas.
+
+**Cabo de aço (usar luvas):**
+🚨 REJEITAR: ≥6 fios quebrados aleatoriamente por disposição, ou ≥3 fios em um cordão; fios partidos a <25mm das luvas de compressão (buris).
+
+**Absorvedor de energia:** Não deve haver alargamento. Cobertura presa e íntegra. Se etiqueta de impacto visível → RETIRAR.
+
+---
+
+### GANCHOS E MOSQUETÕES:
+🚨 REJEITAR: rachaduras, rebarbas, mossas, deformidades, corrosão. Fecho deve funcionar suavemente, fechar e travar completamente.
+
+**Resistências mínimas ANSI Z359:** Tração 2.267kg; fecho frontal 1.632kg; carga lateral 1.632kg.
+
+**NUNCA:** Conectar gancho a gancho, mosquetão a mosquetão, gancho a mosquetão, ou >1 conector em uma argola. Nunca usar conector que não feche completamente.
+
+---
+
+### CONECTORES DE ANCORAGEM:
+🚨 RETIRAR E DESTRUIR se submetido a queda.
+Conectar SOMENTE com mosquetão ou gancho de engate automático à argola D pequena. Sem folga entre conector e estrutura. Nunca usar nós.
+Para altas temperaturas: usar adaptadores de Kevlar.
+
+---
+
+### SRL/SRD (LINHA DE VIDA AUTORRETRÁTIL):
+**Tipos:** Tipo 1 (≤3m, absorção externa) / Tipo 2 (>3m, absorção interna) / Tipo 3 (com recuperação para resgate).
+
+**Indicador de impacto modelo trama:** Dobra costurada com fio VERMELHO. Costura intacta = OK. Costura rompida = 🚨 SOFREU IMPACTO → RETIRAR E ENVIAR PARA REPARO.
+
+**Indicador de impacto modelo cabo/corda:** Faixa vermelha exposta no gancho = 🚨 impacto → RETIRAR.
+
+**Inspeção obrigatória:**
+1. Parafusos soltos / peças deformadas
+2. Carcaça: deformidades, rachaduras
+3. Linha de vida: estender/retrair suavemente sem hesitação
+4. Travamento: positivo, sem deslizamento ao puxar rapidamente
+5. Etiquetas legíveis e data de recertificação válida
+6. Corrosão em toda a unidade
+7. Linha de vida: cortes, queimaduras, danos químicos, abrasão
+8. Ganchos: danos, corrosão, funcionamento
+9. Linha de vida reserva: faixa vermelha visível = acionada → serviço autorizado
+
+**Agentes nocivos:** Potassa, Cloro, Alvejante, Ácido sulfúrico, Ácido clorídrico, Amônia.
+**Temperatura máxima:** 60°C (Spectra); Technora resiste até 480°C.
+**NUNCA:** Desmontar, lubrificar, amarrar nós na linha de vida, retirar fios do cabo.
+
+---
+
+### LINHAS DE VIDA VERTICAIS E TRAVA-QUEDAS DESLIZANTE:
+Cabo de aço: ≥6 fios quebrados por disposição ou ≥3 em cordão → REJEITAR. Fios a <25mm dos buris → REJEITAR.
+Trava-quedas: roldana deve percorrer comprimento completo das fendas; articulação girar livremente; trava por gravidade funcional.
+
+---
+
+### ARMAZENAMENTO DE TODOS OS EPIs:
+Local fresco, seco, limpo, protegido da luz solar, sem vapores químicos.
+Limpeza: água + sabão neutro. NUNCA calor para secar. NUNCA alvejante.
+Reparos: SOMENTE fabricante ou serviço autorizado POR ESCRITO.
+
+
+
+---
+
+## 7. USO SEGURO DE ESCADAS E ANDAIMES (DDS)
+
+### 7.1 ESCADAS — Uso Seguro
+
+**Verificações obrigatórias antes do uso:**
+- Degraus firmes e bem fixados
+- Laterais íntegras (sem trincas ou amassados)
+- Sapatas antiderrapantes em boas condições
+- Travas e articulações funcionando
+- Limpeza (sem óleo, graxa ou sujeira)
+- Sinalização e identificação legíveis
+- Ambiente seguro ao redor (sem obstáculos)
+
+**Condição:** Verificar se está em bom estado — sem trincas, degraus soltos, sapatas desgastadas ou partes danificadas.
+
+**Estabilidade:** Usar em superfície plana, firme e seca. Travar a escada (se aplicável).
+
+**Posicionamento:** Ângulo correto = 4 (altura) : 1 (distância da base à parede).
+
+**Utilização:** Suba e desça sempre voltado para a escada, com as duas mãos livres para apoio. Manter 3 pontos de contato (2 mãos + 1 pé, ou 2 pés + 1 mão).
+
+**Limite de carga:** Respeitar o limite do fabricante. Não transportar materiais pesados enquanto sobe.
+
+**🚨 PROIBIDO em escadas:**
+- Subir nos 3 últimos degraus
+- Usar escada improvisada (caixas, bancos, pallets)
+- Utilizar como ponte ou apoio
+- Inclinar para os lados (descer e reposicionar)
+- Subir com ferramentas ou materiais nas mãos
+- Trabalhar sob efeito de cansaço ou distrações
+- Remover proteções ou travamentos
+- Usar escada ou andaime danificados
+
+**🚨 DANIFICOU? NÃO USE! COMUNIQUE E RETIRE DE USO.**
+
+---
+
+### 7.2 ANDAIMES — Uso Seguro
+
+**Verificações obrigatórias antes do uso:**
+- Estrutura completa e travamentos feitos
+- Plataforma íntegra e bem fixada
+- Guarda-corpo e rodapé instalados
+- Estabilidade da base e nivelamento
+- Rodízios travados ou sapatas fixas
+- Ausência de deformações ou corrosão
+- Carga máxima visível e respeitada
+
+**1. Montagem:** Realizada por pessoa capacitada e conforme procedimento.
+
+**2. Estabilidade:** Verificar travamentos, diagonal, barras e rodízios. Usar sapatas niveladoras em superfícies irregulares.
+
+**3. Plataforma:** Completa, fixa, antiderrapante e com rodapés.
+
+**4. Guarda-corpo:** Sistema de proteção obrigatório — guarda-corpo superior, intermediário e rodapé.
+
+**5. Acesso seguro:** Usar escadas internas do próprio andaime. NUNCA subir pelas estruturas.
+
+**6. Carga máxima:** Respeitar o limite. Não acumular materiais.
+
+**7. Inspeção diária:** Antes de usar, verificar todos os itens. Em caso de dúvida, NÃO USE.
+
+**🚨 NUNCA alterar a estrutura do andaime. Qualquer modificação compromete a segurança.**
+
+---
+
+### 7.3 EPI OBRIGATÓRIO para Escadas e Andaimes
+- Capacete
+- Óculos de segurança
+- Cinto de segurança (paraquedista)
+- Calçado antiderrapante
+
+**Boas práticas:**
+- Planejar o trabalho antes de subir
+- Manter o local organizado e iluminado
+- Fazer pausas e não ter pressa
+- Em caso de vento forte, não utilizar andaimes expostos
+
+---
+
+## 8. NR-35 — FATOR DE QUEDA (FQ)
+
+**Definição:**
+FQ = Altura da Queda Livre (H) ÷ Comprimento do Talabarte (L)
+
+O Fator de Queda determina o nível de impacto no corpo do trabalhador em caso de queda. Quanto MENOR o FQ, MENOR o impacto.
+
+---
+
+### 8.1 SITUAÇÕES E FATOR DE QUEDA
+
+**✅ FQ < 1 — SEGURO (Baixo Impacto)**
+- Ancoragem ACIMA da cabeça + conexão dorsal
+- A queda é mínima, o tranco no corpo é leve
+- O equipamento trabalha com folga
+- **ESTA É A SITUAÇÃO IDEAL — SEMPRE BUSCAR**
+
+**⚠️ FQ = 1 — CUIDADO (Médio Impacto)**
+- Ancoragem no NÍVEL da cintura (conexão dorsal)
+- A queda tem a mesma distância do talabarte
+- O impacto é moderado — exige que o absorvedor de energia atue
+- Situação aceitável mas requer atenção
+
+**🚨 FQ = 2 — PERIGO EXTREMO (Alto Impacto)**
+- Ancoragem nos PÉS (nível da plataforma) + conexão dorsal
+- A queda é o DOBRO do tamanho do talabarte (queda livre + extensão)
+- O impacto é VIOLENTO — risco grave de lesão ou falha do sistema
+- **NUNCA PERMITIR ESTA SITUAÇÃO**
+
+---
+
+### 8.2 POR QUE EVITAR FQ = 2?
+
+Forças de impacto elevadas causam lesões internas graves, independentemente do uso de absorvedor de energia. O esqueleto e órgãos internos sofrem com as forças de desaceleração violenta — fraturas vertebrais, lesões em órgãos, ruptura de vasos.
+
+---
+
+### 8.3 REGRAS PRÁTICAS PARA MINIMIZAR O FATOR DE QUEDA
+
+- **SEMPRE ancorar acima da cabeça** — reduz drasticamente o FQ
+- **NUNCA ancorar abaixo da cintura** — cria FQ = 2 (situação crítica)
+- **Usar talabarte duplo (Y)** para manter ancoragem contínua ao mudar de posição
+- **Calcular a distância de queda livre** antes de iniciar: talabarte (ex.: 1,8m) + extensão do absorvedor (ex.: 1,75m) + altura do trabalhador até o ponto de ancoragem = distância total necessária abaixo
+- **Verificar espaço livre abaixo** para garantir que o trabalhador não atingirá estrutura abaixo antes de o sistema deter a queda
+- **Linha de vida autorretrátil (SRL)** reduz o FQ automaticamente — mantém a linha tensa, limitando a queda livre
+
+---
+
+### 8.4 CÁLCULO DA DISTÂNCIA MÍNIMA ABAIXO DO PONTO DE ANCORAGEM
+
+Para talabarte com absorvedor de 1,8m:
+- Queda livre: 1,8m
+- Extensão do absorvedor: ~1,75m
+- Altura do ponto de conexão dorsal ao chão (trabalhador): ~1,5m
+- **Total mínimo: ~5,05m abaixo do ponto de ancoragem**
+
+Se não houver esse espaço livre, usar **SRL (trava-queda autorretrátil)** que limita a queda a poucos centímetros.
+
+---
+
+### 8.5 SINAIS DE ALERTA — QUANDO PARAR A ATIVIDADE
+
+🚨 Parar imediatamente e comunicar ao líder se:
+- Identificar algo fora do padrão no EPI ou estrutura
+- Condições meteorológicas se deteriorarem (vento, chuva, raios)
+- Sentir tontura, cansaço extremo ou mal-estar
+- Ponto de ancoragem parecer instável ou inadequado
+- Fator de queda calculado for ≥ 1
+
+**Segurança é responsabilidade de TODOS.**
+
+Seja direto, técnico e prático. Use emojis para sinalizar status. Responda sempre em português brasileiro.`;
+
+    const response = await fetch('https://api.anthropic.com/v1/messages', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({
+        model: 'claude-sonnet-4-6',
+        max_tokens: 1000,
+        system: systemPrompt,
+        messages: chatHistory
+      })
+    });
+
+    const data = await response.json();
+    removeTyping();
+
+    if (data.content && data.content[0]) {
+      const reply = data.content[0].text;
+      chatHistory.push({ role: 'assistant', content: reply });
+      addMessage('ai', reply);
+    } else {
+      addMessage('ai', '⚠️ Não foi possível processar a resposta. Tente novamente.');
+    }
+  } catch (err) {
+    removeTyping();
+    addMessage('ai', '🔴 Erro de conexão com a IA. Verifique a internet e tente novamente.\n\nVocê pode usar o modo Manual enquanto isso.');
+  }
+
+  btn.disabled = false;
+  input.focus();
+}
+
+// ═══════════════════════════════════════════
+//  CÂMERA
+// ═══════════════════════════════════════════
+let cameraStream = null;
+let facingMode = 'environment'; // câmera traseira por padrão
+
+async function openCamera() {
+  const modal = document.getElementById('camera-modal');
+  modal.classList.add('open');
+  await startStream();
+}
+
+async function startStream() {
+  try {
+    if (cameraStream) {
+      cameraStream.getTracks().forEach(t => t.stop());
+    }
+    cameraStream = await navigator.mediaDevices.getUserMedia({
+      video: { facingMode, width: { ideal: 1280 }, height: { ideal: 720 } }
+    });
+    document.getElementById('camera-video').srcObject = cameraStream;
+  } catch (err) {
+    alert('Câmera não disponível. Use a galeria.');
+    closeCamera();
+  }
+}
+
+async function switchCamera() {
+  facingMode = facingMode === 'environment' ? 'user' : 'environment';
+  await startStream();
+}
+
+function capturePhoto() {
+  const video = document.getElementById('camera-video');
+  const canvas = document.getElementById('camera-canvas');
+  canvas.width = video.videoWidth;
+  canvas.height = video.videoHeight;
+  canvas.getContext('2d').drawImage(video, 0, 0);
+
+  const dataUrl = canvas.toDataURL('image/jpeg', 0.85);
+  const base64 = dataUrl.split(',')[1];
+
+  setPhoto(dataUrl, base64, 'image/jpeg');
+  closeCamera();
+}
+
+function closeCamera() {
+  if (cameraStream) {
+    cameraStream.getTracks().forEach(t => t.stop());
+    cameraStream = null;
+  }
+  document.getElementById('camera-modal').classList.remove('open');
+}
+
+function handlePhotoFile(event) {
+  const file = event.target.files[0];
+  if (!file) return;
+  const reader = new FileReader();
+  reader.onload = e => {
+    const dataUrl = e.target.result;
+    const base64 = dataUrl.split(',')[1];
+    setPhoto(dataUrl, base64, file.type || 'image/jpeg');
+  };
+  reader.readAsDataURL(file);
+  event.target.value = '';
+}
+
+function setPhoto(dataUrl, base64, type) {
+  pendingPhoto = { dataUrl, base64, type };
+  document.getElementById('photo-preview-thumb').src = dataUrl;
+  document.getElementById('photo-preview-bar').classList.add('visible');
+  document.getElementById('chat-input').placeholder = 'Descreva o que quer analisar na foto…';
+  document.getElementById('chat-input').focus();
+}
+
+function removePhoto() {
+  pendingPhoto = null;
+  document.getElementById('photo-preview-bar').classList.remove('visible');
+  document.getElementById('photo-preview-thumb').src = '';
+  document.getElementById('chat-input').placeholder = 'Descreva o trabalho, risco ou tire uma foto da área…';
+}
+
+// ═══════════════════════════════════════════
+//  MANUAL — BADGES
+// ═══════════════════════════════════════════
+function updateBadge(section, fieldId) {
+  const val = document.getElementById(fieldId).value;
+  const badge = document.getElementById('badge-' + section);
+  if (val) {
+    badge.textContent = 'Preenchido';
+    badge.className = 'manual-section-badge badge-ok';
+  } else {
+    badge.textContent = 'Pendente';
+    badge.className = 'manual-section-badge badge-pending';
+  }
+}
+
+function calcDocBadge() {
+  const total = 6;
+  const checked = ['doc1','doc2','doc3','doc4','doc5','doc6'].filter(id => document.getElementById(id).checked).length;
+  const badge = document.getElementById('badge-docs');
+  if (checked === total) {
+    badge.textContent = '✓ Completo';
+    badge.className = 'manual-section-badge badge-ok';
+  } else if (checked > 0) {
+    badge.textContent = `${checked}/${total}`;
+    badge.className = 'manual-section-badge badge-pending';
+  } else {
+    badge.textContent = 'Pendente';
+    badge.className = 'manual-section-badge badge-pending';
+  }
+}
+
+function calcCheckBadge() {
+  const ids = ['c1','c2','c3','c4','c5','c6','c7','c8'];
+  const checked = ids.filter(id => document.getElementById(id).checked).length;
+  const badge = document.getElementById('badge-check');
+  if (checked === ids.length) {
+    badge.textContent = '✓ Completo';
+    badge.className = 'manual-section-badge badge-ok';
+  } else if (checked > 0) {
+    badge.textContent = `${checked}/${ids.length}`;
+    badge.className = 'manual-section-badge badge-pending';
+  } else {
+    badge.textContent = 'Pendente';
+    badge.className = 'manual-section-badge badge-pending';
+  }
+}
+
+// ═══════════════════════════════════════════
+//  ANÁLISE PxG
+// ═══════════════════════════════════════════
+let riskSelections = { prob: null, grav: null };
+
+const PXG_MATRIX = {
+  'Alta-Fatal':      { nivel: '🚨 CRÍTICO',    cor: '#ff2d2d', desc: 'Trabalho BLOQUEADO. Risco inaceitável. Intervenção imediata obrigatória.' },
+  'Alta-Grave':      { nivel: '🔴 ALTO',        cor: '#ff2d2d', desc: 'Risco alto. Medidas de controle rigorosas antes de liberar.' },
+  'Alta-Moderado':   { nivel: '🟠 ALTO',        cor: '#ff7a00', desc: 'Atenção. Controles adicionais necessários.' },
+  'Alta-Leve':       { nivel: '🟡 MÉDIO',       cor: '#ffd60a', desc: 'Monitorar. Medidas de prevenção aplicadas.' },
+  'Média-Fatal':     { nivel: '🔴 ALTO',        cor: '#ff2d2d', desc: 'Risco alto. Análise detalhada obrigatória.' },
+  'Média-Grave':     { nivel: '🟠 MÉDIO',       cor: '#ff7a00', desc: 'Controles necessários. Supervisão constante.' },
+  'Média-Moderado':  { nivel: '🟡 MÉDIO',       cor: '#ffd60a', desc: 'Medidas preventivas suficientes com monitoramento.' },
+  'Média-Leve':      { nivel: '🟢 BAIXO',       cor: '#00e676', desc: 'Risco aceitável com medidas básicas.' },
+  'Baixa-Fatal':     { nivel: '🟠 MÉDIO',       cor: '#ff7a00', desc: 'Baixa probabilidade, mas consequência crítica. Controles de engenharia.' },
+  'Baixa-Grave':     { nivel: '🟡 BAIXO',       cor: '#ffd60a', desc: 'Risco controlável. EPIs e procedimentos adequados.' },
+  'Baixa-Moderado':  { nivel: '🟢 BAIXO',       cor: '#00e676', desc: 'Risco aceitável. Manter procedimentos.' },
+  'Baixa-Leve':      { nivel: '🟢 ACEITÁVEL',   cor: '#00c8ff', desc: 'Risco mínimo. Seguir procedimento padrão.' },
+  'Improvável-Fatal':  { nivel: '🟡 BAIXO',     cor: '#ffd60a', desc: 'Evento improvável. Plano de contingência documentado.' },
+  'Improvável-Grave':  { nivel: '🟢 BAIXO',     cor: '#00e676', desc: 'Risco baixo. Medidas básicas suficientes.' },
+  'Improvável-Moderado': { nivel: '🟢 ACEITÁVEL', cor: '#00c8ff', desc: 'Risco aceitável.' },
+  'Improvável-Leve':  { nivel: '✅ ACEITÁVEL',  cor: '#00c8ff', desc: 'Risco desprezível. Prosseguir normalmente.' },
+};
+
+function selectRisk(type, value, btn) {
+  const grid = document.getElementById(type === 'prob' ? 'prob-grid' : 'grav-grid');
+  grid.querySelectorAll('.risk-btn').forEach(b => {
+    b.classList.remove('sel-alto','sel-medio','sel-baixo','sel-aceitavel');
+  });
+
+  riskSelections[type] = value;
+
+  const cls = value === 'Alta' || value === 'Fatal' ? 'sel-alto'
+            : value === 'Média' || value === 'Grave' ? 'sel-medio'
+            : value === 'Baixa' || value === 'Moderado' ? 'sel-baixo'
+            : 'sel-aceitavel';
+  btn.classList.add(cls);
+
+  if (riskSelections.prob && riskSelections.grav) {
+    const key = `${riskSelections.prob}-${riskSelections.grav}`;
+    const result = PXG_MATRIX[key];
+    if (result) {
+      const div = document.getElementById('pxg-result');
+      document.getElementById('pxg-nivel').textContent = result.nivel;
+      document.getElementById('pxg-nivel').style.color = result.cor;
+      document.getElementById('pxg-desc').textContent = result.desc;
+      div.style.display = 'block';
+
+      const badge = document.getElementById('badge-risk');
+      badge.textContent = result.nivel.replace(/[🚨🔴🟠🟡🟢✅]/,'').trim();
+      badge.className = 'manual-section-badge ' +
+        (result.cor === '#ff2d2d' ? 'badge-fail' :
+         result.cor === '#ff7a00' ? 'badge-fail' :
+         result.cor === '#ffd60a' ? 'badge-pending' : 'badge-ok');
+    }
+  }
+}
+
+// ═══════════════════════════════════════════
+//  GERAR PT
+// ═══════════════════════════════════════════
+function gerarPT() {
+  const tipo = document.getElementById('m-tipo').value;
+  const local = document.getElementById('m-local').value.trim();
+  const exec = document.getElementById('m-executante').value.trim();
+
+  if (!tipo || !local || !exec) {
+    alert('Preencha: Tipo de Trabalho, Local e Executante.');
+    return;
+  }
+  if (!riskSelections.prob || !riskSelections.grav) {
+    alert('Selecione Probabilidade e Gravidade na análise PxG.');
+    return;
+  }
+
+  const num = 'PT-' + Date.now().toString().slice(-6);
+  const now = new Date().toLocaleString('pt-BR');
+  const key = `${riskSelections.prob}-${riskSelections.grav}`;
+  const risco = PXG_MATRIX[key]?.nivel || '—';
+
+  document.getElementById('pt-num').textContent = num;
+  document.getElementById('pt-tipo-r').textContent = tipo;
+  document.getElementById('pt-local-r').textContent = local;
+  document.getElementById('pt-risco-r').textContent = risco;
+  document.getElementById('pt-hora-r').textContent = now;
+  document.getElementById('pt-exec-r').textContent = exec;
+
+  const res = document.getElementById('pt-resultado');
+  res.style.display = 'block';
+  res.scrollIntoView({ behavior: 'smooth' });
+
+  // Salva no localStorage
+  const pts = JSON.parse(localStorage.getItem('0r_pts') || '[]');
+  pts.push({ num, tipo, local, risco, hora: now, exec, emitidoPor: currentUser.nome });
+  localStorage.setItem('0r_pts', JSON.stringify(pts));
+}
+</script>
+</body>
+</html>
