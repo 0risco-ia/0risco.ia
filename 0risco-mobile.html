@@ -1,7 +1,7 @@
 <!DOCTYPE html>
-<!-- saved from url=(0066)file:///C:/Users/Derjam%20Oliveira/Downloads/0risco-mobile_39.html -->
-<html lang="pt-BR"><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
-
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
 <title>0Risco.IA — App de Campo</title>
 <style>
@@ -175,8 +175,9 @@ body{background:var(--bg);color:var(--text);font-family:var(--font);min-height:1
 <div id="screen-login" class="screen active">
   <div class="login-box">
     <div class="login-logo">
-      <img src="file:///C:/Users/Derjam%20Oliveira/Downloads/logo_0risco_ia_realistic_front.png" alt="0Risco.IA" onerror="this.style.display=&#39;none&#39;;document.getElementById(&#39;logo-fallback&#39;).style.display=&#39;block&#39;" style="display: none;">
-      <div id="logo-fallback" style="display: block; font-size: 32px; font-weight: 900; color: var(--yellow);">0Risco.IA</div>
+      <img src="logo_0risco_ia_realistic_front.png" alt="0Risco.IA"
+           onerror="this.style.display='none';document.getElementById('logo-fallback').style.display='block'">
+      <div id="logo-fallback" style="display:none;font-size:32px;font-weight:900;color:var(--yellow)">0Risco.IA</div>
       <div class="logo-tag">App de Campo · NR-34 / NR-35</div>
     </div>
     <div>
@@ -228,7 +229,7 @@ body{background:var(--bg);color:var(--text);font-family:var(--font);min-height:1
   </div>
   <div class="termo-footer">
     <button class="btn-secondary" onclick="doLogout()">← Sair</button>
-    <button class="btn-primary" id="btn-aceitar" onclick="aceitarTermo()" disabled="" style="flex:2">Aceitar e Continuar →</button>
+    <button class="btn-primary" id="btn-aceitar" onclick="aceitarTermo()" disabled style="flex:2">Aceitar e Continuar →</button>
   </div>
 </div>
 
@@ -240,15 +241,15 @@ body{background:var(--bg);color:var(--text);font-family:var(--font);min-height:1
       <div class="header-title" id="header-user-name">0Risco.IA</div>
       <div class="header-sub" id="header-user-role">Campo</div>
     </div>
-    <a href="file:///C:/Users/Derjam%20Oliveira/Downloads/index.html" class="btn-home">🏠 Início</a>
+    <a href="index.html" class="btn-home">🏠 Início</a>
   </div>
   <div class="status-row">
     <div class="status-dot"></div>
     <span>IA Conectada · Modo Campo Ativo</span>
   </div>
   <div class="mode-tabs">
-    <button class="mode-tab active" id="tab-chat" onclick="switchMode(&#39;chat&#39;)">🤖 Chat + Foto</button>
-    <button class="mode-tab" id="tab-manual" onclick="switchMode(&#39;manual&#39;)">📝 Manual</button>
+    <button class="mode-tab active" id="tab-chat" onclick="switchMode('chat')">🤖 Chat + Foto</button>
+    <button class="mode-tab" id="tab-manual" onclick="switchMode('manual')">📝 Manual</button>
   </div>
   <div class="app-body">
 
@@ -256,7 +257,7 @@ body{background:var(--bg);color:var(--text);font-family:var(--font);min-height:1
     <div id="chat-panel">
       <div class="chat-messages" id="chat-messages"></div>
       <div class="chat-photo-preview" id="photo-preview-bar">
-        <img id="photo-preview-thumb" src="file:///C:/Users/Derjam%20Oliveira/Downloads/0risco-mobile_39.html" alt="foto">
+        <img id="photo-preview-thumb" src="" alt="foto">
         <div class="chat-photo-preview-info">📸 Foto anexada — descreva o que quer analisar</div>
         <button class="btn-remove-photo" onclick="removePhoto()">×</button>
       </div>
@@ -266,7 +267,9 @@ body{background:var(--bg);color:var(--text);font-family:var(--font);min-height:1
           <span style="font-size:11px;color:var(--text3);flex:1">ou <label for="photo-input" style="color:var(--blue);cursor:pointer;text-decoration:underline">Galeria</label></span>
         </div>
         <div class="chat-text-row">
-          <textarea class="chat-input" id="chat-input" placeholder="Descreva o trabalho ou tire uma foto da área…" onkeydown="chatEnter(event)" oninput="autoResize(this)"></textarea>
+          <textarea class="chat-input" id="chat-input"
+            placeholder="Descreva o trabalho ou tire uma foto da área…"
+            onkeydown="chatEnter(event)" oninput="autoResize(this)"></textarea>
           <button class="btn-send" id="btn-send" onclick="sendChat()">➤</button>
         </div>
       </div>
@@ -282,7 +285,7 @@ body{background:var(--bg);color:var(--text);font-family:var(--font);min-height:1
         </div>
         <div class="manual-section-body">
           <div class="form-row"><label>Tipo de Trabalho</label>
-            <select id="m-tipo" onchange="updateBadge(&#39;id&#39;,&#39;m-tipo&#39;)">
+            <select id="m-tipo" onchange="updateBadge('id','m-tipo')">
               <option value="">Selecione…</option>
               <option>Solda Elétrica</option><option>Solda a Gás (MIG/MAG/TIG)</option>
               <option>Corte com Esmerilhadeira</option><option>Uso de Maçarico</option>
@@ -337,18 +340,18 @@ body{background:var(--bg);color:var(--text);font-family:var(--font);min-height:1
         <div class="manual-section-body">
           <div class="form-row"><label>Probabilidade</label>
             <div class="risk-grid" id="prob-grid">
-              <button class="risk-btn" onclick="selectRisk(&#39;prob&#39;,&#39;Alta&#39;,this)">Alta</button>
-              <button class="risk-btn" onclick="selectRisk(&#39;prob&#39;,&#39;Média&#39;,this)">Média</button>
-              <button class="risk-btn" onclick="selectRisk(&#39;prob&#39;,&#39;Baixa&#39;,this)">Baixa</button>
-              <button class="risk-btn" onclick="selectRisk(&#39;prob&#39;,&#39;Improvável&#39;,this)">Improvável</button>
+              <button class="risk-btn" onclick="selectRisk('prob','Alta',this)">Alta</button>
+              <button class="risk-btn" onclick="selectRisk('prob','Média',this)">Média</button>
+              <button class="risk-btn" onclick="selectRisk('prob','Baixa',this)">Baixa</button>
+              <button class="risk-btn" onclick="selectRisk('prob','Improvável',this)">Improvável</button>
             </div>
           </div>
           <div class="form-row"><label>Gravidade</label>
             <div class="risk-grid" id="grav-grid">
-              <button class="risk-btn" onclick="selectRisk(&#39;grav&#39;,&#39;Fatal&#39;,this)">Fatal</button>
-              <button class="risk-btn" onclick="selectRisk(&#39;grav&#39;,&#39;Grave&#39;,this)">Grave</button>
-              <button class="risk-btn" onclick="selectRisk(&#39;grav&#39;,&#39;Moderado&#39;,this)">Moderado</button>
-              <button class="risk-btn" onclick="selectRisk(&#39;grav&#39;,&#39;Leve&#39;,this)">Leve</button>
+              <button class="risk-btn" onclick="selectRisk('grav','Fatal',this)">Fatal</button>
+              <button class="risk-btn" onclick="selectRisk('grav','Grave',this)">Grave</button>
+              <button class="risk-btn" onclick="selectRisk('grav','Moderado',this)">Moderado</button>
+              <button class="risk-btn" onclick="selectRisk('grav','Leve',this)">Leve</button>
             </div>
           </div>
           <div class="form-row"><label>Medidas de Controle</label>
@@ -377,7 +380,7 @@ body{background:var(--bg);color:var(--text);font-family:var(--font);min-height:1
 
 <!-- CÂMERA -->
 <div id="camera-modal">
-  <video id="camera-video" autoplay="" playsinline="" muted=""></video>
+  <video id="camera-video" autoplay playsinline muted></video>
   <canvas id="camera-canvas"></canvas>
   <div class="camera-bar">
     <button class="btn-cancel-cam" onclick="closeCamera()">Cancelar</button>
@@ -727,6 +730,5 @@ function gerarPT() {
   } catch(e){}
 }
 </script>
-
-
-</body></html>
+</body>
+</html>
