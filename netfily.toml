@@ -1,2 +1,4 @@
-[build]
-  functions = "netlify/functions"
+netlify/
+  functions/
+    chat.js
+netlify.toml
