@@ -222,10 +222,10 @@ body{background:var(--bg);color:var(--text);font-family:var(--font);min-height:1
       <h4>5. Declaração</h4>
       <p>Declaro que li, compreendi e assumo responsabilidade pessoal pela veracidade das informações prestadas neste sistema.</p>
     </div>
-    <div class="termo-check-row" onclick="toggleTermoCheck()">
+    <label class="termo-check-row" for="termo-check">
       <input type="checkbox" id="termo-check" onchange="updateTermoBtn()">
       <div class="termo-check-label"><strong>Li e aceito integralmente</strong> o termo acima, ciente das penalidades legais em caso de descumprimento.</div>
-    </div>
+    </label>
   </div>
   <div class="termo-footer">
     <button class="btn-secondary" onclick="doLogout()">← Sair</button>
