@@ -1,0 +1,1935 @@
+<!DOCTYPE html>
+<!-- saved from url=(0066)file:///C:/Users/Derjam%20Oliveira/Downloads/0risco-mobile_45.html -->
+<html lang="pt-BR"><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<title>0Risco.IA</title>
+<style>
+@import url('https://fonts.googleapis.com/css2?family=Bebas+Neue&family=IBM+Plex+Mono:wght@400;600&family=IBM+Plex+Sans:wght@300;400;500;600&display=swap');
+
+:root {
+  --bg:      #f4f6f5;
+  --surf:    #ffffff;
+  --surf2:   #eef1f0;
+  --border:  #dde3e1;
+  --border2: #c8d3cf;
+  --text:    #1a2a26;
+  --text2:   #4a6860;
+  --text3:   #7a9990;
+  --white:   #111a18;
+  --green:   #FFD600;
+  --yellow:  #ffd60a;
+  --orange:  #ff7a00;
+  --red:     #dd1a1a;
+  --accent:  #FFD600;
+  /* touch targets: min 56px */
+}
+
+*{box-sizing:border-box;margin:0;padding:0;-webkit-tap-highlight-color:transparent;}
+html{height:100%;overflow:hidden;}
+body{
+  background:var(--bg);color:var(--text);
+  font-family:'IBM Plex Sans',sans-serif;
+  font-size:15px;height:100%;
+  display:flex;flex-direction:column;
+  overflow:hidden;
+  /* safe area for notch phones */
+  padding-top:env(safe-area-inset-top);
+  padding-bottom:env(safe-area-inset-bottom);
+}
+
+/* ══ SCREENS ══ */
+.screen{
+  display:none;flex-direction:column;
+  flex:1;overflow:hidden;
+}
+.screen.active{display:flex;}
+
+/* ══ TOPBAR ══ */
+.topbar{
+  display:flex;align-items:center;justify-content:space-between;
+  padding:8px 16px;
+  background:#ffffff;
+  border-bottom:2px solid #FFD600;
+  flex-shrink:0;
+  min-height:148px;
+}
+.topbar-logo{
+  font-family:'Bebas Neue',sans-serif;font-size:24px;
+  letter-spacing:0.06em;
+  background:none;
+  
+}
+.topbar-sub{font-size:10px;color:var(--text3);letter-spacing:0.08em;text-transform:uppercase;margin-top:-2px;}
+.topbar-right{display:flex;align-items:center;gap:6px;}
+.ai-dot{width:7px;height:7px;border-radius:50%;background:var(--green);animation:pulse 2s infinite;}
+@keyframes pulse{0%,100%{opacity:1;}50%{opacity:.3;}}
+.ai-lbl{font-family:'IBM Plex Mono',monospace;font-size:10px;color:#888;}
+
+.topbar-back{
+  background:none;border:none;color:#555;
+  font-size:22px;cursor:pointer;padding:4px;
+  display:flex;align-items:center;gap:6px;
+}
+.topbar-back span{font-size:14px;font-family:'IBM Plex Sans',sans-serif;font-weight:500;color:#555;}
+.topbar-title{font-size:15px;font-weight:600;color:#111;}
+
+/* ══ BOTTOM NAV ══ */
+.bottom-nav{
+  display:flex;
+  background:var(--surf);
+  border-top:1px solid var(--border);
+  flex-shrink:0;
+  padding-bottom:env(safe-area-inset-bottom);
+}
+.nav-btn{
+  flex:1;display:flex;flex-direction:column;
+  align-items:center;justify-content:center;
+  gap:3px;padding:10px 4px;
+  background:none;border:none;cursor:pointer;
+  color:var(--text3);transition:color 0.15s;
+  min-height:148px;
+}
+.nav-btn.active{color:var(--accent);}
+.nav-btn svg,.nav-icon{font-size:20px;}
+.nav-label{font-size:10px;letter-spacing:0.05em;font-family:'IBM Plex Mono',monospace;}
+
+/* ══ HOME SCREEN ══ */
+.home-scroll{flex:1;overflow-y:auto;padding:16px;}
+
+/* status card do trabalhador logado */
+.worker-card{
+  background:var(--surf);border:1px solid var(--border);
+  border-radius:12px;padding:16px;
+  display:flex;align-items:center;gap:14px;
+  margin-bottom:16px;
+}
+.worker-avatar{
+  width:52px;height:52px;border-radius:10px;
+  background:var(--border2);
+  display:flex;align-items:center;justify-content:center;
+  font-size:24px;flex-shrink:0;overflow:hidden;
+}
+.worker-avatar img{width:100%;height:100%;object-fit:cover;}
+.worker-name{font-size:16px;font-weight:600;color:var(--white);}
+.worker-role{font-size:12px;color:var(--text2);margin-top:2px;}
+.worker-apt{
+  margin-top:6px;font-family:'IBM Plex Mono',monospace;
+  font-size:10px;font-weight:600;letter-spacing:0.1em;
+  padding:2px 8px;border-radius:3px;display:inline-block;
+}
+.apt-apto   {background:#00e67618;color:var(--green);border:1px solid #00e67635;}
+.apt-vencido{background:#ff2d2d18;color:var(--red);border:1px solid #ff2d2d35;}
+.apt-pendente{background:#ffd60a18;color:var(--yellow);border:1px solid #ffd60a35;}
+
+/* certificações mini */
+.certs-row{display:flex;gap:6px;flex-wrap:wrap;margin-top:8px;}
+.cert-pill{
+  font-family:'IBM Plex Mono',monospace;font-size:9px;font-weight:600;
+  padding:3px 7px;border-radius:3px;
+}
+.cert-ok  {background:#00e67614;color:var(--green);border:1px solid #00e67630;}
+.cert-exp {background:#ff2d2d14;color:var(--red);border:1px solid #ff2d2d30;}
+.cert-warn{background:#ffd60a14;color:var(--yellow);border:1px solid #ffd60a30;}
+
+/* section label */
+.section-label{
+  font-family:'IBM Plex Mono',monospace;font-size:10px;font-weight:600;
+  letter-spacing:0.12em;text-transform:uppercase;color:var(--text3);
+  margin-bottom:10px;
+}
+
+/* ações rápidas */
+.quick-actions{
+  display:grid;grid-template-columns:1fr 1fr;
+  gap:10px;margin-bottom:20px;
+}
+.action-btn{
+  background:var(--surf);border:1px solid var(--border);
+  border-radius:12px;padding:18px 14px;
+  display:flex;flex-direction:column;gap:8px;
+  cursor:pointer;transition:border-color 0.15s,background 0.15s;
+  text-align:left;
+  -webkit-appearance:none;
+}
+.action-btn:active{background:var(--surf2);border-color:var(--border2);}
+.action-btn.primary{
+  border-color:#00e67640;background:#00e67608;
+}
+.action-btn.primary:active{background:#00e67614;}
+.action-icon{font-size:26px;}
+.action-label{font-size:14px;font-weight:600;color:var(--white);line-height:1.2;}
+.action-sub{font-size:11px;color:var(--text2);}
+
+/* PT ativa banner */
+.pt-banner{
+  background:var(--surf);border:1px solid var(--border);
+  border-radius:12px;padding:14px 16px;
+  margin-bottom:20px;
+  border-left:4px solid var(--orange);
+}
+.pt-banner-top{display:flex;justify-content:space-between;align-items:center;margin-bottom:6px;}
+.pt-banner-num{
+  font-family:'IBM Plex Mono',monospace;font-size:11px;font-weight:600;
+  color:var(--orange);letter-spacing:0.08em;
+}
+.pt-status-badge{
+  font-family:'IBM Plex Mono',monospace;font-size:9px;font-weight:600;
+  padding:2px 7px;border-radius:2px;letter-spacing:0.08em;
+  background:#ff7a0018;color:var(--orange);border:1px solid #ff7a0035;
+}
+.pt-banner-desc{font-size:14px;font-weight:600;color:var(--white);}
+.pt-banner-meta{font-size:11px;color:var(--text2);margin-top:3px;}
+.pt-banner-action{
+  margin-top:12px;width:100%;padding:12px;
+  background:var(--orange);color:#000;border:none;border-radius:8px;
+  font-size:14px;font-weight:600;cursor:pointer;
+  font-family:'IBM Plex Sans',sans-serif;
+}
+
+/* ══ ANÁLISE SCREEN ══ */
+.analise-scroll{flex:1;overflow-y:auto;display:flex;flex-direction:column;}
+
+/* resultado de risco */
+.risco-result{
+  margin:0;padding:16px;
+  display:none;flex-direction:column;gap:10px;
+}
+.risco-result.visible{display:flex;}
+.risco-header{
+  border-radius:10px;padding:16px;
+  display:flex;align-items:center;justify-content:space-between;
+}
+.risco-nivel-label{
+  font-family:'Bebas Neue',sans-serif;font-size:32px;letter-spacing:0.05em;
+}
+.risco-pxg{
+  text-align:right;
+  font-family:'IBM Plex Mono',monospace;
+}
+.risco-pxg-val{font-size:28px;font-weight:600;}
+.risco-pxg-sub{font-size:10px;color:inherit;opacity:.7;margin-top:2px;}
+
+.risco-low  {background:#00e67612;border:1px solid #00e67635;color:var(--green);}
+.risco-med  {background:#ffd60a12;border:1px solid #ffd60a35;color:var(--yellow);}
+.risco-high {background:#ff7a0012;border:1px solid #ff7a0035;color:var(--orange);}
+.risco-crit {background:#ff2d2d12;border:1px solid #ff2d2d35;color:var(--red);}
+
+.nc-list{display:flex;flex-direction:column;gap:8px;}
+.nc-item{
+  background:var(--surf);border:1px solid var(--border);
+  border-radius:8px;padding:12px 14px;
+  border-left:3px solid;
+}
+.nc-item.g5,.nc-item.g4{border-left-color:var(--red);}
+.nc-item.g3{border-left-color:var(--orange);}
+.nc-item.g2{border-left-color:var(--yellow);}
+.nc-item.g1{border-left-color:var(--green);}
+.nc-top{display:flex;justify-content:space-between;align-items:flex-start;gap:8px;margin-bottom:4px;}
+.nc-name{font-size:13px;font-weight:600;color:var(--white);flex:1;line-height:1.3;}
+.nc-grav{
+  font-family:'IBM Plex Mono',monospace;font-size:9px;font-weight:600;
+  padding:2px 6px;border-radius:2px;flex-shrink:0;
+}
+.grav5,.grav4{background:#ff2d2d18;color:var(--red);border:1px solid #ff2d2d30;}
+.grav3{background:#ff7a0018;color:var(--orange);border:1px solid #ff7a0030;}
+.grav2{background:#ffd60a18;color:var(--yellow);border:1px solid #ffd60a30;}
+.grav1{background:#00e67618;color:var(--green);border:1px solid #00e67630;}
+.nc-acao{font-size:12px;color:var(--text2);line-height:1.5;}
+
+.medidas-card{
+  background:var(--surf);border:1px solid var(--border);
+  border-radius:10px;padding:14px;
+}
+.medidas-title{
+  font-family:'IBM Plex Mono',monospace;font-size:10px;font-weight:600;
+  letter-spacing:0.1em;text-transform:uppercase;color:var(--text3);
+  margin-bottom:10px;
+}
+.medida-item{
+  display:flex;gap:10px;padding:8px 0;
+  border-bottom:1px solid var(--border);
+  font-size:13px;color:var(--text);line-height:1.5;
+}
+.medida-item:last-child{border-bottom:none;}
+.medida-item::before{content:'›';color:var(--accent);font-weight:700;flex-shrink:0;font-size:16px;}
+
+.normas-row{display:flex;gap:6px;flex-wrap:wrap;padding:0 16px 16px;}
+.norma-tag{
+  font-family:'IBM Plex Mono',monospace;font-size:10px;
+  padding:4px 8px;border-radius:3px;
+  background:var(--surf2);color:var(--text2);border:1px solid var(--border2);
+}
+
+/* chat */
+.chat-messages{
+  flex:1;overflow-y:auto;
+  padding:12px 16px;
+  display:flex;flex-direction:column;gap:12px;
+}
+.chat-messages::-webkit-scrollbar{display:none;}
+
+.msg{display:flex;gap:8px;animation:fadeUp 0.2s ease;}
+@keyframes fadeUp{from{opacity:0;transform:translateY(6px);}to{opacity:1;transform:translateY(0);}}
+.msg.user{flex-direction:row-reverse;}
+.msg-avatar{
+  width:32px;height:32px;border-radius:7px;
+  display:flex;align-items:center;justify-content:center;
+  font-size:11px;font-weight:700;flex-shrink:0;margin-top:2px;
+}
+.msg.ai .msg-avatar{background:var(--accent);color:#000;font-family:'IBM Plex Mono',monospace;}
+.msg.user .msg-avatar{background:var(--border2);font-size:16px;}
+.msg-bubble{
+  padding:10px 13px;border-radius:10px;
+  font-size:14px;line-height:1.65;max-width:82%;
+}
+.msg.ai .msg-bubble{
+  background:var(--surf);border:1px solid var(--border);
+  color:var(--text);border-top-left-radius:2px;
+}
+.msg.user .msg-bubble{
+  background:#00e67610;border:1px solid #00e67628;
+  color:var(--white);border-top-right-radius:2px;
+}
+.msg-img{
+  max-width:200px;border-radius:8px;overflow:hidden;
+  border:1px solid var(--border2);margin-bottom:6px;
+}
+.msg-img img{width:100%;display:block;}
+
+/* typing */
+.typing-dots{display:flex;gap:4px;padding:4px 2px;}
+.typing-dots span{
+  width:6px;height:6px;border-radius:50%;background:var(--text3);
+  animation:bounce 1.2s infinite;
+}
+.typing-dots span:nth-child(2){animation-delay:.2s;}
+.typing-dots span:nth-child(3){animation-delay:.4s;}
+@keyframes bounce{0%,80%,100%{transform:translateY(0);}40%{transform:translateY(-5px);}}
+
+/* input bar */
+.chat-input-bar{
+  background:var(--surf);border-top:1px solid var(--border);
+  padding:10px 12px;display:flex;flex-direction:column;gap:8px;flex-shrink:0;
+}
+.photo-thumb-row{display:none;align-items:center;gap:8px;}
+.photo-thumb-row.visible{display:flex;}
+.photo-thumb{
+  width:48px;height:48px;border-radius:6px;overflow:hidden;
+  border:1px solid var(--border2);flex-shrink:0;position:relative;
+}
+.photo-thumb img{width:100%;height:100%;object-fit:cover;}
+.remove-thumb{
+  position:absolute;top:2px;right:2px;
+  background:#000b;color:#fff;border:none;border-radius:50%;
+  width:16px;height:16px;font-size:9px;cursor:pointer;
+  display:flex;align-items:center;justify-content:center;
+}
+.input-row{display:flex;gap:8px;align-items:flex-end;}
+.chat-textarea{
+  flex:1;background:var(--bg);
+  border:1px solid var(--border2);border-radius:10px;
+  color:var(--white);font-family:'IBM Plex Sans',sans-serif;font-size:15px;
+  padding:10px 14px;resize:none;outline:none;
+  min-height:46px;max-height:120px;line-height:1.5;
+  transition:border-color 0.2s;
+}
+.chat-textarea:focus{border-color:var(--accent);}
+.chat-textarea::placeholder{color:var(--text3);}
+.icon-btn{
+  width:46px;height:46px;border-radius:10px;border:none;
+  display:flex;align-items:center;justify-content:center;
+  font-size:18px;cursor:pointer;flex-shrink:0;
+  transition:opacity 0.15s;
+}
+.icon-btn:active{opacity:.7;}
+.btn-cam{background:var(--border2);color:var(--text2);}
+.btn-send{background:var(--accent);color:#000;}
+.btn-send:disabled{opacity:.35;cursor:default;}
+
+/* chips */
+.chips-scroll{
+  display:flex;gap:7px;overflow-x:auto;padding:10px 16px 0;flex-shrink:0;
+}
+.chips-scroll::-webkit-scrollbar{display:none;}
+.chip{
+  background:var(--surf2);border:1px solid var(--border2);
+  color:var(--text2);border-radius:20px;
+  padding:7px 14px;font-size:12px;
+  cursor:pointer;white-space:nowrap;flex-shrink:0;
+  transition:all 0.15s;-webkit-appearance:none;border:1px solid var(--border2);
+}
+.chip:active{border-color:var(--accent);color:var(--accent);}
+
+/* ══ CRACHÁ SCREEN ══ */
+.cracha-wrap{flex:1;display:flex;flex-direction:column;overflow:hidden;}
+.camera-zone{
+  flex:1;background:#000;
+  display:flex;flex-direction:column;align-items:center;justify-content:center;
+  position:relative;overflow:hidden;
+}
+.camera-frame{
+  width:240px;height:160px;border-radius:12px;
+  border:2px solid var(--accent);
+  position:relative;
+  box-shadow:0 0 0 9999px rgba(0,0,0,0.55);
+}
+.camera-corner{position:absolute;width:20px;height:20px;border-color:var(--accent);border-style:solid;}
+.cc-tl{top:-2px;left:-2px;border-width:3px 0 0 3px;border-radius:4px 0 0 0;}
+.cc-tr{top:-2px;right:-2px;border-width:3px 3px 0 0;border-radius:0 4px 0 0;}
+.cc-bl{bottom:-2px;left:-2px;border-width:0 0 3px 3px;border-radius:0 0 0 4px;}
+.cc-br{bottom:-2px;right:-2px;border-width:0 3px 3px 0;border-radius:0 0 4px 0;}
+.scan-line{
+  position:absolute;width:100%;height:2px;
+  background:linear-gradient(90deg,transparent,var(--accent),transparent);
+  animation:scan 2s linear infinite;top:0;
+}
+@keyframes scan{0%{top:0;}100%{top:100%;}}
+.camera-hint{
+  position:absolute;bottom:16px;
+  font-size:13px;color:rgba(255,255,255,0.5);
+  text-align:center;padding:0 20px;
+}
+.camera-actions{
+  padding:16px;display:flex;flex-direction:column;gap:10px;flex-shrink:0;
+  background:var(--surf);border-top:1px solid var(--border);
+}
+.btn-full{
+  width:100%;padding:16px;border-radius:10px;border:none;
+  font-size:15px;font-weight:600;cursor:pointer;
+  font-family:'IBM Plex Sans',sans-serif;
+  display:flex;align-items:center;justify-content:center;gap:8px;
+  transition:opacity 0.15s;
+}
+.btn-full:active{opacity:.8;}
+.btn-primary{background:var(--accent);color:#000;}
+.btn-secondary{background:var(--surf2);color:var(--text);border:1px solid var(--border2);}
+
+/* resultado crachá */
+.cracha-result{
+  flex:1;overflow-y:auto;padding:16px;
+  display:none;flex-direction:column;gap:12px;
+}
+.cracha-result.visible{display:flex;}
+.cracha-card{
+  background:var(--surf);border:1px solid var(--border);
+  border-radius:12px;overflow:hidden;
+}
+.cracha-card-top{
+  padding:16px;display:flex;gap:14px;align-items:center;
+  border-bottom:1px solid var(--border);
+}
+.cracha-foto{
+  width:60px;height:60px;border-radius:8px;
+  background:var(--border2);flex-shrink:0;
+  display:flex;align-items:center;justify-content:center;font-size:28px;
+  overflow:hidden;
+}
+.cracha-foto img{width:100%;height:100%;object-fit:cover;}
+.cracha-nome{font-size:17px;font-weight:600;color:var(--white);}
+.cracha-func{font-size:12px;color:var(--text2);margin-top:2px;}
+.cracha-mat{font-family:'IBM Plex Mono',monospace;font-size:11px;color:var(--text3);margin-top:4px;}
+.cracha-certs{padding:14px 16px;display:flex;flex-direction:column;gap:10px;}
+.cert-row{display:flex;align-items:center;justify-content:space-between;}
+.cert-name{font-size:13px;font-weight:500;color:var(--white);}
+.cert-date{font-family:'IBM Plex Mono',monospace;font-size:11px;}
+.cert-ok-date{color:var(--green);}
+.cert-exp-date{color:var(--red);}
+.cert-warn-date{color:var(--yellow);}
+.apt-banner{
+  margin:0 16px 16px;padding:14px;border-radius:8px;
+  text-align:center;font-weight:600;font-size:15px;
+}
+.apt-banner.apto{background:#00e67618;color:var(--green);border:1px solid #00e67635;}
+.apt-banner.vencido{background:#ff2d2d18;color:var(--red);border:1px solid #ff2d2d35;}
+.apt-banner.pendente{background:#ffd60a18;color:var(--yellow);border:1px solid #ffd60a35;}
+
+/* ══ PT SCREEN ══ */
+.pt-scroll{flex:1;overflow-y:auto;padding:16px;display:flex;flex-direction:column;gap:12px;}
+.pt-card{
+  background:var(--surf);border:1px solid var(--border);
+  border-radius:12px;overflow:hidden;
+  cursor:pointer;
+}
+.pt-card-bar{height:4px;}
+.pt-card-body{padding:14px 16px;}
+.pt-card-num{
+  font-family:'IBM Plex Mono',monospace;font-size:11px;font-weight:600;
+  color:var(--accent);letter-spacing:0.08em;margin-bottom:4px;
+}
+.pt-card-desc{font-size:15px;font-weight:600;color:var(--white);line-height:1.3;}
+.pt-card-meta{font-size:12px;color:var(--text2);margin-top:4px;}
+.pt-card-footer{
+  padding:10px 16px;border-top:1px solid var(--border);
+  display:flex;align-items:center;justify-content:space-between;
+}
+.pt-st{
+  font-family:'IBM Plex Mono',monospace;font-size:9px;font-weight:600;
+  letter-spacing:0.1em;padding:3px 8px;border-radius:3px;
+}
+.st-ativa{background:#00e67618;color:var(--green);border:1px solid #00e67630;}
+.st-pendente{background:#ffd60a18;color:var(--yellow);border:1px solid #ffd60a30;}
+.st-enc{background:#1e2422;color:var(--text3);border:1px solid var(--border2);}
+.pt-executantes{font-size:11px;color:var(--text3);}
+
+.new-pt-btn{
+  position:fixed;bottom:calc(70px + env(safe-area-inset-bottom));
+  right:16px;
+  width:56px;height:56px;border-radius:28px;
+  background:var(--accent);color:#000;
+  font-size:26px;border:none;cursor:pointer;
+  display:flex;align-items:center;justify-content:center;
+  box-shadow:0 4px 20px #00e67640;
+  z-index:50;
+}
+
+/* hidden */
+#file-input{display:none;}
+
+
+
+
+/* ══ LOGO 0Risco.IA ══ */
+.logo-0risco-wrap { display:flex; align-items:center; }
+.logo-0risco-wrap svg { display:block; }
+
+/* accent → amarelo segurança */
+.ai-dot                { background:#FFD600 !important; }
+.btn-primary           { background:#FFD600 !important; color:#000 !important; }
+.new-pt-btn            { background:#FFD600 !important; color:#000 !important; box-shadow:0 4px 20px #FFD60060 !important; }
+.pt-banner-action      { background:#FFD600 !important; color:#000 !important; }
+.action-btn.primary    { border-color:#FFD60040 !important; background:#FFD60008 !important; }
+.action-btn.primary:active { background:#FFD60014 !important; }
+.chip:active           { border-color:#FFD600 !important; color:#FFD600 !important; }
+.chat-textarea:focus   { border-color:#FFD600 !important; }
+.btn-send              { background:#FFD600 !important; color:#000 !important; }
+.nav-btn.active        { color:#FFD600 !important; }
+.apt-apto              { background:#FFD60018 !important; color:#FFD600 !important; border:1px solid #FFD60035 !important; }
+.cert-ok               { background:#FFD60014 !important; color:#c8a800 !important; border:1px solid #FFD60030 !important; }
+.apt-banner.apto       { background:#FFD60018 !important; color:#FFD600 !important; border:1px solid #FFD60035 !important; }
+.medida-item::before   { color:#FFD600 !important; }
+.pt-banner             { border-left-color:#FFD600 !important; }
+.pt-banner-num         { color:#FFD600 !important; }
+.pt-status-badge       { background:#FFD60018 !important; color:#c8a800 !important; border:1px solid #FFD60035 !important; }
+
+/* ══ MODAL CARDS — SELEÇÃO MODALIDADE ══ */
+.modal-card{
+  display:flex;align-items:center;gap:16px;
+  width:100%;max-width:420px;
+  background:var(--surf);border:2px solid var(--border);
+  border-radius:16px;padding:20px 18px;
+  cursor:pointer;text-align:left;
+  transition:border-color 0.18s,background 0.18s,transform 0.12s;
+  box-shadow:0 2px 8px rgba(0,0,0,0.06);
+}
+.modal-card:active{
+  border-color:#FFD600;background:#FFD60008;
+  transform:scale(0.98);
+}
+.modal-card-icon{font-size:36px;flex-shrink:0;line-height:1;}
+.modal-card-body{flex:1;}
+.modal-card-title{
+  font-family:'IBM Plex Sans',sans-serif;
+  font-size:18px;font-weight:700;
+  color:var(--white);line-height:1.2;
+}
+.modal-card-norm{
+  font-family:'IBM Plex Mono',monospace;
+  font-size:11px;font-weight:600;
+  color:#FFD600;letter-spacing:0.05em;
+  margin:4px 0 6px;
+}
+.modal-card-desc{
+  font-size:12px;color:var(--text2);line-height:1.4;
+}
+.modal-card-arrow{
+  font-size:28px;color:var(--border2);
+  flex-shrink:0;font-weight:300;
+}
+
+/* ══ LOGIN / CADASTRO / ADMIN ══ */
+.auth-screen{flex:1;display:flex;flex-direction:column;justify-content:center;align-items:center;padding:28px 20px;gap:16px;background:var(--bg);}
+.auth-logo{height:90px;width:auto;margin-bottom:8px;}
+.auth-title{font-family:'Bebas Neue',sans-serif;font-size:28px;letter-spacing:.06em;color:var(--white);text-align:center;}
+.auth-sub{font-size:13px;color:var(--text2);text-align:center;margin-top:-8px;}
+.auth-form{display:flex;flex-direction:column;gap:10px;width:100%;max-width:380px;}
+.auth-input{background:var(--surf);border:1.5px solid var(--border);border-radius:10px;padding:13px 15px;font-size:15px;color:var(--white);font-family:'IBM Plex Sans',sans-serif;outline:none;transition:border-color .18s;}
+.auth-input:focus{border-color:#FFD600;}
+.auth-input::placeholder{color:var(--text3);}
+.auth-btn{background:#FFD600;color:#111;border:none;border-radius:10px;padding:15px;font-size:16px;font-weight:700;font-family:'IBM Plex Sans',sans-serif;cursor:pointer;transition:opacity .15s;}
+.auth-btn:active{opacity:.8;}
+.auth-btn.secondary{background:var(--surf);color:var(--white);border:1.5px solid var(--border);}
+.auth-link{font-size:13px;color:#FFD600;text-align:center;cursor:pointer;text-decoration:underline;}
+.auth-error{font-size:12px;color:var(--red);text-align:center;padding:6px 10px;background:#dd1a1a15;border-radius:8px;display:none;}
+.auth-error.visible{display:block;}
+/* Admin painel */
+.admin-list{display:flex;flex-direction:column;gap:10px;padding:16px;}
+.admin-card{background:var(--surf);border-radius:12px;padding:14px 16px;border:1.5px solid var(--border);}
+.admin-card-name{font-weight:700;font-size:15px;color:var(--white);}
+.admin-card-info{font-size:12px;color:var(--text2);margin:3px 0 8px;}
+.admin-card-actions{display:flex;gap:8px;}
+.admin-btn{flex:1;padding:8px;border:none;border-radius:8px;font-size:12px;font-weight:700;cursor:pointer;}
+.admin-btn.aprovar{background:#22c55e;color:#fff;}
+.admin-btn.bloquear{background:var(--red);color:#fff;}
+.admin-btn.ativo{background:#22c55e22;color:#22c55e;border:1px solid #22c55e;}
+.status-badge{display:inline-block;padding:2px 8px;border-radius:10px;font-size:10px;font-weight:700;letter-spacing:.05em;}
+.status-badge.pendente{background:#ffd60a22;color:#b89000;}
+.status-badge.ativo{background:#22c55e22;color:#22c55e;}
+.status-badge.bloqueado{background:#dd1a1a22;color:#dd1a1a;}
+/* Modal encerrar */
+.modal-overlay{position:fixed;inset:0;background:rgba(0,0,0,.55);z-index:9000;display:none;align-items:flex-end;justify-content:center;}
+.modal-overlay.open{display:flex;}
+.modal-sheet{background:var(--surf);border-radius:20px 20px 0 0;padding:28px 20px 40px;width:100%;max-width:480px;}
+.modal-sheet-title{font-family:'Bebas Neue',sans-serif;font-size:22px;color:var(--white);margin-bottom:6px;}
+.modal-sheet-sub{font-size:13px;color:var(--text2);margin-bottom:20px;line-height:1.5;}
+.modal-sheet-btns{display:flex;flex-direction:column;gap:10px;}
+.modal-sheet-btns button{padding:15px;border:none;border-radius:12px;font-size:15px;font-weight:700;cursor:pointer;}
+.modal-btn-primary{background:#FFD600;color:#111;}
+.modal-btn-danger{background:var(--red);color:#fff;}
+.modal-btn-cancel{background:var(--surf2);color:var(--text2);}
+/* Histórico */
+.hist-card{background:var(--surf);border-radius:12px;margin:0 16px 10px;padding:14px 16px;border:1.5px solid var(--border);}
+.hist-card-header{display:flex;align-items:center;justify-content:space-between;margin-bottom:4px;}
+.hist-card-norma{font-family:'IBM Plex Mono',monospace;font-size:10px;font-weight:700;padding:2px 8px;border-radius:8px;background:#FFD600;color:#111;}
+.hist-card-norma.nr35{background:#2196F3;color:#fff;}
+.hist-card-date{font-size:11px;color:var(--text3);}
+.hist-card-cat{font-size:14px;font-weight:700;color:var(--white);margin-bottom:2px;}
+.hist-card-score{font-size:12px;color:var(--text2);}
+.hist-download-btns{display:flex;gap:8px;margin-top:10px;}
+.hist-download-btn{flex:1;padding:8px;border:1.5px solid var(--border);border-radius:8px;font-size:11px;font-weight:700;color:var(--text2);background:var(--surf2);cursor:pointer;text-align:center;}
+.hist-download-btn:active{border-color:#FFD600;color:#FFD600;}
+
+</style>
+</head>
+<body>
+
+<!-- ══════════════════════════════════
+     TELA: HOME
+══════════════════════════════════ -->
+
+<!-- ══════════════════════════════════
+     TELA: LOGIN
+══════════════════════════════════ -->
+<div class="screen active" id="screen-login">
+  <div class="auth-screen">
+    <img class="auth-logo" src="data:image/png;base64,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" alt="0Risco.IA">
+    <div class="auth-title">0Risco.IA</div>
+    <div class="auth-sub">Análise de Risco com Inteligência Artificial</div>
+    <div class="auth-form">
+      <div class="auth-error" id="login-error">E-mail ou senha incorretos.</div>
+      <input class="auth-input" id="login-email" type="email" placeholder="E-mail" autocomplete="email">
+      <input class="auth-input" id="login-senha" type="password" placeholder="Senha" autocomplete="current-password">
+      <button class="auth-btn" onclick="fazerLogin()">Entrar</button>
+      <button class="auth-btn secondary" onclick="goScreen(&#39;screen-cadastro&#39;)">Criar conta</button>
+    </div>
+  </div>
+</div>
+
+<!-- ══════════════════════════════════
+     TELA: CADASTRO
+══════════════════════════════════ -->
+<div class="screen" id="screen-cadastro">
+  <div class="topbar" style="min-height:56px;">
+    <button class="topbar-back" onclick="goScreen(&#39;screen-login&#39;)">‹ <span>Voltar</span></button>
+    <div class="topbar-title">Nova Conta</div>
+    <div style="width:60px;"></div>
+  </div>
+  <div style="flex:1;overflow-y:auto;padding:20px;">
+    <div class="auth-form" style="max-width:100%;">
+      <div class="auth-error" id="cad-error"></div>
+      <input class="auth-input" id="cad-nome" type="text" placeholder="Nome completo">
+      <input class="auth-input" id="cad-email" type="email" placeholder="E-mail">
+      <input class="auth-input" id="cad-empresa" type="text" placeholder="Empresa">
+      <input class="auth-input" id="cad-cargo" type="text" placeholder="Cargo">
+      <input class="auth-input" id="cad-matricula" type="text" placeholder="Matrícula">
+      <input class="auth-input" id="cad-senha" type="password" placeholder="Senha (mín. 6 caracteres)">
+      <input class="auth-input" id="cad-senha2" type="password" placeholder="Confirmar senha">
+      <button class="auth-btn" onclick="fazerCadastro()">Solicitar Acesso</button>
+      <p style="font-size:12px;color:var(--text3);text-align:center;line-height:1.5;">
+        Seu acesso será revisado pelo administrador.<br>Você receberá confirmação por e-mail.
+      </p>
+    </div>
+  </div>
+</div>
+
+<!-- ══════════════════════════════════
+     TELA: ADMIN
+══════════════════════════════════ -->
+<div class="screen" id="screen-admin">
+  <div class="topbar" style="min-height:56px;">
+    <button class="topbar-back" onclick="fazerLogout()">⏻ <span>Sair</span></button>
+    <div class="topbar-title">Painel Admin</div>
+    <div style="width:60px;"></div>
+  </div>
+  <div style="flex:1;overflow-y:auto;">
+    <div style="padding:16px 16px 6px;display:flex;gap:8px;flex-wrap:wrap;">
+      <button class="admin-btn aprovar" style="flex:none;padding:8px 16px;" onclick="carregarUsuarios(&#39;pendente&#39;)">Pendentes</button>
+      <button class="admin-btn ativo" style="flex:none;padding:8px 16px;" onclick="carregarUsuarios(&#39;ativo&#39;)">Ativos</button>
+      <button class="admin-btn bloquear" style="flex:none;padding:8px 16px;background:#888;border:none;" onclick="carregarUsuarios(&#39;bloqueado&#39;)">Bloqueados</button>
+    </div>
+    <div id="admin-lista" class="admin-list"></div>
+  </div>
+</div>
+
+<!-- ══════════════════════════════════
+     TELA: HISTÓRICO
+══════════════════════════════════ -->
+<div class="screen" id="screen-historico">
+  <div class="topbar" style="min-height:56px;">
+    <button class="topbar-back" onclick="goScreen(&#39;screen-home&#39;)">‹ <span>Início</span></button>
+    <div class="topbar-title">Minhas Análises</div>
+    <div style="width:60px;"></div>
+  </div>
+  <div style="flex:1;overflow-y:auto;padding-top:12px;" id="historico-lista">
+    <div style="text-align:center;padding:40px 20px;color:var(--text3);">Carregando...</div>
+  </div>
+</div>
+
+<!-- Modal encerrar análise -->
+<div class="modal-overlay" id="modal-encerrar">
+  <div class="modal-sheet">
+    <div class="modal-sheet-title">Encerrar análise?</div>
+    <div class="modal-sheet-sub">Deseja salvar esta análise e voltar ao menu inicial? Um relatório PDF e JSON será gerado.</div>
+    <div class="modal-sheet-btns">
+      <button class="modal-btn-primary" onclick="confirmarEncerramento()">💾 Salvar e encerrar</button>
+      <button class="modal-btn-cancel" onclick="fecharModal()">Continuar analisando</button>
+    </div>
+  </div>
+</div>
+
+<div class="screen" id="screen-home">
+  <div class="topbar">
+    <div>
+      <div class="logo-0risco-wrap">
+        <img src="data:image/png;base64,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" alt="0Risco.IA" style="height:132px;width:auto;display:block;object-fit:contain;">
+      </div>
+    </div>
+    <div class="topbar-right">
+      <div class="ai-dot"></div>
+      <span class="ai-lbl">IA ativa</span>
+      <button id="btn-logout-home" onclick="fazerLogout()" style="background:none;border:none;color:var(--text3);font-size:18px;cursor:pointer;padding:4px;margin-left:6px;">⏻</button>
+    </div>
+  </div>
+
+  <div class="home-scroll">
+    <!-- Card do trabalhador logado -->
+    <div class="worker-card">
+      <div class="worker-avatar">👷</div>
+      <div style="flex:1;">
+        <div class="worker-name">João Silva</div>
+        <div class="worker-role">Soldador — Matrícula 4521</div>
+        <div class="certs-row">
+          <span class="cert-pill cert-ok">NR-34 ✓</span>
+          <span class="cert-pill cert-ok">TAQ ✓</span>
+          <span class="cert-pill cert-warn">Integração ⚠</span>
+        </div>
+        <div class="worker-apt apt-apto" style="margin-top:8px;">APTO</div>
+      </div>
+    </div>
+
+    <!-- PT Ativa -->
+    <div class="section-label">PT ativa agora</div>
+    <div class="pt-banner">
+      <div class="pt-banner-top">
+        <span class="pt-banner-num">0RISCO-2025-0012</span>
+        <span class="pt-status-badge">ATIVA</span>
+      </div>
+      <div class="pt-banner-desc">Soldagem estrutural — Bloco 3 Convés</div>
+      <div class="pt-banner-meta">Hoje 08:00 – 12:00 · Supervisor: Carlos M.</div>
+      <button class="pt-banner-action" onclick="goScreen(&#39;screen-pt&#39;)">Ver PT completa</button>
+    </div>
+
+    <!-- Ações rápidas -->
+    <div class="section-label">Ações</div>
+    <div class="quick-actions">
+      <button class="action-btn primary" onclick="goScreen(&#39;screen-modalidade&#39;)">
+        <div class="action-icon">📸</div>
+        <div class="action-label">Analisar risco</div>
+        <div class="action-sub">Foto + IA PxG</div>
+      </button>
+      <button class="action-btn" onclick="goScreen(&#39;screen-cracha&#39;)">
+        <div class="action-icon">🪪</div>
+        <div class="action-label">Ler crachá</div>
+        <div class="action-sub">QR ou foto</div>
+      </button>
+      <button class="action-btn" onclick="goScreen(&#39;screen-pt&#39;)">
+        <div class="action-icon">📋</div>
+        <div class="action-label">Minhas PTs</div>
+        <div class="action-sub">Histórico</div>
+      </button>
+      <button class="action-btn" onclick="abrirHistorico()">
+        <div class="action-icon">📊</div>
+        <div class="action-label">Histórico</div>
+        <div class="action-sub">Minhas análises</div>
+      </button>
+    </div>
+  </div>
+
+  <div class="bottom-nav">
+    <button class="nav-btn active" onclick="navTo(&#39;home&#39;,this)">
+      <span class="nav-icon">🏠</span>
+      <span class="nav-label">Início</span>
+    </button>
+    <button class="nav-btn" onclick="navTo(&#39;analise&#39;,this)">
+      <span class="nav-icon">🔍</span>
+      <span class="nav-label">Risco</span>
+    </button>
+    <button class="nav-btn" onclick="navTo(&#39;cracha&#39;,this)">
+      <span class="nav-icon">🪪</span>
+      <span class="nav-label">Crachá</span>
+    </button>
+    <button class="nav-btn" onclick="navTo(&#39;pt&#39;,this)">
+      <span class="nav-icon">📋</span>
+      <span class="nav-label">PTs</span>
+    </button>
+  </div>
+</div>
+
+<!-- ══════════════════════════════════
+     TELA: ANÁLISE IA
+══════════════════════════════════ -->
+<!-- ══════════════════════════════════
+     TELA: SELEÇÃO DE MODALIDADE
+══════════════════════════════════ -->
+<div class="screen" id="screen-modalidade">
+  <div class="topbar" style="min-height:56px;">
+    <button class="topbar-back" onclick="goBack()">‹ <span>Voltar</span></button>
+    <div class="topbar-title">Análise de Risco IA</div>
+    <div style="width:60px;"></div>
+  </div>
+  <div style="flex:1;display:flex;flex-direction:column;justify-content:center;align-items:center;padding:24px 20px;gap:18px;">
+    <div style="text-align:center;margin-bottom:4px;">
+      <div style="font-family:&#39;Bebas Neue&#39;,sans-serif;font-size:28px;letter-spacing:0.05em;color:var(--white);line-height:1.1;">Selecionar Modalidade</div>
+      <div style="font-size:13px;color:var(--text2);margin-top:8px;line-height:1.5;">Escolha a norma para carregar o sistema de análise correspondente</div>
+    </div>
+    <button class="modal-card" onclick="selecionarModalidade(&#39;nr34&#39;)">
+      <div class="modal-card-icon">🔥</div>
+      <div class="modal-card-body">
+        <div class="modal-card-title">Trabalho a Quente</div>
+        <div class="modal-card-norm">NR-34 · Trabalho Naval</div>
+        <div class="modal-card-desc">Oxicorte, soldagem, esmerilhamento em estaleiros e embarcações</div>
+      </div>
+      <div class="modal-card-arrow">›</div>
+    </button>
+    <button class="modal-card" onclick="selecionarModalidade(&#39;nr35&#39;)">
+      <div class="modal-card-icon">🧗</div>
+      <div class="modal-card-body">
+        <div class="modal-card-title">Trabalho em Altura</div>
+        <div class="modal-card-norm">NR-35 · Acima de 2,0 m</div>
+        <div class="modal-card-desc">EPIs de altura: cinturões, talabartes, SRL, linhas de vida</div>
+      </div>
+      <div class="modal-card-arrow">›</div>
+    </button>
+  </div>
+</div>
+
+<!-- ══════════════════════════════════
+     TELA: ANÁLISE IA
+══════════════════════════════════ -->
+<div class="screen" id="screen-analise">
+  <div class="topbar" style="min-height:56px;">
+    <button class="topbar-back" onclick="voltarParaModalidade()">‹ <span>Voltar</span></button>
+    <div style="display:flex;flex-direction:column;align-items:center;gap:3px;">
+      <div class="topbar-title" id="analise-titulo">Análise de Risco</div>
+      <div id="analise-norma-badge" style="font-size:10px;font-weight:700;letter-spacing:0.06em;padding:2px 10px;border-radius:10px;background:#FFD600;color:#000;">NR-34</div>
+    </div>
+    <button onclick="abrirModalEncerrar()" style="background:#dd1a1a;border:none;border-radius:8px;padding:6px 10px;color:#fff;font-size:11px;font-weight:700;cursor:pointer;">Encerrar</button>
+  </div>
+
+  <div class="analise-scroll" id="analise-scroll">
+    <!-- resultado risco -->
+    <div class="risco-result" id="risco-result"></div>
+
+    <!-- mensagens chat -->
+    <div class="chat-messages" id="chat-messages">
+      <!-- mensagem inicial injetada via JS -->
+    </div>
+  </div>
+
+  <!-- chips -->
+  <div class="chips-scroll">
+    <div class="chip" onclick="sendChip(this)">Inspeção oxicorte</div>
+    <div class="chip" onclick="sendChip(this)">Verificar EPIs</div>
+    <div class="chip" onclick="sendChip(this)">Área de trabalho</div>
+    <div class="chip" onclick="sendChip(this)">Extintor</div>
+    <div class="chip" onclick="sendChip(this)">Vigia incêndio</div>
+    <div class="chip" onclick="sendChip(this)">PT emitida?</div>
+  </div>
+
+  <!-- input -->
+  <div class="chat-input-bar">
+    <div class="photo-thumb-row" id="photo-thumb-row">
+      <div class="photo-thumb">
+        <img id="photo-thumb-img" src="file:///C:/Users/Derjam%20Oliveira/Downloads/0risco-mobile_45.html" alt="">
+        <button class="remove-thumb" onclick="removePhoto()">✕</button>
+      </div>
+      <div style="flex:1;display:flex;flex-direction:column;gap:6px;">
+        <span style="font-size:12px;color:var(--text2);">📎 Foto pronta para análise</span>
+        <button onclick="sendMessage()" style="
+          background:#FFD600;color:#000;border:none;border-radius:8px;
+          padding:8px 14px;font-size:13px;font-weight:700;
+          font-family:IBM Plex Sans,sans-serif;cursor:pointer;
+          display:flex;align-items:center;gap:6px;width:fit-content;
+        ">➤ Analisar foto</button>
+      </div>
+    </div>
+    <div class="input-row">
+      <button class="icon-btn btn-cam" onclick="document.getElementById(&#39;file-input&#39;).click()" title="Câmera">📷</button>
+      <button class="icon-btn btn-cam" onclick="document.getElementById(&#39;gallery-input&#39;).click()" title="Galeria" style="font-size:16px;">🖼️</button>
+      <input type="file" id="file-input" accept="image/*" capture="environment" onchange="handlePhoto(event)" style="display:none;">
+      <input type="file" id="gallery-input" accept="image/*" onchange="handlePhoto(event)" style="display:none;">
+      <textarea class="chat-textarea" id="chat-input" rows="1" placeholder="Descreva ou tire uma foto…"></textarea>
+      <button class="icon-btn btn-send" id="btn-send" onclick="sendMessage()">➤</button>
+    </div>
+  </div>
+</div>
+
+<!-- ══════════════════════════════════
+     TELA: CRACHÁ / QR
+══════════════════════════════════ -->
+<div class="screen" id="screen-cracha">
+  <div class="topbar">
+    <button class="topbar-back" onclick="goBack()">‹ <span>Voltar</span></button>
+    <div class="topbar-title">Verificar Crachá</div>
+    <div style="width:60px;"></div>
+  </div>
+
+  <div class="cracha-wrap">
+    <!-- viewfinder simulado -->
+    <div class="camera-zone" id="camera-zone">
+      <div class="camera-frame">
+        <div class="camera-corner cc-tl"></div>
+        <div class="camera-corner cc-tr"></div>
+        <div class="camera-corner cc-bl"></div>
+        <div class="camera-corner cc-br"></div>
+        <div class="scan-line"></div>
+      </div>
+      <div class="camera-hint">Aponte para o QR Code ou foto do crachá</div>
+    </div>
+
+    <!-- resultado da leitura -->
+    <div class="cracha-result" id="cracha-result">
+      <div class="cracha-card">
+        <div class="cracha-card-top">
+          <div class="cracha-foto">👷</div>
+          <div>
+            <div class="cracha-nome">João Silva</div>
+            <div class="cracha-func">Soldador</div>
+            <div class="cracha-mat">MAT · 4521</div>
+          </div>
+        </div>
+        <div class="cracha-certs">
+          <div class="cert-row">
+            <span class="cert-name">NR-34 Trabalho Naval</span>
+            <span class="cert-date cert-ok-date">✓ Mar/2026</span>
+          </div>
+          <div class="cert-row">
+            <span class="cert-name">Trabalho a Quente (TAQ)</span>
+            <span class="cert-date cert-ok-date">✓ Jun/2026</span>
+          </div>
+          <div class="cert-row">
+            <span class="cert-name">Integração de Segurança</span>
+            <span class="cert-date cert-warn-date">⚠ Vence em 12 dias</span>
+          </div>
+        </div>
+        <div class="apt-banner apto">✓ APTO para Trabalho a Quente</div>
+      </div>
+
+      <button class="btn-full btn-secondary" onclick="resetCracha()">
+        📷 Ler outro crachá
+      </button>
+    </div>
+
+    <!-- ações câmera -->
+    <div class="camera-actions" id="camera-actions">
+      <button class="btn-full btn-primary" onclick="simularLeitura()">
+        📷 Fotografar crachá
+      </button>
+      <button class="btn-full btn-secondary">
+        ⌨️ Digitar matrícula manualmente
+      </button>
+    </div>
+  </div>
+</div>
+
+<!-- ══════════════════════════════════
+     TELA: PTs
+══════════════════════════════════ -->
+<div class="screen" id="screen-pt">
+  <div class="topbar">
+    <button class="topbar-back" onclick="goBack()">‹ <span>Voltar</span></button>
+    <div class="topbar-title">Permissões de Trabalho</div>
+    <div style="width:60px;"></div>
+  </div>
+
+  <div class="pt-scroll" id="pt-scroll">
+    <div class="pt-card">
+      <div class="pt-card-bar" style="background:var(--orange)"></div>
+      <div class="pt-card-body">
+        <div class="pt-card-num">0RISCO-2025-0012</div>
+        <div class="pt-card-desc">Soldagem estrutural — Bloco 3 Convés</div>
+        <div class="pt-card-meta">Supervisor: Carlos M. · Hoje 08:00–12:00</div>
+      </div>
+      <div class="pt-card-footer">
+        <span class="pt-st st-ativa">ATIVA</span>
+        <span class="pt-executantes">4 executantes · 3 assinaram</span>
+      </div>
+    </div>
+    <div class="pt-card">
+      <div class="pt-card-bar" style="background:var(--red)"></div>
+      <div class="pt-card-body">
+        <div class="pt-card-num">0RISCO-2025-0013</div>
+        <div class="pt-card-desc">Solda de reparo — Tanque TQ-04</div>
+        <div class="pt-card-meta">Supervisor: Pedro R. · Amanhã 07:00–11:00</div>
+      </div>
+      <div class="pt-card-footer">
+        <span class="pt-st st-pendente">PENDENTE</span>
+        <span class="pt-executantes">2 executantes · 0 assinaram</span>
+      </div>
+    </div>
+    <div class="pt-card">
+      <div class="pt-card-bar" style="background:var(--green)"></div>
+      <div class="pt-card-body">
+        <div class="pt-card-num">0RISCO-2025-0011</div>
+        <div class="pt-card-desc">Oxicorte de tubulação — Oficina B</div>
+        <div class="pt-card-meta">Supervisor: Ana F. · Ontem 14:00–17:00</div>
+      </div>
+      <div class="pt-card-footer">
+        <span class="pt-st st-enc">ENCERRADA</span>
+        <span class="pt-executantes">3 executantes · 3 assinaram</span>
+      </div>
+    </div></div>
+
+  <button class="new-pt-btn" title="Nova PT">＋</button>
+
+  <div class="bottom-nav">
+    <button class="nav-btn" onclick="navTo(&#39;home&#39;,this)">
+      <span class="nav-icon">🏠</span><span class="nav-label">Início</span>
+    </button>
+    <button class="nav-btn" onclick="navTo(&#39;analise&#39;,this)">
+      <span class="nav-icon">🔍</span><span class="nav-label">Risco</span>
+    </button>
+    <button class="nav-btn" onclick="navTo(&#39;cracha&#39;,this)">
+      <span class="nav-icon">🪪</span><span class="nav-label">Crachá</span>
+    </button>
+    <button class="nav-btn active" onclick="navTo(&#39;pt&#39;,this)">
+      <span class="nav-icon">📋</span><span class="nav-label">PTs</span>
+    </button>
+  </div>
+</div>
+
+<script>
+// ══════════════════════════════════════
+// NAVEGAÇÃO
+// ══════════════════════════════════════
+let screenStack = ['screen-home'];
+
+function goScreen(id) {
+  document.querySelectorAll('.screen').forEach(s => s.classList.remove('active'));
+  document.getElementById(id).classList.add('active');
+  if (screenStack[screenStack.length-1] !== id) screenStack.push(id);
+}
+
+function goBack() {
+  screenStack.pop();
+  const prev = screenStack[screenStack.length-1] || 'screen-home';
+  document.querySelectorAll('.screen').forEach(s => s.classList.remove('active'));
+  document.getElementById(prev).classList.add('active');
+}
+
+function navTo(name, btn) {
+  document.querySelectorAll('.nav-btn').forEach(b => b.classList.remove('active'));
+  btn.classList.add('active');
+  goScreen(name === 'analise' ? 'screen-modalidade' : 'screen-'+name);
+}
+
+// ══════════════════════════════════════
+// CHAT IA — ANÁLISE (DUAL MODE: NR-34 / NR-35)
+// ══════════════════════════════════════
+
+const SYSTEM_NR34 = `Você é o 0Risco.IA, assistente especializado em análise de risco de trabalho a quente, metodologia Probabilidade × Gravidade (PxG).
+
+Base de conhecimento:
+- NR-34, NR-1, NR-20, NR-23, NR-15, NR-6, NR-10, NR-35
+- Procedimento CMOC de Trabalho a Quente com Oxicorte
+- 16 itens de inspeção de oxicorte: cilindros, válvulas, reguladores, manômetros, mangueiras, identificação mangueiras (verde=O₂/vermelha=combustível), conexões/abraçadeiras, válvulas corta-chama antirretorno, maçarico, bicos de corte, teste estanqueidade, carrinho, fixação cilindros, extintor, área de trabalho, condições gerais
+- EPIs obrigatórios CMOC: capacete com jugular, óculos tonalidade 5, protetor auricular, máscara/escudo facial, avental+mangas+perneiras de raspa, luvas raspa, calçado segurança, respirador PFF2
+- Matriz PxG: P1-P5 × G1-G5. Baixo(1-3) Médio(4-7) Alto(8-14) Crítico(15-25)
+- Gravidade CMOC: G1=Leve G2=Moderado G3=Sério G4=Crítico G5=Catastrófico
+- Regras críticas: PT+APR antes de iniciar; área livre combustíveis 15m; piso limpo e seco; vigia incêndio durante atividade; vigilância pós-atividade mínimo 60 minutos
+
+PARA ANÁLISE DE RISCO inclua ao final (numa linha só):
+RISCO_JSON:{"nivel":"baixo|medio|alto|critico","p":1-5,"g":1-5,"score":1-25,"categoria":"nome curto","normas":["NR-xx"],"medidas":["medida 1","medida 2","medida 3"],"nao_conformidades":[{"item":"nome","gravidade_cmoc":1-5,"acao":"ação imediata"}]}
+
+Responda em português brasileiro. Seja direto e técnico. Respostas curtas e claras para uso em campo.`;
+
+const SYSTEM_NR35 = `Você é o 0Risco.IA, especialista em análise de risco de Trabalho em Altura conforme NR-35 e nos critérios técnicos do Manual Capital Safety (DOC. 62-573) — guia oficial de inspeção de EPIs de proteção contra quedas.
+
+DEFINIÇÃO NR-35:
+Trabalho em Altura: toda atividade executada acima de 2,0 m do nível inferior, onde haja risco de queda. Exige APR e PT emitida antes do início. Treinamento bienal obrigatório para todos os trabalhadores.
+
+HIERARQUIA DE CONTROLES (Daewoo / NR-35):
+1. Eliminar (evitar o trabalho em altura) 2. Prevenir (proteções coletivas: guarda-corpos, redes, andaimes) 3. Minimizar (EPI: cinturão + talabarte + ancoragem). Proteção coletiva tem prioridade sobre individual.
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+INSPEÇÃO DE CINTURÃO TIPO PARAQUEDISTA (Capital Safety Cap.2)
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+Frequência: ANTES de cada uso (pelo usuário) + anualmente por pessoa competente. Resultados registrados.
+4 componentes essenciais: Ferragens | Tecido | Etiquetas | Costuras
+
+FERRAGENS — inspecionar: Argolas em D, almofada dorsal, fivelas, prendedores.
+Rejeitar se: danificados, quebrados, distorcidos, bordas afiadas, rebarbas, rachaduras, partes gastas, corrosão.
+Fivelas revestidas de PVC: sem cortes, rasgos, rachaduras nem orifícios (garantia de não condutividade).
+
+TECIDO — rejeitar se houver: puimentos, cortes, fibras rompidas, rasgos, abrasões, bolor, queimaduras, descoloramento, furos, tinta, danos por calor.
+Limites de rejeição (Capital Safety):
+- Furo/queimadura >1,5 mm (1/16") em fitas de ombro/pernas → rejeitar
+- Mais de 1 furo trespassante na mesma fita → rejeitar
+- Corte >3,17 mm (1/8") na maioria das áreas → rejeitar
+- Corte de qualquer tamanho próximo à argola em D dorsal → rejeitar
+- Trama com tinta (causa ruptura de fibra ao flexi) → rejeitar
+- Danos por calor (áreas escuras e duras: escória de solda, chamas) → rejeitar
+
+COSTURAS — rejeitar se: mais de 2 costuras rasgadas/cortadas no mesmo padrão. Pontos partidos podem indicar carga de impacto.
+
+ETIQUETAS: todas presentes e totalmente legíveis. Cinturões ANSI devem ter indicador de impacto — verificar acionamento.
+
+DESCARTE IMEDIATO: se submetido a travamento de queda ou forças de impacto → retirar de operação imediatamente.
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+INSPEÇÃO DE TALABARTES (Capital Safety Cap.3)
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+Tipos: talabarte de malha, Shockwave™, trama, amarra nas costas, duplo (Y).
+Frequência: antes de cada uso + anualmente por pessoa competente.
+
+FERRAGENS (ganchos automáticos, ajustadores, dedais, barras espaçadoras):
+- Fechos dos ganchos: movem-se livremente e travam quando fechados
+- Rejeitar: danificados, quebrados, distorcidos, bordas afiadas, rebarbas, rachaduras, corrosão
+
+TECIDO/COSTURA: mesmos critérios do cinturão. Adicional:
+- Nós → rejeitar. Sujeira excessiva, tinta acumulada, manchas de ferrugem → inspecionar rigorosamente
+- Danos UV: descoloramento + lascas/fibras soltas na superfície → rejeitar
+- Danos químicos/calor: manchas escuras, áreas quebradiças → rejeitar
+
+CORDA SINTÉTICA: fibras puídas, fios rompidos, cortes, abrasões, queimaduras, descoloramento → rejeitar. Emendas: mínimo 5 dobras completas, ponteiras presas.
+
+ABSORVEDOR DE ENERGIA: inspecionar cobertura — não deve estar rasgada. Alargamento visível = acionado → rejeitar imediatamente. Modelos EZ Stop™ Shockwave™: tecido que se alonga revelando etiqueta de indicação de impacto = descarte.
+
+CABO DE AÇO (em talabartes): usar luvas. Rejeitar se: 6+ fios quebrados aleatoriamente em uma disposição, 3+ fios partidos em um cordão, fios partidos a 25 mm das luvas de compressão.
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+INSPEÇÃO DE GANCHOS E MOSQUETÕES (Capital Safety Cap.4)
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+Ganchos automáticos: fechamento/travamento automático. Mosquetões: fechamento automático/engate automático.
+ANSI Z359 (nov.2007): resistência à tração 5.000 lbs (2.267 kg) na direção da carga; frente do fecho 3.600 lbs (1.632 kg); carga lateral 3.600 lbs (1.632 kg).
+
+Inspeção:
+1. Rachaduras, bordas afiadas, rebarbas, mossas, deformidades
+2. Corrosão excessiva; fecho e trava: funcionam suavemente sem dificuldade; fechos totalmente fechados prendendo a ponta do gancho
+3. Marcações presentes e legíveis
+DESCARTE: se submetido a forças de travamento de queda → retirar e enviar para central de serviços autorizada.
+Nunca conectar: gancho a gancho, mosquetão a mosquetão, gancho a mosquetão. Nunca instalar 2 ganchos em uma única argola.
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+INSPEÇÃO DE CONECTORES DE ANCORAGEM (Capital Safety Cap.5)
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+Tipos: adaptadores de entorno (padrão, ajustável, Kevlar®), cinto "boom", cinta para andaime, fita cruzada com corrente, trole para viga, ancoragem com suporte fixo.
+Resistência mínima do ponto de ancoragem: 15 kN (≈1.500 kgf) por trabalhador.
+
+Inspeção: ferragens (corrente, conexão giratória, argolas D, anéis O, rebites, fivela de ajuste) + tecido/costuras (mesmos critérios).
+Estrutura de ancoragem: livre de corrosão, rachaduras, deformidades.
+Aviso: adaptador de entorno deve estar firme contra a estrutura — folga aumenta distância de queda livre.
+DESCARTE: se submetido a forças de travamento de queda → destruir.
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+INSPEÇÃO DE SRL/SRD (Linhas de Vida Autorretráteis) (Capital Safety Cap.6)
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+Tipos: Tipo 1 (≤3 m, absorvedor externo), Tipo 2 (>3 m, absorvedor interno — ex. Ultra-Lok™), Tipo 3 (Tipo 2 com recuperação).
+Frequência: antes de cada uso + após queda enviar para central autorizada.
+
+Etapas: 1.Parafusos soltos/peças deformadas 2.Carcaça: deformidades/rachaduras/danos; ponto de ancoragem não deformado 3.Linha de vida: estender/retrair suavemente sem hesitação 4.Mecanismo de trava: puxar rapidamente → deve travar positivamente sem deslizamento 5.Etiquetas/data de recertificação 6.Corrosão em toda a unidade 7.Linha de vida: cortes, queimaduras, danos químicos, abrasão severa 8.Ganchos: danos, deformidades, corrosão, funcionamento
+
+INDICADOR DE IMPACTO:
+- Modelos trama (Talon): dobra costurada com fio vermelho — costura rompida/dobra desfeita = impacto → descarte
+- Modelos cabo/corda: faixa vermelha exposta no gancho ("modo indicado") = impacto → descarte. Nunca rearmar.
+
+CABO DE AÇO (Ultra-Lok): rejeitar se 6+ fios quebrados aleatoriamente ou 3+ partidos em um cordão em uma disposição; ou fios partidos a 25 mm das virolas.
+CORDA SINTÉTICA (Spectra®/Technora®): desgaste concentrado, fios partidos, cortes, abrasões, nós → rejeitar. Technora: resistente até 480°C. Corda Spectra: não usar acima de 60°C.
+NÃO lubrificar, NÃO desmontar. Manutenção somente por central autorizada.
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+INSPEÇÃO DE LINHAS DE VIDA VERTICAIS (Capital Safety Cap.7)
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+Frequência: antes de cada uso + anualmente por pessoa competente.
+Corda sintética: cordões puídos, fios partidos, cortes, abrasões, queimaduras, descoloramento, nós → rejeitar. Emendas: 5 dobras completas.
+Cabo de aço 3/8" (9,52 mm): critério idêntico ao talabarte (6+ fios/disposição ou 3+/cordão → rejeitar).
+TRAVA-QUEDAS DESLIZANTE: roldana de travamento livre no comprimento total da guia; mola da alça no local e sem danos; pino de retenção desliza livremente; articulação fecha completamente; trava por gravidade funcional.
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+REQUISITOS NR-35 / DAEWOO SAFE WORK CAMPAIGN
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+- PT + APR obrigatórios ANTES de iniciar qualquer trabalho em altura
+- Treinamento NR-35 válido (bienal) para todos os executantes
+- Sistema duplo (talabarte Y / SRL + talabarte) sempre que possível — 100% tie-off
+- Capacete com jugular fixada e ajustada (obrigatório em altura)
+- Andaimes: scafftag válido semanal por inspetor competente; guarda-corpo topo+meio+rodapé; escada 4:1; decking completo
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+INSPEÇÃO E USO SEGURO DE ANDAIMES (NR-35 + Decreto-Lei 50/2005)
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+MONTAGEM SEGURA (6 etapas):
+1. PLANEJAMENTO: avaliar local, tipo de trabalho, cargas e condições do terreno
+2. BASE E APOIOS: superfície estável, nivelada e resistente; sapatas de base obrigatórias
+3. ESTRUTURA: quadros, travamentos e diagonais conforme projeto; travar todas as ligações
+4. PLATAFORMAS: pranchas em bom estado, bem fixas e completas; sem folgas ou balanços
+5. PROTEÇÕES COLETIVAS: guarda-corpos (1,00 m), rodapés (mín. 0,15 m), redes quando necessário
+6. VERIFICAÇÃO FINAL: inspecionar todo o andaime antes do uso; registrar a inspeção
+
+REGRAS DE UTILIZAÇÃO:
+- Acesso: subir/descer pelos acessos (lanças ou escadas internas) — NUNCA pelos cruzamentos
+- Respeitar carga máxima prevista para o andaime e plataformas
+- NÃO remover, alterar ou improvisar elementos do andaime
+- Não utilizar em condições adversas: vento forte, chuva ou gelo
+- Manter piso limpo e organizado; não acumular materiais
+- EPI obrigatório: capacete, calçado de segurança e arnês quando aplicável
+- Inspecionar periodicamente e após qualquer alteração ou evento adverso
+
+COMPONENTES OBRIGATÓRIOS: guarda-corpo (1,00 m) + travamento horizontal + travamento diagonal + plataforma (piso de trabalho) + rodapé (mín. 0,15 m) + lança/escada de acesso + sapatas de base niveladas
+
+CHECKLIST DE INSPEÇÃO DO ANDAIME:
+✔ Verificar apoios e nivelamento
+✔ Confirmar travamentos e ligações
+✔ Verificar fixação das plataformas
+✔ Confirmar guarda-corpos e rodapés
+✔ Verificar condições das pranchas
+✔ Registrar e identificar o andaime (etiqueta de inspeção/scafftag)
+
+NUNCA FAZER (condições de rejeição imediata):
+✗ Trabalhar sem guarda-corpos
+✗ Usar plataformas incompletas
+✗ Subir pelo exterior do andaime
+✗ Sobrecarregar o andaime
+✗ Usar andaime sem scafftag válido
+
+ENQUADRAMENTO LEGAL: Decreto-Lei nº 50/2005 (equipamentos de trabalho temporários em altura) e Decreto-Lei nº 273/2003 (prescrições mínimas de segurança em estaleiros temporários ou móveis)
+- MEWP (plataforma elevatória): somente trabalhador certificado com cinturão conectado; não mover com estabilizadores baixos sem autorização
+- Inspeção de EPI: antes de cada uso (usuário) + semestral/anual (profissional habilitado) + após qualquer queda ou impacto (descarte imediato)
+- Registro obrigatório: ficha de inspeção com data, resultado e responsável; registro na etiqueta do EPI
+
+MATRIZ PxG PARA ALTURA:
+P1-P5 × G1-G5. Baixo(1-3) Médio(4-7) Alto(8-14) Crítico(15-25)
+G5=Queda fatal (>6 m sem proteção) G4=Queda com lesão grave/invalidez G3=Fratura/afastamento longo G2=Lesão moderada G1=Lesão leve
+
+PARA ANÁLISE DE RISCO inclua ao final (numa linha só):
+RISCO_JSON:{"nivel":"baixo|medio|alto|critico","p":1-5,"g":1-5,"score":1-25,"categoria":"nome curto","normas":["NR-35"],"medidas":["medida 1","medida 2","medida 3"],"nao_conformidades":[{"item":"nome EPI/condição","gravidade_cmoc":1-5,"acao":"ação imediata"}]}
+
+Responda em português brasileiro. Seja direto e técnico. Para inspeção de EPI, siga rigorosamente os critérios Capital Safety. Respostas curtas e claras para uso em campo.`;
+
+// Modalidade ativa — começa nula, definida pela tela de seleção
+let modalidadeAtiva = null;
+let SYSTEM = SYSTEM_NR34; // fallback
+
+function selecionarModalidade(modo) {
+  modalidadeAtiva = modo;
+  history = [];
+  pendingPhoto = null;
+  document.getElementById('photo-thumb-row').classList.remove('visible');
+
+  if (modo === 'nr35') {
+    SYSTEM = SYSTEM_NR35;
+    document.getElementById('analise-titulo').textContent = 'Trabalho em Altura';
+    document.getElementById('analise-norma-badge').textContent = 'NR-35';
+    document.getElementById('analise-norma-badge').style.background = '#2196F3';
+    document.getElementById('analise-norma-badge').style.color = '#fff';
+    // Atualizar chips
+    const chips = document.querySelector('.chips-scroll');
+    chips.innerHTML = `
+      <div class="chip" onclick="sendChip(this)">Inspecionar cinturão</div>
+      <div class="chip" onclick="sendChip(this)">Verificar talabarte</div>
+      <div class="chip" onclick="sendChip(this)">Checar SRL</div>
+      <div class="chip" onclick="sendChip(this)">Ponto de ancoragem</div>
+      <div class="chip" onclick="sendChip(this)">Linha de vida</div>
+      <div class="chip" onclick="sendChip(this)">PT emitida?</div>
+    `;
+    // Limpar e reiniciar chat
+    document.getElementById('chat-messages').innerHTML = '';
+    document.getElementById('risco-result').innerHTML = '';
+    addAIMsg('**0Risco.IA — NR-35 ativo.** Pronto para inspeção de EPIs de altura e análise de risco. Envie uma **foto** do equipamento (cinturão, talabarte, SRL, ancoragem) ou descreva o cenário.');
+  } else {
+    SYSTEM = SYSTEM_NR34;
+    document.getElementById('analise-titulo').textContent = 'Trabalho a Quente';
+    document.getElementById('analise-norma-badge').textContent = 'NR-34';
+    document.getElementById('analise-norma-badge').style.background = '#FFD600';
+    document.getElementById('analise-norma-badge').style.color = '#000';
+    // Restaurar chips originais
+    const chips = document.querySelector('.chips-scroll');
+    chips.innerHTML = `
+      <div class="chip" onclick="sendChip(this)">Inspeção oxicorte</div>
+      <div class="chip" onclick="sendChip(this)">Verificar EPIs</div>
+      <div class="chip" onclick="sendChip(this)">Área de trabalho</div>
+      <div class="chip" onclick="sendChip(this)">Extintor</div>
+      <div class="chip" onclick="sendChip(this)">Vigia incêndio</div>
+      <div class="chip" onclick="sendChip(this)">PT emitida?</div>
+    `;
+    // Limpar e reiniciar chat
+    document.getElementById('chat-messages').innerHTML = '';
+    document.getElementById('risco-result').innerHTML = '';
+    addAIMsg('**0Risco.IA — NR-34 ativo.** Pronto para análise. Envie uma **foto** do equipamento ou da área, ou descreva o cenário de trabalho a quente.');
+  }
+
+  goScreen('screen-analise');
+}
+
+function voltarParaModalidade() {
+  goScreen('screen-modalidade');
+}
+
+let history = [];
+let pendingPhoto = null;
+
+
+// ══════════════════════════════════════════════════════
+// SUPABASE CONFIG
+// ══════════════════════════════════════════════════════
+const SB_URL = 'https://edaybzkovzouqdqsszkk.supabase.co';
+const SB_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImVkYXliemtvdnpvdXFkcXNzemtrIiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODI2OTcyMTIsImV4cCI6MjA5ODI3MzIxMn0.NL32HpF_3pfPoQQVphX3YBjgJevGyogURRdYzaq4seQ';
+const ADMIN_EMAIL = '0risco.ia@gmail.com';
+const ADMIN_SENHA = 'Rbka@2007';
+
+async function sbFetch(path, opts = {}) {
+  const url = SB_URL + '/rest/v1/' + path;
+  const headers = {
+    'apikey': SB_KEY,
+    'Authorization': 'Bearer ' + SB_KEY,
+    'Content-Type': 'application/json',
+    'Prefer': opts.prefer || 'return=representation',
+    ...(opts.headers || {})
+  };
+  const res = await fetch(url, { method: opts.method || 'GET', headers, body: opts.body ? JSON.stringify(opts.body) : undefined });
+  if (!res.ok && res.status !== 406) {
+    const txt = await res.text();
+    throw new Error(txt);
+  }
+  const ct = res.headers.get('content-type') || '';
+  if (ct.includes('json') && res.status !== 204) return res.json();
+  return [];
+}
+
+// Criar tabelas via RPC se não existirem — fallback gracioso
+async function garantirTabelas() {
+  // Tentar inserir um registro de teste e ignorar erro de tabela não existir
+  try {
+    await sbFetch('orisco_usuarios?limit=1', { headers: { 'Range': '0-0' } });
+  } catch(e) {
+    console.warn('Tabelas ainda não criadas:', e.message);
+  }
+}
+
+// ══════════════════════════════════════════════════════
+// ESTADO GLOBAL
+// ══════════════════════════════════════════════════════
+let usuarioLogado = null; // { id, nome, email, empresa, cargo, matricula, role }
+let analiseAtual = { modalidade: null, messages: [], riscoData: null, inicio: null };
+
+// ══════════════════════════════════════════════════════
+// AUTH
+// ══════════════════════════════════════════════════════
+async function fazerLogin() {
+  const email = document.getElementById('login-email').value.trim().toLowerCase();
+  const senha = document.getElementById('login-senha').value;
+  const errEl = document.getElementById('login-error');
+  errEl.classList.remove('visible');
+
+  if (!email || !senha) { errEl.textContent = 'Preencha e-mail e senha.'; errEl.classList.add('visible'); return; }
+
+  // Admin hardcoded
+  if (email === ADMIN_EMAIL.toLowerCase() && senha === ADMIN_SENHA) {
+    usuarioLogado = { id: 'admin', nome: 'Administrador', email: ADMIN_EMAIL, role: 'admin' };
+    salvarSessao();
+    goScreen('screen-admin');
+    carregarUsuarios('pendente');
+    return;
+  }
+
+  try {
+    const rows = await sbFetch('orisco_usuarios?email=eq.' + encodeURIComponent(email) + '&select=*');
+    if (!rows || rows.length === 0) { errEl.textContent = 'E-mail não cadastrado.'; errEl.classList.add('visible'); return; }
+    const u = rows[0];
+    // Comparar hash simples (SHA-256 seria ideal, mas usamos comparação direta por ser MVP)
+    if (u.senha_hash !== btoa(senha)) { errEl.textContent = 'Senha incorreta.'; errEl.classList.add('visible'); return; }
+    if (u.status === 'pendente') { errEl.textContent = 'Acesso pendente de aprovação pelo administrador.'; errEl.classList.add('visible'); return; }
+    if (u.status === 'bloqueado') { errEl.textContent = 'Acesso bloqueado. Contate o administrador.'; errEl.classList.add('visible'); return; }
+    usuarioLogado = { id: u.id, nome: u.nome, email: u.email, empresa: u.empresa, cargo: u.cargo, matricula: u.matricula, role: 'avaliador' };
+    salvarSessao();
+    atualizarHomeComUsuario();
+    goScreen('screen-home');
+  } catch(e) {
+    errEl.textContent = 'Erro de conexão: ' + e.message;
+    errEl.classList.add('visible');
+  }
+}
+
+async function fazerCadastro() {
+  const nome = document.getElementById('cad-nome').value.trim();
+  const email = document.getElementById('cad-email').value.trim().toLowerCase();
+  const empresa = document.getElementById('cad-empresa').value.trim();
+  const cargo = document.getElementById('cad-cargo').value.trim();
+  const matricula = document.getElementById('cad-matricula').value.trim();
+  const senha = document.getElementById('cad-senha').value;
+  const senha2 = document.getElementById('cad-senha2').value;
+  const errEl = document.getElementById('cad-error');
+  errEl.classList.remove('visible');
+
+  if (!nome || !email || !empresa || !cargo || !senha) { errEl.textContent = 'Preencha todos os campos.'; errEl.classList.add('visible'); return; }
+  if (senha !== senha2) { errEl.textContent = 'As senhas não conferem.'; errEl.classList.add('visible'); return; }
+  if (senha.length < 6) { errEl.textContent = 'Senha deve ter no mínimo 6 caracteres.'; errEl.classList.add('visible'); return; }
+
+  try {
+    await sbFetch('orisco_usuarios', {
+      method: 'POST',
+      body: { nome, email, empresa, cargo, matricula, senha_hash: btoa(senha), status: 'pendente', criado_em: new Date().toISOString() }
+    });
+    alert('✅ Solicitação enviada! Aguarde aprovação do administrador.');
+    goScreen('screen-login');
+  } catch(e) {
+    errEl.textContent = e.message.includes('duplicate') ? 'E-mail já cadastrado.' : 'Erro: ' + e.message;
+    errEl.classList.add('visible');
+  }
+}
+
+function fazerLogout() {
+  usuarioLogado = null;
+  localStorage.removeItem('orisco_sessao');
+  history = [];
+  analiseAtual = { modalidade: null, messages: [], riscoData: null, inicio: null };
+  goScreen('screen-login');
+}
+
+function salvarSessao() {
+  localStorage.setItem('orisco_sessao', JSON.stringify(usuarioLogado));
+}
+
+function restaurarSessao() {
+  try {
+    const s = localStorage.getItem('orisco_sessao');
+    if (s) {
+      usuarioLogado = JSON.parse(s);
+      if (usuarioLogado?.role === 'admin') {
+        goScreen('screen-admin');
+        carregarUsuarios('pendente');
+      } else if (usuarioLogado?.role === 'avaliador') {
+        atualizarHomeComUsuario();
+        goScreen('screen-home');
+      }
+    }
+  } catch(e) { localStorage.removeItem('orisco_sessao'); }
+}
+
+function atualizarHomeComUsuario() {
+  if (!usuarioLogado) return;
+  const nameEl = document.querySelector('.worker-name');
+  const roleEl = document.querySelector('.worker-role');
+  if (nameEl) nameEl.textContent = usuarioLogado.nome;
+  if (roleEl) roleEl.textContent = (usuarioLogado.cargo || '') + (usuarioLogado.matricula ? ' — Matrícula ' + usuarioLogado.matricula : '');
+}
+
+// ══════════════════════════════════════════════════════
+// ADMIN — gerenciar usuários
+// ══════════════════════════════════════════════════════
+async function carregarUsuarios(status) {
+  const lista = document.getElementById('admin-lista');
+  lista.innerHTML = '<div style="text-align:center;padding:30px;color:var(--text3);">Carregando...</div>';
+  try {
+    const rows = await sbFetch('orisco_usuarios?status=eq.' + status + '&order=criado_em.desc');
+    if (!rows || rows.length === 0) {
+      lista.innerHTML = '<div style="text-align:center;padding:30px;color:var(--text3);">Nenhum usuário ' + status + '.</div>';
+      return;
+    }
+    lista.innerHTML = rows.map(u => `
+      <div class="admin-card">
+        <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:4px;">
+          <div class="admin-card-name">${escHtml(u.nome)}</div>
+          <span class="status-badge ${u.status}">${u.status.toUpperCase()}</span>
+        </div>
+        <div class="admin-card-info">${escHtml(u.email)} · ${escHtml(u.empresa||'')} · ${escHtml(u.cargo||'')}${u.matricula ? ' · Mat. ' + escHtml(u.matricula) : ''}</div>
+        <div style="font-size:11px;color:var(--text3);margin-bottom:8px;">Solicitado em: ${new Date(u.criado_em).toLocaleDateString('pt-BR')}</div>
+        <div class="admin-card-actions">
+          ${u.status !== 'ativo' ? `<button class="admin-btn aprovar" onclick="atualizarStatus('${u.id}','ativo','${status}')">✅ Aprovar</button>` : ''}
+          ${u.status !== 'bloqueado' ? `<button class="admin-btn bloquear" onclick="atualizarStatus('${u.id}','bloqueado','${status}')">🚫 Bloquear</button>` : ''}
+          ${u.status === 'bloqueado' ? `<button class="admin-btn aprovar" onclick="atualizarStatus('${u.id}','ativo','${status}')">✅ Reativar</button>` : ''}
+        </div>
+      </div>`).join('');
+  } catch(e) {
+    lista.innerHTML = '<div style="text-align:center;padding:30px;color:var(--red);">Erro: ' + escHtml(e.message) + '<br><small>Verifique se as tabelas foram criadas no Supabase.</small></div>';
+  }
+}
+
+async function atualizarStatus(id, novoStatus, statusAtual) {
+  try {
+    await sbFetch('orisco_usuarios?id=eq.' + id, { method: 'PATCH', body: { status: novoStatus }, prefer: 'return=minimal' });
+    carregarUsuarios(statusAtual);
+  } catch(e) { alert('Erro: ' + e.message); }
+}
+
+// ══════════════════════════════════════════════════════
+// ENCERRAR ANÁLISE
+// ══════════════════════════════════════════════════════
+function abrirModalEncerrar() {
+  if (history.length === 0) { alert('Nenhuma análise iniciada.'); return; }
+  document.getElementById('modal-encerrar').classList.add('open');
+}
+
+function fecharModal() {
+  document.getElementById('modal-encerrar').classList.remove('open');
+}
+
+async function confirmarEncerramento() {
+  fecharModal();
+  const dados = {
+    usuario_id: usuarioLogado?.id || 'anonimo',
+    usuario_nome: usuarioLogado?.nome || 'Anônimo',
+    modalidade: modalidadeAtiva || 'nr34',
+    messages: history,
+    risco_data: obterUltimoRiscoData(),
+    inicio: analiseAtual.inicio || new Date().toISOString(),
+    fim: new Date().toISOString()
+  };
+
+  // Salvar no Supabase
+  try {
+    await sbFetch('orisco_analises', { method: 'POST', body: {
+      usuario_id: dados.usuario_id,
+      modalidade: dados.modalidade,
+      risco_nivel: dados.risco_data?.nivel || null,
+      risco_score: dados.risco_data?.score || null,
+      risco_categoria: dados.risco_data?.categoria || null,
+      messages_json: JSON.stringify(dados.messages),
+      risco_json: JSON.stringify(dados.risco_data),
+      inicio: dados.inicio,
+      fim: dados.fim
+    }});
+  } catch(e) { console.warn('Erro ao salvar no Supabase:', e.message); }
+
+  // Salvar local (backup)
+  const analisesSalvas = JSON.parse(localStorage.getItem('orisco_analises_local') || '[]');
+  analisesSalvas.unshift(dados);
+  localStorage.setItem('orisco_analises_local', JSON.stringify(analisesSalvas.slice(0, 50)));
+
+  // Gerar downloads
+  gerarDownloadJSON(dados);
+  setTimeout(() => gerarPDF(dados), 500);
+
+  // Resetar e voltar ao menu
+  setTimeout(() => {
+    history = [];
+    analiseAtual = { modalidade: null, messages: [], riscoData: null, inicio: new Date().toISOString() };
+    document.getElementById('chat-messages').innerHTML = '';
+    document.getElementById('risco-result').innerHTML = '';
+    goScreen('screen-home');
+  }, 800);
+}
+
+function obterUltimoRiscoData() {
+  // Procura o último RISCO_JSON no histórico
+  for (let i = history.length - 1; i >= 0; i--) {
+    const msg = history[i];
+    if (msg.role === 'assistant') {
+      const raw = typeof msg.content === 'string' ? msg.content : '';
+      const m = raw.match(/RISCO_JSON:(\{.+?\})\s*$/m);
+      if (m) { try { return JSON.parse(m[1]); } catch(e) {} }
+    }
+  }
+  return null;
+}
+
+// ══════════════════════════════════════════════════════
+// GERAÇÃO DE ARQUIVOS
+// ══════════════════════════════════════════════════════
+function gerarDownloadJSON(dados) {
+  const blob = new Blob([JSON.stringify(dados, null, 2)], { type: 'application/json' });
+  const url = URL.createObjectURL(blob);
+  const a = document.createElement('a');
+  const ts = new Date().toISOString().replace(/[:.]/g,'-').slice(0,19);
+  a.href = url;
+  a.download = '0risco-analise-' + ts + '.json';
+  a.click();
+  URL.revokeObjectURL(url);
+}
+
+function gerarPDF(dados) {
+  const norma = dados.modalidade === 'nr35' ? 'NR-35 Trabalho em Altura' : 'NR-34 Trabalho a Quente';
+  const risco = dados.risco_data;
+  const ts = new Date(dados.fim).toLocaleString('pt-BR');
+  const tsFile = new Date(dados.fim).toISOString().replace(/[:.]/g,'-').slice(0,19);
+
+  const mensagens = dados.messages.map(m => {
+    const role = m.role === 'user' ? '👷 AVALIADOR' : '🤖 IA 0Risco';
+    const texto = typeof m.content === 'string' ? m.content : (Array.isArray(m.content) ? m.content.filter(c=>c.type==='text').map(c=>c.text).join(' ') : '');
+    const textoLimpo = texto.replace(/RISCO_JSON:\{.+?\}\s*$/m,'').trim();
+    return `<div style="margin-bottom:12px;"><strong style="color:${m.role==='user'?'#1a2a26':'#0077cc'}">${role}</strong><br><div style="margin-top:4px;white-space:pre-wrap;font-size:12px;">${textoLimpo}</div></div>`;
+  }).join('<hr style="border:none;border-top:1px solid #eee;margin:8px 0;">');
+
+  const riscoHtml = risco ? `
+    <div style="background:${{'baixo':'#22c55e','medio':'#ffd60a','alto':'#ff7a00','critico':'#dd1a1a'}[risco.nivel]||'#888'};color:${risco.nivel==='medio'?'#111':'#fff'};padding:12px 16px;border-radius:8px;margin-bottom:12px;">
+      <div style="font-size:18px;font-weight:900;">RISCO ${(risco.nivel||'').toUpperCase()} — Score ${risco.score}/25</div>
+      <div style="font-size:13px;margin-top:2px;">P${risco.p} × G${risco.g} · ${risco.categoria||''}</div>
+    </div>
+    ${risco.nao_conformidades?.length ? '<div style="font-weight:700;margin-bottom:6px;">Não conformidades:</div>' + risco.nao_conformidades.map(nc=>`<div style="margin-bottom:4px;font-size:12px;">• <strong>${nc.item}</strong> (G${nc.gravidade_cmoc}): ${nc.acao}</div>`).join('') : ''}
+    ${risco.medidas?.length ? '<div style="font-weight:700;margin:8px 0 4px;">Medidas de controle:</div>' + risco.medidas.map(m=>`<div style="font-size:12px;margin-bottom:2px;">✓ ${m}</div>`).join('') : ''}
+  ` : '<p style="color:#888;">Nenhuma análise de risco gerada.</p>';
+
+  const html = `<!DOCTYPE html><html lang="pt-BR"><head><meta charset="UTF-8">
+  <title>Análise 0Risco.IA</title>
+  <style>body{font-family:Arial,sans-serif;max-width:800px;margin:0 auto;padding:20px;color:#111;}
+  h1{color:#1a2a26;border-bottom:3px solid #FFD600;padding-bottom:8px;}
+  .header-info{background:#f4f6f5;border-radius:8px;padding:12px 16px;margin-bottom:16px;font-size:13px;}
+  </style></head><body>
+  <h1>📋 Relatório de Análise de Risco</h1>
+  <div class="header-info">
+    <strong>0Risco.IA</strong> · ${norma}<br>
+    <strong>Avaliador:</strong> ${dados.usuario_nome}<br>
+    <strong>Data/Hora:</strong> ${ts}
+  </div>
+  <h2 style="font-size:15px;margin-bottom:8px;">Resultado da Análise</h2>
+  ${riscoHtml}
+  <h2 style="font-size:15px;margin:16px 0 8px;">Histórico da Conversa</h2>
+  ${mensagens}
+  <div style="margin-top:20px;font-size:10px;color:#999;text-align:center;">Gerado por 0Risco.IA · ${ts}</div>
+  </body></html>`;
+
+  const blob = new Blob([html], { type: 'text/html' });
+  const url = URL.createObjectURL(blob);
+  const a = document.createElement('a');
+  a.href = url;
+  a.download = '0risco-relatorio-' + tsFile + '.html';
+  a.click();
+  URL.revokeObjectURL(url);
+}
+
+// ══════════════════════════════════════════════════════
+// HISTÓRICO
+// ══════════════════════════════════════════════════════
+async function abrirHistorico() {
+  goScreen('screen-historico');
+  const lista = document.getElementById('historico-lista');
+  lista.innerHTML = '<div style="text-align:center;padding:40px;color:var(--text3);">Carregando...</div>';
+
+  let analises = [];
+
+  // Tentar Supabase
+  if (usuarioLogado?.id && usuarioLogado.id !== 'admin') {
+    try {
+      analises = await sbFetch('orisco_analises?usuario_id=eq.' + usuarioLogado.id + '&order=fim.desc&limit=30');
+    } catch(e) { console.warn('Supabase histórico erro:', e.message); }
+  }
+
+  // Fallback local
+  if (!analises || analises.length === 0) {
+    const local = JSON.parse(localStorage.getItem('orisco_analises_local') || '[]');
+    analises = local.filter(a => !usuarioLogado || a.usuario_id === usuarioLogado.id || a.usuario_id === 'anonimo');
+    // mapear formato local para formato Supabase
+    analises = analises.map(a => ({
+      modalidade: a.modalidade,
+      risco_nivel: a.risco_data?.nivel,
+      risco_score: a.risco_data?.score,
+      risco_categoria: a.risco_data?.categoria,
+      messages_json: JSON.stringify(a.messages),
+      risco_json: JSON.stringify(a.risco_data),
+      fim: a.fim,
+      _local: true,
+      _dados: a
+    }));
+  }
+
+  if (!analises || analises.length === 0) {
+    lista.innerHTML = '<div style="text-align:center;padding:40px;color:var(--text3);">Nenhuma análise encontrada.</div>';
+    return;
+  }
+
+  const cores = { baixo:'#22c55e', medio:'#ffd60a', alto:'#ff7a00', critico:'#dd1a1a' };
+  lista.innerHTML = analises.map((a, idx) => {
+    const norma = a.modalidade === 'nr35' ? 'NR-35' : 'NR-34';
+    const date = a.fim ? new Date(a.fim).toLocaleString('pt-BR') : '—';
+    const nivel = a.risco_nivel || '—';
+    const score = a.risco_score || '—';
+    const cat = a.risco_categoria || 'Análise';
+    return `<div class="hist-card">
+      <div class="hist-card-header">
+        <span class="hist-card-norma ${a.modalidade === 'nr35' ? 'nr35' : ''}">${norma}</span>
+        <span class="hist-card-date">${date}</span>
+      </div>
+      <div class="hist-card-cat">${escHtml(cat)}</div>
+      <div class="hist-card-score" style="color:${cores[nivel]||'#888'}">Risco: ${nivel.toUpperCase()} · Score: ${score}/25</div>
+      <div class="hist-download-btns">
+        <button class="hist-download-btn" onclick="redownloadJSON(${idx})">⬇ JSON</button>
+        <button class="hist-download-btn" onclick="redownloadPDF(${idx})">⬇ PDF</button>
+      </div>
+    </div>`;
+  }).join('');
+
+  // Guardar para re-download
+  window._historicoCache = analises;
+}
+
+function redownloadJSON(idx) {
+  const a = window._historicoCache?.[idx];
+  if (!a) return;
+  const dados = a._dados || {
+    modalidade: a.modalidade,
+    messages: JSON.parse(a.messages_json || '[]'),
+    risco_data: JSON.parse(a.risco_json || 'null'),
+    fim: a.fim
+  };
+  gerarDownloadJSON(dados);
+}
+
+function redownloadPDF(idx) {
+  const a = window._historicoCache?.[idx];
+  if (!a) return;
+  const dados = a._dados || {
+    usuario_nome: usuarioLogado?.nome || 'Avaliador',
+    modalidade: a.modalidade,
+    messages: JSON.parse(a.messages_json || '[]'),
+    risco_data: JSON.parse(a.risco_json || 'null'),
+    fim: a.fim
+  };
+  gerarPDF(dados);
+}
+
+// ══════════════════════════════════════════════════════
+// OVERRIDE: DOMContentLoaded — agora não inicia o chat direto
+// ══════════════════════════════════════════════════════
+// mensagem inicial — agora gerenciado pelo sistema de login
+window.addEventListener('DOMContentLoaded', () => {
+  analiseAtual.inicio = new Date().toISOString();
+  garantirTabelas();
+  restaurarSessao();
+  renderPTs();
+});
+
+const chatInput = document.getElementById('chat-input');
+chatInput.addEventListener('input', () => {
+  chatInput.style.height = 'auto';
+  chatInput.style.height = Math.min(chatInput.scrollHeight, 120) + 'px';
+});
+chatInput.addEventListener('keydown', e => {
+  if (e.key === 'Enter' && !e.shiftKey) { e.preventDefault(); sendMessage(); }
+});
+
+function sendChip(el) { chatInput.value = el.textContent; sendMessage(); }
+
+async function sendMessage() {
+  const text = chatInput.value.trim();
+  if (!text && !pendingPhoto) return;
+
+  const content = [];
+  if (pendingPhoto) content.push({ type:'image', source:{ type:'base64', media_type:'image/jpeg', data:pendingPhoto.base64 } });
+  content.push({ type:'text', text: text || 'Analise os riscos nesta imagem com base na metodologia PxG e procedimentos CMOC.' });
+
+  addUserMsg(text, pendingPhoto?.dataUrl);
+  chatInput.value = '';
+  chatInput.style.height = 'auto';
+  document.getElementById('btn-send').disabled = true;
+
+  history.push({ role:'user', content: content.length===1 && !pendingPhoto ? content[0].text : content });
+  pendingPhoto = null;
+  document.getElementById('photo-thumb-row').classList.remove('visible');
+
+  const typing = addTypingMsg();
+
+  try {
+    const res = await fetch('/.netlify/functions/chat', {
+      method:'POST',
+      headers:{'Content-Type':'application/json'},
+      body: JSON.stringify({
+        system:SYSTEM,
+        messages:history
+      })
+    });
+    if (!res.ok) {
+      const errText = await res.text();
+      typing.remove();
+      addAIMsg('Erro ' + res.status + ': ' + errText);
+      document.getElementById('btn-send').disabled = false;
+      return;
+    }
+    const data = await res.json();
+    const raw = data.content?.[0]?.text || 'Erro na resposta: ' + JSON.stringify(data);
+    typing.remove();
+    processAIResponse(raw);
+    history.push({ role:'assistant', content:raw });
+  } catch(e) {
+    typing.remove();
+    addAIMsg('Erro: ' + e.message);
+  }
+  document.getElementById('btn-send').disabled = false;
+}
+
+function processAIResponse(raw) {
+  let riskData = null;
+  let text = raw;
+  const m = raw.match(/RISCO_JSON:(\{.+?\})\s*$/m);
+  if (m) {
+    try { riskData = JSON.parse(m[1]); } catch(e){}
+    text = raw.replace(/RISCO_JSON:\{.+?\}\s*$/m,'').trim();
+  }
+  if (riskData) renderRiscoResult(riskData);
+  addAIMsg(text);
+}
+
+function renderRiscoResult(d) {
+  const el = document.getElementById('risco-result');
+  const zClass = {baixo:'risco-low',medio:'risco-med',alto:'risco-high',critico:'risco-crit'}[d.nivel]||'risco-med';
+  const zLabel = {baixo:'BAIXO',medio:'MÉDIO',alto:'ALTO',critico:'CRÍTICO'}[d.nivel]||'—';
+
+  const ncs = (d.nao_conformidades||[]).map(nc => {
+    const g = nc.gravidade_cmoc||1;
+    return `<div class="nc-item g${g}">
+      <div class="nc-top">
+        <div class="nc-name">${escHtml(nc.item)}</div>
+        <div class="nc-grav grav${g}">G${g}</div>
+      </div>
+      <div class="nc-acao">${escHtml(nc.acao)}</div>
+    </div>`;
+  }).join('');
+
+  const medidas = (d.medidas||[]).map(m=>`<div class="medida-item">${escHtml(m)}</div>`).join('');
+  const normas = (d.normas||[]).map(n=>`<span class="norma-tag">${escHtml(n)}</span>`).join('');
+
+  el.innerHTML = `
+    <div class="risco-header ${zClass}">
+      <div>
+        <div style="font-family:'IBM Plex Mono',monospace;font-size:10px;opacity:.7;letter-spacing:.1em;text-transform:uppercase;margin-bottom:2px;">Nível de Risco</div>
+        <div class="risco-nivel-label">${zLabel}</div>
+      </div>
+      <div class="risco-pxg">
+        <div class="risco-pxg-val">P${d.p||'?'}×G${d.g||'?'}</div>
+        <div class="risco-pxg-sub">Score ${d.score||'?'}/25</div>
+      </div>
+    </div>
+    ${ncs ? `<div class="section-label" style="padding:0 2px;">Não conformidades</div><div class="nc-list">${ncs}</div>` : ''}
+    ${medidas ? `<div class="medidas-card"><div class="medidas-title">Medidas de controle</div>${medidas}</div>` : ''}
+    ${normas ? `<div style="display:flex;gap:6px;flex-wrap:wrap;">${normas}</div>` : ''}
+  `;
+  el.classList.add('visible');
+
+  // scroll para o resultado
+  setTimeout(() => { el.scrollIntoView({ behavior:'smooth' }); }, 100);
+}
+
+// ── DOM helpers ──
+function addUserMsg(text, imgUrl) {
+  const el = document.createElement('div');
+  el.className = 'msg user';
+  el.innerHTML = `
+    <div class="msg-avatar">👷</div>
+    <div class="msg-bubble">
+      ${imgUrl ? `<div class="msg-img"><img src="${imgUrl}" alt=""></div>` : ''}
+      ${text ? escHtml(text) : ''}
+    </div>`;
+  document.getElementById('chat-messages').appendChild(el);
+  scrollChat();
+}
+
+function addAIMsg(text) {
+  const el = document.createElement('div');
+  el.className = 'msg ai';
+  el.innerHTML = `
+    <div class="msg-avatar">PxG</div>
+    <div class="msg-bubble">${formatText(text)}</div>`;
+  document.getElementById('chat-messages').appendChild(el);
+  scrollChat();
+}
+
+function addTypingMsg() {
+  const el = document.createElement('div');
+  el.className = 'msg ai';
+  el.innerHTML = `<div class="msg-avatar">PxG</div><div class="msg-bubble"><div class="typing-dots"><span></span><span></span><span></span></div></div>`;
+  document.getElementById('chat-messages').appendChild(el);
+  scrollChat();
+  return el;
+}
+
+function scrollChat() {
+  setTimeout(() => {
+    const c = document.getElementById('chat-messages');
+    c.scrollTop = c.scrollHeight;
+  }, 60);
+}
+
+function formatText(t) {
+  return escHtml(t)
+    .replace(/\*\*(.+?)\*\*/g,'<strong>$1</strong>')
+    .replace(/\*(.+?)\*/g,'<em>$1</em>')
+    .replace(/\n/g,'<br>');
+}
+function escHtml(s) {
+  return String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');
+}
+
+// ── Foto ──
+function handlePhoto(e) {
+  const file = e.target.files[0];
+  if (!file) return;
+  const reader = new FileReader();
+  reader.onload = ev => {
+    const dataUrl = ev.target.result;
+    pendingPhoto = { base64: dataUrl.split(',')[1], dataUrl };
+    document.getElementById('photo-thumb-img').src = dataUrl;
+    document.getElementById('photo-thumb-row').classList.add('visible');
+  };
+  reader.readAsDataURL(file);
+  e.target.value = '';
+}
+function removePhoto() {
+  pendingPhoto = null;
+  document.getElementById('photo-thumb-row').classList.remove('visible');
+}
+
+// ══════════════════════════════════════
+// CRACHÁ
+// ══════════════════════════════════════
+function simularLeitura() {
+  // Simula leitura do crachá
+  document.getElementById('camera-zone').style.display = 'none';
+  document.getElementById('camera-actions').style.display = 'none';
+  document.getElementById('cracha-result').classList.add('visible');
+}
+function resetCracha() {
+  document.getElementById('camera-zone').style.display = 'flex';
+  document.getElementById('camera-actions').style.display = 'flex';
+  document.getElementById('cracha-result').classList.remove('visible');
+}
+
+// ══════════════════════════════════════
+// PTs — demo data
+// ══════════════════════════════════════
+const pts = [
+  { num:'0RISCO-2025-0012', desc:'Soldagem estrutural — Bloco 3 Convés', meta:'Supervisor: Carlos M. · Hoje 08:00–12:00', status:'ativa', risco:'var(--orange)', exec:'4 executantes · 3 assinaram' },
+  { num:'0RISCO-2025-0013', desc:'Solda de reparo — Tanque TQ-04', meta:'Supervisor: Pedro R. · Amanhã 07:00–11:00', status:'pendente', risco:'var(--red)', exec:'2 executantes · 0 assinaram' },
+  { num:'0RISCO-2025-0011', desc:'Oxicorte de tubulação — Oficina B', meta:'Supervisor: Ana F. · Ontem 14:00–17:00', status:'enc', risco:'var(--green)', exec:'3 executantes · 3 assinaram' },
+];
+
+function renderPTs() {
+  const st = { ativa:{cls:'st-ativa',lbl:'ATIVA'}, pendente:{cls:'st-pendente',lbl:'PENDENTE'}, enc:{cls:'st-enc',lbl:'ENCERRADA'} };
+  document.getElementById('pt-scroll').innerHTML = pts.map(p => `
+    <div class="pt-card">
+      <div class="pt-card-bar" style="background:${p.risco}"></div>
+      <div class="pt-card-body">
+        <div class="pt-card-num">${p.num}</div>
+        <div class="pt-card-desc">${p.desc}</div>
+        <div class="pt-card-meta">${p.meta}</div>
+      </div>
+      <div class="pt-card-footer">
+        <span class="pt-st ${st[p.status].cls}">${st[p.status].lbl}</span>
+        <span class="pt-executantes">${p.exec}</span>
+      </div>
+    </div>`).join('');
+}
+</script>
+
+
+</body></html>
