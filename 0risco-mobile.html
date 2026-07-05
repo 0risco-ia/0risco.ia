@@ -6,6 +6,9 @@
 <meta name="mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<link rel="manifest" href="/manifest.json">
+<meta name="theme-color" content="#F5C400">
+<link rel="apple-touch-icon" href="/icon-192.png">
 <title>0Risco.IA</title>
 <style>
 @import url('https://fonts.googleapis.com/css2?family=Bebas+Neue&family=IBM+Plex+Mono:wght@400;600&family=IBM+Plex+Sans:wght@300;400;500;600&display=swap');
@@ -2850,6 +2853,15 @@ function atualizarBannerPT() {
       if (metaEl) metaEl.textContent = (ativa.data ? new Date(ativa.data+'T12:00:00').toLocaleDateString('pt-BR') : '') + ' · ' + ativa.hora + ' · Liberador: ' + ativa.liberador;
     }
   } catch(e) {}
+}
+</script>
+<script>
+if ('serviceWorker' in navigator) {
+  window.addEventListener('load', () => {
+    navigator.serviceWorker.register('/sw.js')
+      .then((reg) => console.log('SW registrado:', reg.scope))
+      .catch((err) => console.error('Erro ao registrar SW:', err));
+  });
 }
 </script>
 </body>
